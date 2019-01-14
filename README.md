@@ -1,0 +1,1 @@
+# juridigo_mobile_front
