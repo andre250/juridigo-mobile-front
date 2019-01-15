@@ -5,7 +5,7 @@ import { List, ListItem, SearchBar } from "react-native-elements";
 export class ListaDisponiveis extends Component {
   constructor(props) {
     super(props);
-
+    this._bootstrapAsync();
     this.state = {
       loading: false,
       data: [],
@@ -16,6 +16,12 @@ export class ListaDisponiveis extends Component {
       refreshing: false
     };
   }
+
+  _bootstrapAsync = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    console.log(userToken)
+
+  };
 
   componentDidMount() {
     this.makeRemoteRequest();

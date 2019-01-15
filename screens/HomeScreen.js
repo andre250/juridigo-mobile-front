@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ListaDisponiveis } from '../components/ListaDisponiveis';
 
-export default class LinksScreen extends React.Component {
-  
+export default class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'JuridiGo',
     headerStyle: {
