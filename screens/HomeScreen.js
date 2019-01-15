@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { ListaDisponiveis } from '../components/ListaDisponiveis';
 
 export default class HomeScreen extends React.Component {
+
   static navigationOptions = {
     title: 'JuridiGo',
     headerStyle: {
@@ -16,15 +16,7 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <ListaDisponiveis></ListaDisponiveis>
+      <ListaDisponiveis />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 15,
-    backgroundColor: 'grey',
-  },
-});

@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator } from "react-native";
+import { View, FlatList, ActivityIndicator, AsyncStorage } from "react-native";
 import { List, ListItem, SearchBar } from "react-native-elements";
 
 export class ListaDisponiveis extends Component {
   constructor(props) {
     super(props);
-    this._bootstrapAsync();
     this.state = {
       loading: false,
       data: [],
-      id_usuario: "1",
+      id_usuario: null,
       page: 1,
       seed: 1,
       error: null,
@@ -17,19 +16,16 @@ export class ListaDisponiveis extends Component {
     };
   }
 
-  _bootstrapAsync = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    console.log(userToken)
-
-  };
-
   componentDidMount() {
-    this.makeRemoteRequest();
+    this._makeRemoteRequestAsync();
   }
 
-  makeRemoteRequest = () => {
-    const { page, seed, id_usuario } = this.state;
-    const url = `https://private-599c2-juridigo.apiary-mock.com/trabalhos/:id/propostas?usuario=${id_usuario}`;
+  _makeRemoteRequestAsync = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    // const { id_usuario } = this.state;
+    console.log(userToken)
+    const url = `https://private-599c2-juridigo.apiary-mock.com/trabalhos/:id/propostas?usuario=${userToken}`;
+    
     this.setState({ loading: true });
 
     fetch(url)
@@ -54,7 +50,7 @@ export class ListaDisponiveis extends Component {
         refreshing: true
       },
       () => {
-        this.makeRemoteRequest();
+        this._makeRemoteRequestAsync();
       }
     );
   };
@@ -65,7 +61,7 @@ export class ListaDisponiveis extends Component {
         page: this.state.page + 1
       },
       () => {
-        this.makeRemoteRequest();
+        this._makeRemoteRequestAsync();
       }
     );
   };
@@ -104,7 +100,6 @@ export class ListaDisponiveis extends Component {
   };
 
   render() {
-    console.log(this.state.data)
     return (
       <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         <FlatList
