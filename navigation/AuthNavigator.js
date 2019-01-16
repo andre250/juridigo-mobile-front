@@ -11,6 +11,7 @@ import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
 import LoginScreen from '../screens/Auth/LoginScreen'
 import AuthLoadingScreen from '../screens/Auth/AuthLoadingScreen'
+import FormularioScreen from '../screens/FormularioScreen'
 
 const AppStack = createStackNavigator(
     { 
@@ -27,8 +28,9 @@ const AppStack = createStackNavigator(
 export default createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
-    App: AppStack,
     Auth: LoginScreen,
+    RegisterForm: FormularioScreen,
+    App: AppStack,
   },
   {
     initialRouteName: 'AuthLoading',

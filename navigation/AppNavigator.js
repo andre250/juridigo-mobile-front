@@ -1,9 +1,9 @@
 import React from 'react';
-import { createAppContainer, createSwitchNavigator, createStackNavigator } from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 import AuthNavigator from './AuthNavigator';
 
-export default createAppContainer(
+const MainNavigator = 
   createStackNavigator(
     { 
       Root: AuthNavigator 
@@ -14,5 +14,8 @@ export default createAppContainer(
         headerVisible: false,
       }
      }
-  )
-);
+  );
+
+const AppNavigator = createAppContainer(MainNavigator);
+
+export default AppNavigator;

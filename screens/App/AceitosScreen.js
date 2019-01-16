@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ListaDisponiveis } from '../components/ListaDisponiveis';
+import { ListaAceitos } from '../../components/ListaAceitos';
 
-export default class LinksScreen extends React.Component {
+export default class AceitosScreen extends React.Component {
   
   static navigationOptions = {
     title: 'JuridiGo',
@@ -17,7 +17,8 @@ export default class LinksScreen extends React.Component {
 
   render() {
     return (
-      <ListaDisponiveis></ListaDisponiveis>
+      <ListaAceitos 
+      nav={this.props.navigation}/>
     );
   }
 }

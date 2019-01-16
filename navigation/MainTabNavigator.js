@@ -3,18 +3,23 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import PerfilScreen from '../screens/PerfilScreen';
+import DisponivelScreen from '../screens/App/DisponiveisScreen';
+import DetailDisponivelScreen from '../screens/App/Detail/DetailDisponiveisScreen';
+import AceitosScreen from '../screens/App/AceitosScreen';
+import DetailAceitosScreen from '../screens/App/Detail/DetailAceitosScreen';
+import ConcluidosScreen from '../screens/App/ConcluidosScreen';
+import DetailConcluidosScreen from '../screens/App/Detail/DetailConcluidosScreen';
+import PerfilScreen from '../screens/App/PerfilScreen';
 
 
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+
+const DisponivelStack = createStackNavigator({
+  Disponivel: DisponivelScreen,
+  DetailDisponivel: DetailDisponivelScreen
 });
 
-HomeStack.navigationOptions = {
+DisponivelStack.navigationOptions = {
   tabBarLabel: 'Disponíveis',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -28,11 +33,12 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+const AceitosStack = createStackNavigator({
+  Aceitos: AceitosScreen,
+  DetailAceitos: DetailAceitosScreen
 });
 
-LinksStack.navigationOptions = {
+AceitosStack.navigationOptions = {
   tabBarLabel: 'Aceitos',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -42,11 +48,12 @@ LinksStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const ConcluidosStack = createStackNavigator({
+  Concluidos: ConcluidosScreen,
+  DetailConcluidos: DetailConcluidosScreen
 });
 
-SettingsStack.navigationOptions = {
+ConcluidosStack.navigationOptions = {
   tabBarLabel: 'Concluídos',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -57,7 +64,7 @@ SettingsStack.navigationOptions = {
 };
 
 const PerfilStack = createStackNavigator({
-  Settings: PerfilScreen,
+  Perfil: PerfilScreen,
 });
 
 PerfilStack.navigationOptions = {
@@ -71,8 +78,8 @@ PerfilStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+  DisponivelStack,
+  AceitosStack,
+  ConcluidosStack,
   PerfilStack,
 });

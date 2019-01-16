@@ -18,6 +18,7 @@ export class ListaConcluidos extends Component {
   }
 
   componentDidMount() {
+    this.nav = this.props.nav
     this.makeRemoteRequest();
   }
 
@@ -110,6 +111,7 @@ export class ListaConcluidos extends Component {
               subtitle={item.prazo}
               //avatar={{ uri: item.picture.thumbnail }}
               containerStyle={{ borderBottomWidth: 0 }}
+              onPress={() => this.nav.navigate('DetailConcluidos')}
             />
           )}
           keyExtractor={item => item.idTrabalho}
@@ -126,4 +128,4 @@ export class ListaConcluidos extends Component {
   }
 }
 
-export default ListaDisponiveis;
+export default ListaConcluidos;

@@ -1,7 +1,8 @@
 import React from 'react';
-import { ListaDisponiveis } from '../components/ListaDisponiveis';
 
-export default class HomeScreen extends React.Component {
+import {  Text, View } from 'react-native';
+
+export default class DetailDisponiveisScreen extends React.Component {
 
   static navigationOptions = {
     title: 'JuridiGo',
@@ -16,7 +17,9 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <ListaDisponiveis />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Detalhes desse item!</Text>
+      </View>
     );
   }
 }

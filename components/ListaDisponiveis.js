@@ -17,13 +17,13 @@ export class ListaDisponiveis extends Component {
   }
 
   componentDidMount() {
+    this.nav = this.props.nav
     this._makeRemoteRequestAsync();
   }
 
   _makeRemoteRequestAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     // const { id_usuario } = this.state;
-    console.log(userToken)
     const url = `https://private-599c2-juridigo.apiary-mock.com/trabalhos/:id/propostas?usuario=${userToken}`;
     
     this.setState({ loading: true });
@@ -111,6 +111,7 @@ export class ListaDisponiveis extends Component {
               subtitle={item.prazo}
               //avatar={{ uri: item.picture.thumbnail }}
               containerStyle={{ borderBottomWidth: 0 }}
+              onPress={() => this.nav.navigate('DetailDisponivel')}
             />
           )}
           keyExtractor={item => item.idTrabalho}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ListaDisponiveis } from '../components/ListaDisponiveis';
+import { ListaConcluidos } from '../../components/ListaConcluidos';
 
 export default class LinksScreen extends React.Component {
   
@@ -17,7 +17,8 @@ export default class LinksScreen extends React.Component {
 
   render() {
     return (
-      <ListaDisponiveis></ListaDisponiveis>
+      <ListaConcluidos
+      nav={this.props.navigation}/>
     );
   }
 }
