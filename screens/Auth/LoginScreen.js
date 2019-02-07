@@ -5,9 +5,12 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Text
+  Text,
+  Image
 } from 'react-native';
+import { Divider } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -25,7 +28,8 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput style = {styles.input} 
+        <Image style={styles.logoImage} source={require('../../assets/images/logo_final.png')} />
+        <TextInput style = {styles.inputLogin} 
                       autoCapitalize="none" 
                       onSubmitEditing={() => this.passwordInput.focus()} 
                       onChangeText={ TextInputValue =>
@@ -33,25 +37,33 @@ export default class LoginScreen extends React.Component {
                       autoCorrect={false} 
                       keyboardType='email-address' 
                       returnKeyType="next" 
-                      placeholder='Email ou usuário' 
-                      placeholderTextColor='rgba(225,225,225,0.7)'/>
+                      placeholder='email' 
+                      placeholderTextColor='rgba(63,63,63,0.7)'/>
 
-        <TextInput style = {styles.input}   
+        <TextInput style = {styles.inputPass}   
                       returnKeyType="go" 
                       onChangeText={ TextInputValue =>
                         this.setState({ps: TextInputValue }) }
-                      placeholder='Senha' 
-                      placeholderTextColor='rgba(225,225,225,0.7)' 
+                      placeholder='senha' 
+                      placeholderTextColor='rgba(63,63,63,0.7)' 
                       secureTextEntry/>
 
-        <TouchableOpacity style={styles.buttonContainer} 
+        <TouchableOpacity style={styles.buttonSignin} 
                             onPress={this._logInAsync}>
-                    <Text  style={styles.buttonText}>LOGIN</Text>
+                    <Text  style={styles.buttonSigninText}>ENTRAR</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonContainer} 
-                            onPress={this._facebookLogInAsync}>
-                    <Text  style={styles.buttonText}>FACEBOOK</Text>
+        <TouchableOpacity style={styles.buttonSignup} 
+                            onPress={this._logInAsync}>
+                    <Text  style={styles.buttonSignupText}>Ainda não possuo cadastro</Text>
         </TouchableOpacity>
+        <Text  style={styles.separatorText}>────────  ou  ────────</Text>
+        <View style={styles.fbContainer}>
+          <Image style={styles.fbImage} source={require('../../assets/images/fb_icon.png')} />
+          <TouchableOpacity style={styles.buttonFacebook} 
+                              onPress={this._facebookLogInAsync}>
+                      <Text  style={styles.buttonFacebookText}>ENTRAR COM FACEBOOK</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -92,24 +104,89 @@ export default class LoginScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    flex: 1,
-    justifyContent: 'center'
+       padding: hp('10%'),
+       flex: 1,
+       justifyContent: 'center',
+       backgroundColor: 'black',
+       alignItems: 'center'
    },
-   input:{
-       height: 40,
-       backgroundColor: 'rgba(225,225,225,0.2)',
-       marginBottom: 10,
-       padding: 10,
-       color: '#fff'
+   logoImage: {
+       height: hp('20%'),
+       width: wp('95%'),
+       marginLeft: hp('8%'),
+       marginRight: hp('8%'),
+       marginTop: hp('5%'),
    },
-   buttonContainer:{
+   inputLogin:{
+    height: hp('6%'),
+    width: wp('60%'),
+    marginTop: hp('5%'),
+    marginBottom: hp('2%'),
+    marginLeft: hp('8%'),
+    marginRight: hp('8%'),
+    backgroundColor: '#fff',
+    textAlign: 'center',
+    fontSize: hp('2%')
+  },
+   inputPass:{
+       height: hp('6%'),
+       width: wp('60%'),
+       marginBottom: hp('5%'),
+       marginLeft: hp('8%'),
+       marginRight: hp('8%'),
+       backgroundColor: '#fff',
+       textAlign: 'center',
+       fontSize: hp('2%')
+   },
+   buttonSignin:{
        backgroundColor: '#2980b6',
-       paddingVertical: 15,
-       marginBottom: 10,
+       paddingVertical: hp('1%'),
+       marginBottom: hp('5%'),
+       marginLeft: hp('5%'),
+       marginRight: hp('5%'),
+       width: wp('35%'),
+       height: hp('5%'),
    },
-   buttonText:{
+   buttonSigninText:{
        color: '#fff',
+       textAlign: 'center',
+       fontWeight: '700'
+   },
+   buttonSignup:{
+       paddingVertical: hp('2%'),
+       marginBottom: hp('5%'),
+   },
+   buttonSignupText:{
+       textDecorationLine: 'underline',
+       color: 'white',
+       textAlign: 'center',
+       fontWeight: '700'
+   },
+   separatorText:{
+       color: 'white',
+       textAlign: 'center',
+       fontWeight: '700',
+       marginBottom: hp('7%'),
+       width: wp('100%'),
+   },
+   fbImage:{
+       paddingVertical: hp('2%'),
+       height: hp('10%'),
+       width: wp('20%'),
+   },
+   fbContainer:{
+    flexDirection: 'row'
+   },
+   buttonFacebook:{
+       backgroundColor: '#3C579E',
+       paddingVertical: hp('3,5%'),
+       marginBottom: 10,
+       height: hp('10%'),
+       width: wp('60%'),
+   },
+   buttonFacebookText:{
+       textDecorationLine: 'underline',
+       color: 'white',
        textAlign: 'center',
        fontWeight: '700'
    }
