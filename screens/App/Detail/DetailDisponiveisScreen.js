@@ -1,10 +1,14 @@
 import React from 'react';
 import { MapView, Marker } from 'expo';
-import {  Text, View } from 'react-native';
+import {  Text, View, ScrollView } from 'react-native';
+import { LogoTitle } from '../../../components/LogoTitle';
+import { DetailItem } from '../../../components/DetailItem';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export default class DetailDisponiveisScreen extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props)
     this.state = {
       markers: [
           {
@@ -21,39 +25,54 @@ export default class DetailDisponiveisScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'JuridiGo',
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
+    header: (
+      <LogoTitle />
+    )
   };
 
   render() {
     return (
-      <MapView
-        ref={MapView => (this.MapView = MapView)}
-        style={{ flex: 1 }}
-        showsUserLocation={true}
-        initialRegion={{
-          latitude: -23.519812,
-          longitude: -46.660077,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-      >
-      {this.state.markers.map((marker, i)  => (  
-              <MapView.Marker
-                key={marker.id}
-                coordinate={marker.coordinate}
-                title={marker.title}
-                description={marker.description}
-              />
-              
-      ))}
-      </MapView>
+      <ScrollView style={{ height: "100%" }}>
+      <Text
+      style={{
+        backgroundColor: "#2AA3D8",
+        textAlign: "center",
+        color: "white",
+        fontSize:hp('3%'),
+        padding:hp('1%'),
+        paddingBottom:hp('3%')
+      }}>
+      {this.props.navigation.state.params.item.rotulo}</Text>
+        <View style={{ height: hp('30%') }}>
+          <MapView
+            ref={MapView => (this.MapView = MapView)}
+            style={{ flex: 1 }}
+            showsUserLocation={true}
+            initialRegion={{
+              latitude: -23.519812,
+              longitude: -46.660077,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+          {this.state.markers.map((marker, i)  => (  
+                  <MapView.Marker
+                    key={marker.id}
+                    coordinate={marker.coordinate}
+                    title={marker.title}
+                    description={marker.description}
+                  />
+                  
+          ))}
+          </MapView>
+        </View>
+          <DetailItem />
+          <DetailItem />
+          <DetailItem />
+          <DetailItem />
+          <DetailItem />
+          <DetailItem />
+      </ScrollView>
     );
   }
 }

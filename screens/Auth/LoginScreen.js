@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  Image
+  Image, 
+  Alert
 } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
@@ -15,7 +16,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
-    state = {
+    this.state = {
       us: '',
       ps: ''
     }
@@ -95,10 +96,33 @@ export default class LoginScreen extends React.Component {
   
 
   _logInAsync = async () => {
-    await AsyncStorage.setItem('userToken', this.state.us+this.state.ps);
-    //console.log(this.state.us)
-    //console.log(this.state.ps)
-    this.props.navigation.navigate('App');
+    if (!this.state.us) {
+      Alert.alert(
+        'Usuário não preenchido',
+        'Por favor entre com o seu usuário.')
+    }
+    else if (!this.state.ps) {
+        Alert.alert(
+          'Senha não preenchida',
+          'Por favor entre com a sua senha.')
+      }
+    else {
+      let credentials = this.state.us + ':' + this.state.ps
+      /* fetch('')
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          data: res,
+          loading: false,
+          refreshing: false
+        });
+      })
+      .catch(error => {
+        this.setState({ loading: false });
+      }); */
+      await AsyncStorage.setItem('userToken', credentials);
+      this.props.navigation.navigate('App');
+    }
   };
 }
 

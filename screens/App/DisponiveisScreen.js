@@ -1,17 +1,14 @@
 import React from 'react';
 import { ListaDisponiveis } from '../../components/ListaDisponiveis';
+import { LogoTitle } from '../../components/LogoTitle';
+import { View, Text } from "react-native";
 
 export default class HomeScreen extends React.Component {
 
   static navigationOptions = {
-    title: 'JuridiGo',
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
+    header: (
+      <LogoTitle />
+    )
   };
 
   render() {

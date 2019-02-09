@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator, AsyncStorage } from "react-native";
+import { View, FlatList, ActivityIndicator, AsyncStorage, Text } from "react-native";
 import { List, ListItem, SearchBar } from "react-native-elements";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 export class ListaDisponiveis extends Component {
   constructor(props) {
@@ -79,6 +80,61 @@ export class ListaDisponiveis extends Component {
     );
   };
 
+  renderItem = ({ item }) => (
+    <ListItem
+      roundAvatar
+      hideChevron
+      title={
+      <View
+        style={{
+          backgroundColor: "#2AA3D8",
+          borderRadius:7,
+        }}>
+      <Text
+      style={{
+        color: "white",
+        textAlign:"center",
+        height:hp('5%'),
+      }}>
+      {item.rotulo}</Text> 
+      <View
+        style={{
+          backgroundColor: "#fff",
+          height:hp('7%'),
+          flexDirection: 'row'
+        }}>
+        <Text
+        style={{
+          color: "#A1A1A1",
+          marginLeft: wp('5%')
+        }}>
+        14h - 11/02</Text>
+
+        <Text
+        style={{
+          color: "#A1A1A1",
+          marginLeft: wp('5%')
+        }}>
+        R$ 500,00</Text>
+
+        <Text
+        style={{
+          color: "#A1A1A1",
+          marginLeft: wp('5%')
+        }}>
+        4,3 KM</Text>
+      </View>
+    </View>}
+      //title={`${item.rotulo}`}
+      // subtitle={item.prazo}
+      //avatar={{ uri: item.picture.thumbnail }}
+      containerStyle={{ borderBottomWidth: 0 }}
+      onPress={() => this.nav.navigate('DetailDisponivel',{
+        item: item
+    })}
+    />
+  );
+  
   renderHeader = () => {
     return <SearchBar placeholder="Busque aqui..." lightTheme round />;
   };
@@ -102,20 +158,16 @@ export class ListaDisponiveis extends Component {
   render() {
     return (
       <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+        <View style={{
+          backgroundColor: "#E8E9ED",
+          height:"100%",
+          justifyContent: 'center',
+        }}>
         <FlatList
           data={this.state.data}
-          renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              title={`${item.rotulo}`}
-              subtitle={item.prazo}
-              //avatar={{ uri: item.picture.thumbnail }}
-              containerStyle={{ borderBottomWidth: 0 }}
-              onPress={() => this.nav.navigate('DetailDisponivel')}
-            />
-          )}
+          renderItem={this.renderItem}
           keyExtractor={item => item.idTrabalho}
-          ItemSeparatorComponent={this.renderSeparator}
+          // ItemSeparatorComponent={this.renderSeparator}
           ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
@@ -123,9 +175,11 @@ export class ListaDisponiveis extends Component {
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
+        </View>
       </List>
     );
   }
 }
+
 
 export default ListaDisponiveis;
