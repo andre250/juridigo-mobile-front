@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator } from "react-native";
-import { List, ListItem, SearchBar } from "react-native-elements";
+import { View, FlatList, Text, StyleSheet } from "react-native";
+import { ListItem } from "react-native-elements";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import JobSteps from "./JobSteps";
 
 export class ListaAceitos extends Component {
   constructor(props) {
@@ -13,7 +15,8 @@ export class ListaAceitos extends Component {
       page: 1,
       seed: 1,
       error: null,
-      refreshing: false
+      refreshing: false,
+      currentPosition: 0
     };
   }
 
@@ -65,67 +68,90 @@ export class ListaAceitos extends Component {
     );
   };
 
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: "86%",
-          backgroundColor: "#CED0CE",
-          marginLeft: "14%"
-        }}
-      />
-    );
-  };
+  renderItem = ({ item }) => (
+    <ListItem
+      roundAvatar
+      hideChevron
+      title={
+        <View
+          style={{
+            backgroundColor: "#13438F",
+            borderRadius: 7,
+          }}>
+          <Text
+            style={{
+              color: "white",
+              textAlign: "center",
+              height: hp('5%'),
+            }}>
+            {item.rotulo}</Text>
+          <View style={{
+            backgroundColor: "#fff",
+            padding: hp('1%')
+          }}>
+            <JobSteps />
+          </View>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: hp('5%'),
+              flexDirection: 'row',
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                color: "#A1A1A1",
+                marginLeft: wp('5%')
+              }}>
+              14h - 11/02</Text>
 
-  renderHeader = () => {
-    return <SearchBar placeholder="Busque aqui..." lightTheme round />;
-  };
+            <Text
+              style={{
+                color: "#A1A1A1",
+                marginLeft: wp('5%')
+              }}>
+              R$ 500,00</Text>
 
-  renderFooter = () => {
-    if (!this.state.loading) return null;
-
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#CED0CE"
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  };
+            <Text
+              style={{
+                color: "#A1A1A1",
+                marginLeft: wp('5%')
+              }}>
+              4,3 KM</Text>
+          </View>
+        </View>}
+      containerStyle={{ borderBottomWidth: 0 }}
+      onPress={() => this.nav.navigate('DetailAceitos', {
+        item: item
+      })}
+    />
+  );
 
   render() {
-    console.log(this.state.data)
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+      <View style={styles.container}>
         <FlatList
           data={this.state.data}
-          renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              title={`${item.rotulo}`}
-              subtitle={item.prazo}
-              //avatar={{ uri: item.picture.thumbnail }}
-              containerStyle={{ borderBottomWidth: 0 }}
-              onPress={() => this.nav.navigate('DetailAceitos')}
-            />
-          )}
+          renderItem={this.renderItem}
           keyExtractor={item => item.idTrabalho}
-          ItemSeparatorComponent={this.renderSeparator}
-          ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
-      </List>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#E8E9ED",
+    height: "100%",
+    justifyContent: 'center',
+  }
+});
 
 export default ListaAceitos;

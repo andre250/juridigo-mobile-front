@@ -85,7 +85,7 @@ export default class LoginScreen extends React.Component {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
         await AsyncStorage.setItem('userToken', token);
         this.props.navigation.navigate('App');
-        // console.log(`Response ${(await JSON.stringify(response))}!`);
+        console.log(`Response ${(await JSON.stringify(response))}!`);
       } else {
         // type === 'cancel'
       }
@@ -94,7 +94,6 @@ export default class LoginScreen extends React.Component {
     }
   }
   
-
   _logInAsync = async () => {
     if (!this.state.us) {
       Alert.alert(

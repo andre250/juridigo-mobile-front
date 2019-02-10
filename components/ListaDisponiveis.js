@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator, AsyncStorage, Text } from "react-native";
-import { List, ListItem, SearchBar } from "react-native-elements";
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { View, FlatList, StyleSheet, AsyncStorage, Text } from "react-native";
+import { ListItem } from "react-native-elements";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Icon from "react-native-vector-icons/Ionicons";
+import { Platform } from 'react-native';
 
 export class ListaDisponiveis extends Component {
   constructor(props) {
@@ -26,7 +28,7 @@ export class ListaDisponiveis extends Component {
     const userToken = await AsyncStorage.getItem('userToken');
     // const { id_usuario } = this.state;
     const url = `https://private-599c2-juridigo.apiary-mock.com/trabalhos/:id/propostas?usuario=${userToken}`;
-    
+
     this.setState({ loading: true });
 
     fetch(url)
@@ -67,119 +69,91 @@ export class ListaDisponiveis extends Component {
     );
   };
 
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: "86%",
-          backgroundColor: "#CED0CE",
-          marginLeft: "14%"
-        }}
-      />
-    );
-  };
-
   renderItem = ({ item }) => (
     <ListItem
       roundAvatar
       hideChevron
       title={
-      <View
-        style={{
-          backgroundColor: "#2AA3D8",
-          borderRadius:7,
-        }}>
-      <Text
-      style={{
-        color: "white",
-        textAlign:"center",
-        height:hp('5%'),
-      }}>
-      {item.rotulo}</Text> 
-      <View
-        style={{
-          backgroundColor: "#fff",
-          height:hp('7%'),
-          flexDirection: 'row'
-        }}>
-        <Text
-        style={{
-          color: "#A1A1A1",
-          marginLeft: wp('5%')
-        }}>
-        14h - 11/02</Text>
-
-        <Text
-        style={{
-          color: "#A1A1A1",
-          marginLeft: wp('5%')
-        }}>
-        R$ 500,00</Text>
-
-        <Text
-        style={{
-          color: "#A1A1A1",
-          marginLeft: wp('5%')
-        }}>
-        4,3 KM</Text>
-      </View>
-    </View>}
-      //title={`${item.rotulo}`}
-      // subtitle={item.prazo}
-      //avatar={{ uri: item.picture.thumbnail }}
+        <View style={styles.listItemContainer}>
+          <Text style={styles.labelText}> {item.rotulo}</Text>
+          <View style={styles.listItemLowerContainer}>
+            <View style={styles.infoContainer}>
+              <Icon name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9F9F9F" size={25} />
+              <Text style={styles.infoLabel}>14h - 11/02</Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <Icon name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"} color="#9F9F9F" size={25} />
+              <Text style={styles.infoLabel}>R$ 500,00</Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
+              <Text style={styles.infoLabel}>4,3 KM</Text>
+            </View>
+          </View>
+        </View>}
       containerStyle={{ borderBottomWidth: 0 }}
-      onPress={() => this.nav.navigate('DetailDisponivel',{
+      onPress={() => this.nav.navigate('DetailDisponivel', {
         item: item
-    })}
+      })}
     />
   );
-  
-  renderHeader = () => {
-    return <SearchBar placeholder="Busque aqui..." lightTheme round />;
-  };
-
-  renderFooter = () => {
-    if (!this.state.loading) return null;
-
-    return (
-      <View
-        style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#CED0CE"
-        }}
-      >
-        <ActivityIndicator animating size="large" />
-      </View>
-    );
-  };
 
   render() {
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
-        <View style={{
-          backgroundColor: "#E8E9ED",
-          height:"100%",
-          justifyContent: 'center',
-        }}>
+      <View style={styles.container}>
         <FlatList
           data={this.state.data}
           renderItem={this.renderItem}
           keyExtractor={item => item.idTrabalho}
-          // ItemSeparatorComponent={this.renderSeparator}
-          ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
-        </View>
-      </List>
+      </View>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#E8E9ED",
+    height: "100%",
+    justifyContent: 'center',
+  },
+  labelText: {
+    color: "white",
+    textAlign: "center",
+    height: hp('5%'),
+    fontWeight: 'bold',
+    fontSize: hp("2%"),
+    alignSelf: "center",
+    textAlignVertical: "center"
+  },
+  listItemContainer: {
+    backgroundColor: "#2AA3D8",
+    borderRadius: 7,
+  },
+  listItemLowerContainer: {
+    backgroundColor: "#fff",
+    height: hp('7%'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    padding: hp('1%'),
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  infoLabel: {
+    color: "#9F9F9F",
+    fontWeight: 'bold',
+    padding: hp('1%'),
+  }
+});
 
 export default ListaDisponiveis;

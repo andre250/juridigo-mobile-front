@@ -1,7 +1,6 @@
 import React from 'react';
 import { ListaDisponiveis } from '../../components/ListaDisponiveis';
 import { LogoTitle } from '../../components/LogoTitle';
-import { View, Text } from "react-native";
 
 export default class HomeScreen extends React.Component {
 

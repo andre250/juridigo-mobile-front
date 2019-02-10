@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator } from "react-native";
+import { View, FlatList, ActivityIndicator, Text, StyleSheet } from "react-native";
 import { List, ListItem, SearchBar } from "react-native-elements";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { Icon } from 'expo';
+import Colors from '../constants/Colors';
 
 export class ListaConcluidos extends Component {
   constructor(props) {
@@ -78,9 +81,65 @@ export class ListaConcluidos extends Component {
     );
   };
 
-  renderHeader = () => {
-    return <SearchBar placeholder="Busque aqui..." lightTheme round />;
-  };
+  renderItem = ({ item }) => (
+    <ListItem
+      roundAvatar
+      hideChevron
+      title={
+        <View
+          style={{
+            backgroundColor: "#3D3D3D",
+            borderRadius: 7,
+          }}>
+          <Text
+            style={{
+              color: "white",
+              textAlign: "center",
+              height: hp('5%'),
+            }}>
+            {item.rotulo}</Text>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              height: hp('7%'),
+              flexDirection: 'row'
+            }}>
+            
+            <Text
+              style={{
+                color: "#A1A1A1",
+                marginLeft: wp('5%')
+              }}>
+              14h - 11/02</Text>
+
+            <Text
+              style={{
+                color: "#A1A1A1",
+                marginLeft: wp('5%')
+              }}>
+              R$ 500,00</Text>
+
+            <Text
+              style={{
+                color: "#A1A1A1",
+                marginLeft: wp('5%')
+              }}>
+              4,3 KM</Text>
+          </View>
+        </View>}
+      //title={`${item.rotulo}`}
+      // subtitle={item.prazo}
+      //avatar={{ uri: item.picture.thumbnail }}
+      containerStyle={{ borderBottomWidth: 0 }}
+      onPress={() => this.nav.navigate('DetailDisponivel', {
+        item: item
+      })}
+    />
+  );
+
+  // renderHeader = () => {
+  //   return <SearchBar placeholder="Busque aqui..." lightTheme round />;
+  // };
 
   renderFooter = () => {
     if (!this.state.loading) return null;
@@ -88,34 +147,23 @@ export class ListaConcluidos extends Component {
     return (
       <View
         style={{
-          paddingVertical: 20,
-          borderTopWidth: 1,
-          borderColor: "#CED0CE"
-        }}
-      >
+          backgroundColor: "#E8E9ED",
+          height: "100%",
+          justifyContent: 'center',
+        }}>
         <ActivityIndicator animating size="large" />
       </View>
     );
   };
 
   render() {
-    console.log(this.state.data)
     return (
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+      <View style={styles.container}>
         <FlatList
           data={this.state.data}
-          renderItem={({ item }) => (
-            <ListItem
-              roundAvatar
-              title={`${item.rotulo}`}
-              subtitle={item.prazo}
-              //avatar={{ uri: item.picture.thumbnail }}
-              containerStyle={{ borderBottomWidth: 0 }}
-              onPress={() => this.nav.navigate('DetailConcluidos')}
-            />
-          )}
+          renderItem={this.renderItem}
           keyExtractor={item => item.idTrabalho}
-          ItemSeparatorComponent={this.renderSeparator}
+          // ItemSeparatorComponent={this.renderSeparator}
           ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
           onRefresh={this.handleRefresh}
@@ -123,9 +171,17 @@ export class ListaConcluidos extends Component {
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={50}
         />
-      </List>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#E8E9ED",
+    height: "100%",
+    justifyContent: 'center',
+  }
+});
 
 export default ListaConcluidos;

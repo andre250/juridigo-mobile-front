@@ -20,6 +20,7 @@
     "react-native-elements": "^0.19.1",
     "react-native-fbsdk": "^0.8.0",
     "react-native-responsive-screen": "^1.2.0",
+    "react-native-step-indicator": "0.0.9",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",

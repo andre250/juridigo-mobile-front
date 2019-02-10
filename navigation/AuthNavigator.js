@@ -13,6 +13,7 @@ import LoginScreen from '../screens/Auth/LoginScreen'
 import AuthLoadingScreen from '../screens/Auth/AuthLoadingScreen'
 import FormularioScreen from '../screens/FormularioScreen'
 
+
 const AppStack = createStackNavigator(
     { 
       Main: MainTabNavigator 

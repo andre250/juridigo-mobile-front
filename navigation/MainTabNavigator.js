@@ -11,9 +11,6 @@ import ConcluidosScreen from '../screens/App/ConcluidosScreen';
 import DetailConcluidosScreen from '../screens/App/Detail/DetailConcluidosScreen';
 import PerfilScreen from '../screens/App/PerfilScreen';
 
-
-
-
 const DisponivelStack = createStackNavigator({
   Disponivel: DisponivelScreen,
   DetailDisponivel: DetailDisponivelScreen
@@ -26,8 +23,8 @@ DisponivelStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? 'ios-briefcase'
+          : 'md-briefcase'
       }
     />
   ),
@@ -43,7 +40,7 @@ AceitosStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-bookmarks' : 'md-bookmarks'}
     />
   ),
 };
@@ -58,7 +55,7 @@ ConcluidosStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-checkmark-circle' : 'md-checkmark-circle'}
     />
   ),
 };
@@ -72,7 +69,7 @@ PerfilStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'}
     />
   ),
 };
