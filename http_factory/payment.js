@@ -1,12 +1,13 @@
 
-function Flow(mainRoute) {
-    this.mainRoute = mainRoute + "/fluxo";
+function Payment(mainRoute) {
+    this.mainRoute = mainRoute + "/pagamento";
 };
 
-Flow.prototype.createFlow = function (flowBody) {
+
+Proposal.prototype.createPayment = function (body) {
     fetch(`${this.mainRoute}`, {
         method: "POST",
-        body: JSON.stringify(flowBody)
+        body: JSON.stringify(body)
     })
         .then(res => res.json())
         .then(finalRes => {
@@ -17,8 +18,9 @@ Flow.prototype.createFlow = function (flowBody) {
         });
 };
 
-Flow.prototype.updateFlow = function (flowId, updatedBody) {
-    fetch(`${this.mainRoute}?id=${flowId}`, {
+
+Proposal.prototype.updatePayment = function (paymentId, updatedBody) {
+    fetch(`${this.mainRoute}?pagamento=${paymentId}`, {
         method: "PUT",
         body: JSON.stringify(updatedBody)
     })
@@ -28,12 +30,12 @@ Flow.prototype.updateFlow = function (flowId, updatedBody) {
         })
         .catch(err => {
             return err;
-        })
+        });
 };
 
 
-Flow.prototype.getFlowByJobId = function (jobId) {
-    fetch(`${this.mainRoute}?trabalho=${jobId}`, {
+Proposal.prototype.getPaymentsByStatus = function (status) {
+    fetch(`${this.mainRoute}?status=${status}`, {
         method: "GET"
     })
         .then(res => res.json())
@@ -42,7 +44,7 @@ Flow.prototype.getFlowByJobId = function (jobId) {
         })
         .catch(err => {
             return err;
-        });
+        })
 };
 
-module.exports = Flow;
+module.exports = Payment;
