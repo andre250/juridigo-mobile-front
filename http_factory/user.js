@@ -30,6 +30,8 @@ User.prototype.getFacebookInfo = function (credential) {
 };
 
 User.prototype.login = function (login) {
+    console.log(login)
+    console.log("oi")
     fetch(`${this.mainRoute}/login`, {
         method: "POST",
         body: JSON.stringify(login)

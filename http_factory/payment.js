@@ -1,5 +1,5 @@
 
-function Payment(mainRoute) {
+function Proposal(mainRoute) {
     this.mainRoute = mainRoute + "/pagamento";
 };
 
@@ -47,4 +47,4 @@ Proposal.prototype.getPaymentsByStatus = function (status) {
         })
 };
 
-module.exports = Payment;
+module.exports = Proposal;

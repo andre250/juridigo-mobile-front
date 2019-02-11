@@ -5,7 +5,7 @@ const Flow = require("./flow");
 const User = require("./user");
 const Payment = require("./payment");
 
-const mainRoute = "https://private-599c2-juridigo.apiary-mock.com";
+const mainRoute = "https://api-hml.juridigo.com.br";
 const interactRoute = `${mainRoute}/interacao`;
 const userRoute = `${mainRoute}/usuario`;
 const paymentRoute = `${mainRoute}/pagamento`

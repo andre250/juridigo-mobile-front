@@ -1,8 +1,6 @@
-const initialState = {
-    info: {},
-};
+const token = "";
 
-const Login = (state = initialState, action) => {
+const Login = (state = token, action) => {
     switch (action.type) {
       case 'LOGIN':
         return action.payload;
