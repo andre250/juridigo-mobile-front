@@ -4,26 +4,7 @@ import { Text, View, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { JobSteps } from '../../../components/JobSteps';
 import { Platform } from 'react-native';
-
-const labels = ["Contestação", "Saída", "Chegada", "Audiência", "Pagamento"];
-const customStyles = {
-  stepIndicatorSize: 20,
-  currentStepIndicatorSize: 30,
-  separatorStrokeWidth: 2,
-  currentStepStrokeWidth: 3,
-  stepStrokeCurrentColor: '#fe7013',
-  stepStrokeWidth: 3,
-  stepStrokeFinishedColor: '#fe7013',
-  stepStrokeUnFinishedColor: '#aaaaaa',
-  separatorFinishedColor: '#fe7013',
-  separatorUnFinishedColor: '#aaaaaa',
-  stepIndicatorFinishedColor: '#fe7013',
-  stepIndicatorUnFinishedColor: '#ffffff',
-  stepIndicatorCurrentColor: '#ffffff',
-  labelSize: 0
-}
 
 export default class DetailDisponiveisScreen extends React.Component {
   constructor(props) {

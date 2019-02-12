@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { View, FlatList, Text, StyleSheet } from "react-native";
 import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Icon from "react-native-vector-icons/Ionicons"
+import { Platform } from 'react-native';
 import JobSteps from "./JobSteps";
 
 export class ListaAceitos extends Component {
@@ -73,53 +75,24 @@ export class ListaAceitos extends Component {
       roundAvatar
       hideChevron
       title={
-        <View
-          style={{
-            backgroundColor: "#13438F",
-            borderRadius: 7,
-          }}>
-          <Text
-            style={{
-              color: "white",
-              textAlign: "center",
-              height: hp('5%'),
-            }}>
-            {item.rotulo}</Text>
-          <View style={{
-            backgroundColor: "#fff",
-            padding: hp('1%')
-          }}>
+        <View style={styles.listItemContainer}>
+          <Text style={styles.labelText}>{item.rotulo}</Text>
+          <View style={styles.jobStepContainer}>
             <JobSteps />
           </View>
-          <View
-            style={{
-              backgroundColor: "#fff",
-              height: hp('5%'),
-              flexDirection: 'row',
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                color: "#A1A1A1",
-                marginLeft: wp('5%')
-              }}>
-              14h - 11/02</Text>
-
-            <Text
-              style={{
-                color: "#A1A1A1",
-                marginLeft: wp('5%')
-              }}>
-              R$ 500,00</Text>
-
-            <Text
-              style={{
-                color: "#A1A1A1",
-                marginLeft: wp('5%')
-              }}>
-              4,3 KM</Text>
+          <View style={styles.listItemLowerContainer}>
+            <View style={styles.infoContainer}>
+              <Icon name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9F9F9F" size={25} />
+              <Text style={styles.infoLabel}>14h - 11/02</Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <Icon name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"} color="#9F9F9F" size={25} />
+              <Text style={styles.infoLabel}>R$ 500,00</Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
+              <Text style={styles.infoLabel}>4,3 KM</Text>
+            </View>
           </View>
         </View>}
       containerStyle={{ borderBottomWidth: 0 }}
@@ -151,6 +124,45 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8E9ED",
     height: "100%",
     justifyContent: 'center',
+  },
+  jobStepContainer: {
+    backgroundColor: "#fff",
+    paddingTop: hp('1%'),
+    paddingLeft: hp('1%'),
+    paddingRight: hp('1%'),
+  },
+  labelText: {
+    color: "white",
+    textAlign: "center",
+    height: hp('5%'),
+    fontWeight: 'bold',
+    fontSize: hp("2%"),
+    alignSelf: "center",
+    textAlignVertical: "center"
+  },
+  listItemContainer: {
+    backgroundColor: "#13438F",
+    borderRadius: 7,
+  },
+  listItemLowerContainer: {
+    backgroundColor: "#fff",
+    height: hp('5%'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    padding: hp('1%'),
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  infoLabel: {
+    color: "#9F9F9F",
+    fontWeight: 'bold',
+    padding: hp('1%'),
   }
 });
 
