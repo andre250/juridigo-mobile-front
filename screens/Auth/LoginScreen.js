@@ -7,15 +7,18 @@ import {
   TouchableOpacity,
   Text,
   Image,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { Divider } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { connect } from 'react-redux';
-import { login } from '../../actions/index';
+import User from '../../http_factory/user';
+import sha256 from 'js-sha256';
 
-class LoginScreen extends React.Component {
+let user = new User();
+
+export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,9 +41,9 @@ class LoginScreen extends React.Component {
           onChangeText={TextInputValue =>
             this.setState({ us: TextInputValue })}
           autoCorrect={false}
-          keyboardType='email-address'
+          keyboardType='default'
           returnKeyType="next"
-          placeholder='email'
+          placeholder='usuario'
           placeholderTextColor='rgba(63,63,63,0.7)' />
         <TextInput style={styles.inputPass}
           returnKeyType="go"
@@ -52,7 +55,9 @@ class LoginScreen extends React.Component {
 
         <TouchableOpacity style={styles.buttonSignin}
           onPress={this._logInAsync}>
-          <Text style={styles.buttonSigninText}>ENTRAR</Text>
+          { this.state.loading == true 
+            ? <ActivityIndicator size="small" color="#FFFFFF" />
+            : <Text style={styles.buttonSigninText}>ENTRAR</Text> }
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonSignup}
           onPress={this._logInAsync}>
@@ -72,7 +77,7 @@ class LoginScreen extends React.Component {
 
   _facebookLogInAsync = async () => {
     try {
-      const {
+      const { 
         type,
         token,
         expires,
@@ -96,46 +101,34 @@ class LoginScreen extends React.Component {
   }
 
   _logInAsync = async () => {
-    const factory = require("../../http_factory/factory")
-    fetch(`https://api-hml.juridigo.com.br/usuario/login`, {
-      method: "POST",
-      body: JSON.stringify()
-    })
-      .then(res => res.json())
-      .then(finalRes => {s
-        return this.props.onLogin(finalRes)
-      })
-      .catch(err => {
-        console.log(err)
-        return err;
-      });
-    // if (!this.state.us) {
-    //   Alert.alert(
-    //     'Usuário não preenchido',
-    //     'Por favor entre com o seu usuário.')
-    // }
-    // else if (!this.state.ps) {
-    //     Alert.alert(
-    //       'Senha não preenchida',
-    //       'Por favor entre com a sua senha.')
-    //   }
-    // else {
-    //   let credentials = this.state.us + ':' + this.state.ps
-    //   /* fetch('')
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     this.setState({
-    //       data: res,
-    //       loading: false,
-    //       refreshing: false
-    //     });
-    //   })
-    //   .catch(error => {
-    //     this.setState({ loading: false });
-    //   }); */
-    //   await AsyncStorage.setItem('userToken', credentials);
-    //   this.props.navigation.navigate('App');
-    // }
+    this.setState({ loading: true });
+
+    if (!this.state.us) {
+      this.setState({ loading: false });
+      return Alert.alert(
+        'Usuário não preenchido',
+        'Por favor entre com o seu usuário.');
+    }
+    else if (!this.state.ps) {
+      this.setState({ loading: false });
+      return Alert.alert(
+        'Senha não preenchida',
+        'Por favor entre com a sua senha.');
+    }
+
+    try {
+      const hash = sha256.create().update(this.state.us + "@" + this.state.ps).hex();
+      const token = await user.login({ "credencial": hash });
+      await AsyncStorage.setItem('userToken', token);
+      this.setState({ loading: false });
+      this.props.navigation.navigate('App');
+    } catch (error) {
+      this.setState({ loading: false });
+      return Alert.alert(
+        'Usuário ou senha inválido',
+        'Por favor verifique e tente novamente.'
+      );
+    };
   };
 }
 
@@ -228,17 +221,3 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   }
 });
-
-let mapStateToProps = state => ({
-  user: state.token
-});
-
-const mapDispatchToProps = dispatch => ({
-  onLogin: (token) => {
-    dispatch(login(token.token))
-  }
-})
-
-const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
-
-export default LoginContainer;

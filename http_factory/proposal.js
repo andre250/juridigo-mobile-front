@@ -1,50 +1,46 @@
 
-function Proposal(mainRoute) {
-    this.mainRoute = mainRoute + "/proposta";
-};
-
-
-Proposal.prototype.createProposal = function (proposalBody) {
-    fetch(`${this.mainRoute}`, {
-        method: "POST",
-        body: JSON.stringify(jobBody)
-    })
-        .then(res => res.json())
-        .then(finalRes => {
-            return finalRes;
+class Proposal {
+    constructor(mainRoute) {
+        this.mainRoute = mainRoute + "/proposta";
+    }
+    createProposal(proposalBody) {
+        fetch(`${this.mainRoute}`, {
+            method: "POST",
+            body: JSON.stringify(jobBody)
         })
-        .catch(err => {
-            return err;
-        });
-};
-
-
-Proposal.prototype.getProposalByUser = function (userId) {
-    fetch(`${this.mainRoute}?usuario=${userId}`, {
-        method: "GET"
-    })
-        .then(res => res.json())
-        .then(finalRes => {
-            return finalRes;
+            .then(res => res.json())
+            .then(finalRes => {
+                return finalRes;
+            })
+            .catch(err => {
+                return err;
+            });
+    }
+    getProposalByUser(userId) {
+        fetch(`${this.mainRoute}?usuario=${userId}`, {
+            method: "GET"
         })
-        .catch(err => {
-            return err;
-        });
-};
-
-
-Proposal.prototype.updateProposal = function (proposalId, updatedBody) {
-    fetch(`${this.mainRoute}?id=${proposalId}`, {
-        method: "PUT",
-        body: JSON.stringify(updatedBody)
-    })
-        .then(res => res.json())
-        .then(finalRes => {
-            return finalRes;
+            .then(res => res.json())
+            .then(finalRes => {
+                return finalRes;
+            })
+            .catch(err => {
+                return err;
+            });
+    }
+    updateProposal(proposalId, updatedBody) {
+        fetch(`${this.mainRoute}?id=${proposalId}`, {
+            method: "PUT",
+            body: JSON.stringify(updatedBody)
         })
-        .catch(err => {
-            return err;
-        })
+            .then(res => res.json())
+            .then(finalRes => {
+                return finalRes;
+            })
+            .catch(err => {
+                return err;
+            });
+    }
 };
 
 module.exports = Proposal;
