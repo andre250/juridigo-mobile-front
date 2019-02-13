@@ -1,67 +1,38 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
-
+import { StyleSheet, View, Text } from 'react-native';
+import { LogoTitle } from '../components/LogoTitle';
 import Wizard from '../components/Wizard';
 import Input from '../components/Input';
-
-const forms = [
-  {
-    placeholder: 'Cadastrais',
-    name: 'cadastrais',
-  },
-  {
-    placeholder: 'Curriculares',
-    name: 'curriculares',
-  },
-  {
-    placeholder: 'Pagamento',
-    name: 'pagamento',
-  },
-];
+import CadastralForm from '../components/Forms/CadastralForm';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default class FormularioScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  static navigationOptions = {
+    header: (
+      <LogoTitle />
+    )
+  };
+
   render() {
     return (
       <View style={styles.root}>
-        <Wizard
-          nav={this.props.navigation}
-          initialValues={{
-            cadastrais: '',
-            curriculares: '',
-            pagamento: '',
-          }}
-        >
-          {forms.map(el => (
-            <Wizard.Step key={el.name}>
-              {({ onChangeValue, values }) => (
-                <View style={styles.container}>
-                  <Input
-                    onChangeValue={onChangeValue}
-                    placeholder={el.placeholder}
-                    value={values[el.name]}
-                    name={el.name}
-                  />
-                </View>
-              )}
-            </Wizard.Step>
-          ))}
-        </Wizard>
+          <CadastralForm
+            // onChangeValue={onChangeValue}
+            // placeholder={el.placeholder}
+            // value={values[el.name]}
+            // name={el.name}
+          />
       </View>
-    );
-  }
-}
+              )
+            }
+          }
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1
   },
 });

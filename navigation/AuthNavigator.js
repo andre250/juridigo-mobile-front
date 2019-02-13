@@ -1,12 +1,3 @@
-import React from 'react';
-import {
-  ActivityIndicator,
-  AsyncStorage,
-  Button,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
 import LoginScreen from '../screens/Auth/LoginScreen'
@@ -26,11 +17,17 @@ const AppStack = createStackNavigator(
      }
   );
 
+const FormStack = createStackNavigator(
+    { 
+      Cadastral: FormularioScreen 
+    }
+  );
+
 export default createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     Auth: LoginScreen,
-    RegisterForm: FormularioScreen,
+    RegisterForm: FormStack,
     App: AppStack,
   },
   {

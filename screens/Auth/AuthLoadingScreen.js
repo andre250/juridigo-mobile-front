@@ -18,6 +18,7 @@ export default class AuthLoadingScreen extends React.Component {
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
+<<<<<<< HEAD
     const decoded = jwtDecode(userToken);
     const timeNow = Math.round(new Date().getTime()/1000);
 
@@ -28,6 +29,12 @@ export default class AuthLoadingScreen extends React.Component {
     }
     
     return this.props.navigation.navigate('Auth');
+=======
+    // const userToken = ""
+    // This will switch to the App screen or Auth screen and this loading
+    // screen will be unmounted and thrown away.
+    this.props.navigation.navigate(userToken ? 'Auth' : 'RegisterForm');
+>>>>>>> 3df368a0cde439b1ffb8569ce02474af757609b1
   };
 
   // Render any loading content that you like here
