@@ -15,8 +15,9 @@ import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import User from '../../http_factory/user';
 import sha256 from 'js-sha256';
+import jwtDecode from 'jwt-decode';
 
-let user = new User();
+
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -105,12 +106,14 @@ export default class LoginScreen extends React.Component {
 
     if (!this.state.us) {
       this.setState({ loading: false });
+
       return Alert.alert(
         'Usuário não preenchido',
         'Por favor entre com o seu usuário.');
     }
     else if (!this.state.ps) {
       this.setState({ loading: false });
+      
       return Alert.alert(
         'Senha não preenchida',
         'Por favor entre com a sua senha.');
@@ -118,12 +121,21 @@ export default class LoginScreen extends React.Component {
 
     try {
       const hash = sha256.create().update(this.state.us + "@" + this.state.ps).hex();
-      const token = await user.login({ "credencial": hash });
+      const token = await User.login({ "credencial": hash });
+      
       await AsyncStorage.setItem('userToken', token);
+      
+      const decoded = jwtDecode(token);
+      
+      await AsyncStorage.setItem('userName', decoded.name);
+      await AsyncStorage.setItem('userID', decoded.id);
+      
       this.setState({ loading: false });
       this.props.navigation.navigate('App');
+
     } catch (error) {
       this.setState({ loading: false });
+      
       return Alert.alert(
         'Usuário ou senha inválido',
         'Por favor verifique e tente novamente.'

@@ -17,7 +17,24 @@ class User {
                 return err;
             });
     }
-    getFacebookInfo(credential) {
+
+    async getUserInfo(userId, token) {
+        try {
+            let myHeaders = new Headers();
+            myHeaders.append("Authtoken", token)
+
+            let response = await fetch(`https://api-hml.juridigo.com.br/interacao/usuario/${userId}`, {
+                method: "GET",
+                headers: myHeaders
+            });
+            let data = await response.json();
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    getFacebookInfo() {
         fetch(`${this.mainRoute}/facebook`, {
             method: "GET"
         })
@@ -108,4 +125,4 @@ class User {
     }
 };
 
-module.exports = User;
+module.exports = new User();

@@ -22,7 +22,7 @@ export default class AuthLoadingScreen extends React.Component {
     const timeNow = Math.round(new Date().getTime()/1000);
 
     if (userToken) {
-      if (timeNow > decoded.exp) {
+      if (timeNow < decoded.exp) {
         return this.props.navigation.navigate('App');
       }
     }
