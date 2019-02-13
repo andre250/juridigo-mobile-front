@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 13836,
+  "expoServerNgrokUrl": "https://rk-8ne.guilhermecaruso.juridigo-mobile-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.rk-8ne.guilhermecaruso.juridigo-mobile-front.exp.direct",
+  "ngrokPid": 13910
 }
