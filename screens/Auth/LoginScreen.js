@@ -10,7 +10,6 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native';
-import { Divider } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import User from '../../http_factory/user';
