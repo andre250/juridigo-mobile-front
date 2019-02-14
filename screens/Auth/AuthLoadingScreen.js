@@ -18,7 +18,6 @@ export default class AuthLoadingScreen extends React.Component {
   // Fetch the token from storage then navigate to our appropriate place
   _bootstrapAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-
     if (userToken) {
       const decoded = jwtDecode(userToken);
       const timeNow = Math.round(new Date().getTime()/1000);

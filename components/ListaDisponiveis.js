@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { View, FlatList, StyleSheet, AsyncStorage, Text } from "react-native";
+import { View, FlatList, StyleSheet, AsyncStorage, Text, Alert } from "react-native";
 import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
 import Proposal from '../http_factory/proposal';
+import { Constants, Location, Permissions } from 'expo';
+
 
 export class ListaDisponiveis extends Component {
   constructor(props) {
@@ -16,14 +18,27 @@ export class ListaDisponiveis extends Component {
       page: 1,
       seed: 1,
       error: null,
-      refreshing: false
+      refreshing: false,
+      location: null,
     };
   }
 
   componentDidMount() {
     this.nav = this.props.nav
+    this._getLocationAsync();
     this._makeRemoteRequestAsync();
   }
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      Alert.alert("Permissão Negada", "Para ter acesso ao recuros de geolocalização, por favor ative-o nas configurações do dispositivo.")
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location)
+    this.setState({ location });
+  };
 
   _makeRemoteRequestAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -85,7 +100,7 @@ export class ListaDisponiveis extends Component {
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>4,3 KM</Text>
+              <Text style={styles.infoLabel}>KM</Text>
             </View>
           </View>
         </View>}
