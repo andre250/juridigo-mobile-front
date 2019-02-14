@@ -4,6 +4,7 @@ import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
+import Proposal from '../http_factory/proposal';
 
 export class ListaDisponiveis extends Component {
   constructor(props) {
@@ -26,23 +27,20 @@ export class ListaDisponiveis extends Component {
 
   _makeRemoteRequestAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    // const { id_usuario } = this.state;
-    const url = `https://private-599c2-juridigo.apiary-mock.com/trabalhos/:id/propostas?usuario=${userToken}`;
-
     this.setState({ loading: true });
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: res,
-          loading: false,
-          refreshing: false
-        });
+    try {
+      const data = await Proposal.getFreeProposal(userToken);
+      this.setState({
+        data: data,
+        loading: false,
+        refreshing: false
       })
-      .catch(error => {
-        this.setState({ loading: false });
-      });
+    } catch (error) {
+      this.setState({
+        loading :false
+      })
+    }
+
   };
 
   handleRefresh = () => {
@@ -83,7 +81,7 @@ export class ListaDisponiveis extends Component {
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>R$ 500,00</Text>
+              <Text style={styles.infoLabel}>R$ {item.valor}</Text>
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
@@ -104,7 +102,7 @@ export class ListaDisponiveis extends Component {
         <FlatList
           data={this.state.data}
           renderItem={this.renderItem}
-          keyExtractor={item => item.idTrabalho}
+          keyExtractor={item => item["_id"]["$oid"]}
           onRefresh={this.handleRefresh}
           refreshing={this.state.refreshing}
           onEndReached={this.handleLoadMore}

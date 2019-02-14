@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, Text, StyleSheet, AsyncStorage } from "react-native";
+import { Image, View, Text, StyleSheet, AsyncStorage, ActivityIndicator } from "react-native";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Avatar } from 'react-native-elements';
 import User from '../http_factory/user';
@@ -20,14 +20,14 @@ export class Profile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Avatar xlarge rounded
-          source={{
-            uri:
-              'https://i.imgur.com/FPEwMuG.jpg',
-          }} />
-        <Text style={styles.textName}>{this.state.name ? this.state.name : "Carregando..."}</Text>
-        <Text style={styles.textInfo}>{this.state.phone}</Text>
-        <Text style={styles.textInfo}>{this.state.email}</Text>
+        {this.state.name != ""
+          ? <View style={styles.container}>
+            <Avatar xlarge rounded title={this.state.sg} />
+            <Text style={styles.textName}>{this.state.name}</Text>
+            <Text style={styles.textInfo}>{this.state.phone}</Text>
+            <Text style={styles.textInfo}>{this.state.email}</Text>
+          </View>
+          : <ActivityIndicator size="large" color="#13438F" />}
         <Text style={styles.textStatus}>Status do recebimento</Text>
         <Text>────────────────</Text>
       </View>
