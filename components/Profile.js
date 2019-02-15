@@ -38,6 +38,18 @@ export class Profile extends React.Component {
     this.makeRemoteRequest()
   }
 
+  _createTagName = function(fullName) {
+    const splitName = fullName.split(" ")
+    const first = splitName[0];
+    const second = splitName[1];
+ 
+    if (second) {
+      return `${first.substr(0, 1).toUpperCase()}${second.substr(0, 1).toUpperCase()}`
+    }else {
+      return `${first.substr(0, 1).toUpperCase()}${first.substr(1, 1).toUpperCase()}`
+    }
+  }
+
   makeRemoteRequest = async () => {
     const userName = await AsyncStorage.getItem("userName");
     const userId = await AsyncStorage.getItem("userID");
@@ -45,13 +57,12 @@ export class Profile extends React.Component {
 
     const userInfo = await User.getUserInfo(userId, userToken)
 
-    const sgParts = userName.split(" ");
 
     this.setState({
       name: userName,
       phone: `(${userInfo.cadastrais.telefone.substr(0, 2)}) ${userInfo.cadastrais.telefone.substr(2, 9)}`,
       email: userInfo.cadastrais.email,
-      sg: `${sgParts[0].substr(0, 1)}${sgParts[1].substr(0, 1)}`
+      sg: this._createTagName(userName)
     })
   }
 

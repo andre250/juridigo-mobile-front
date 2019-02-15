@@ -121,8 +121,7 @@ export default class LoginScreen extends React.Component {
     try {
       const hash = sha256.create().update(this.state.us + "@" + this.state.ps).hex();
       const token = await User.login({ "credencial": hash });
-      console.log(token)
-      
+
       await AsyncStorage.setItem('userToken', token);
       
       const decoded = jwtDecode(token);
