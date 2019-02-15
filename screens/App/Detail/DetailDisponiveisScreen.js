@@ -12,44 +12,26 @@ export default class DetailDisponiveisScreen extends React.Component {
     this.state = {
       currentPosition: 2,
       user: {
-        latitude: -23.570870,
-        longitude: -46.622440,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitude: parseFloat(this.props.navigation.state.params.localizacao.uLat),
+        longitude: parseFloat(this.props.navigation.state.params.localizacao.uLong),
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03,
       },
       markers: [
         {
           coordinate: {
-            latitude: -23.519812,
-            longitude: -46.660077
+            latitude: this.props.navigation.state.params.item.localizacao.latitude,
+            longitude: this.props.navigation.state.params.item.localizacao.longitude,
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03,
           },
-          title: "Best Place",
-          description: "Description1",
+          title: "Localização",
+          description: "Forum",
           id: 1
         }
       ]
     };
   }
-
-
-  componentDidMount() {
-    this._setUserLocation();
-  }
-
-  _setUserLocation = async () => {
-    const userLatitude = await AsyncStorage.getItem('userLatitude');
-    const userLongitude = await AsyncStorage.getItem('userLongitude');
-    console.log(userLatitude, userLongitude)
-    this.setState({
-      user: {
-        latitude: parseFloat(userLatitude),
-        longitude: parseFloat(userLongitude),
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
-    })
-  }
-
 
   static navigationOptions = {
     header: (
@@ -74,8 +56,8 @@ export default class DetailDisponiveisScreen extends React.Component {
           <MapView
             ref={MapView => (this.MapView = MapView)}
             style={{ flex: 1 }}
-            showsUserLocation={true}
-            initialRegion={this.state.user}
+            showsUserLocation={false}
+            initialRegion={this.state.markers[0].coordinate}
           >
             {this.state.markers.map((marker, i) => (
               <MapView.Marker

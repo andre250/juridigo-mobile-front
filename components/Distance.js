@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import geolib from 'geolib';
 
 class Distance extends React.Component {
     constructor(props) {
@@ -21,13 +22,10 @@ class Distance extends React.Component {
         const taskLatitude = this.props.tLat;
         const taskLongitude = this.props.tLong;
 
-        let diferenceLat = userLatitude - taskLatitude;
-        let diferenceLong = userLongitude - taskLongitude;
-
-        let distance = ((
-            Math.sqrt(
-                (Math.pow(diferenceLat, 2) + Math.pow(diferenceLong, 2))
-            ))).toFixed(2);
+        let distance = ((geolib.getDistance(
+            {latitude: userLatitude, longitude: userLongitude},
+            {latitude: taskLatitude, longitude: taskLongitude}   
+        ))/1000).toFixed(2);
         
         if (distance < 1){
             this.setState({unit: "m"});

@@ -110,7 +110,11 @@ export class ListaDisponiveis extends Component {
         </View>}
       containerStyle={{ borderBottomWidth: 0 }}
       onPress={() => this.nav.navigate('DetailDisponivel', {
-        item: item
+        item: item,
+        localizacao: {
+          uLat: this.state.latitude,
+          uLong: this.state.longitude
+        }
       })}
     />
   );
