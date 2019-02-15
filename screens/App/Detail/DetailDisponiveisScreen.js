@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapView, Marker } from 'expo';
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native';
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -11,6 +11,12 @@ export default class DetailDisponiveisScreen extends React.Component {
     super(props);
     this.state = {
       currentPosition: 2,
+      user: {
+        latitude: -23.570870,
+        longitude: -46.622440,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      },
       markers: [
         {
           coordinate: {
@@ -24,6 +30,26 @@ export default class DetailDisponiveisScreen extends React.Component {
       ]
     };
   }
+
+
+  componentDidMount() {
+    this._setUserLocation();
+  }
+
+  _setUserLocation = async () => {
+    const userLatitude = await AsyncStorage.getItem('userLatitude');
+    const userLongitude = await AsyncStorage.getItem('userLongitude');
+    console.log(userLatitude, userLongitude)
+    this.setState({
+      user: {
+        latitude: parseFloat(userLatitude),
+        longitude: parseFloat(userLongitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }
+    })
+  }
+
 
   static navigationOptions = {
     header: (
@@ -49,12 +75,7 @@ export default class DetailDisponiveisScreen extends React.Component {
             ref={MapView => (this.MapView = MapView)}
             style={{ flex: 1 }}
             showsUserLocation={true}
-            initialRegion={{
-              latitude: -23.519812,
-              longitude: -46.660077,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
+            initialRegion={this.state.user}
           >
             {this.state.markers.map((marker, i) => (
               <MapView.Marker
@@ -104,16 +125,16 @@ const styles = StyleSheet.create({
     marginTop: hp('5%'),
     borderRadius: 7,
   },
-  confirmButtonText: { 
-    color: "white", 
-    textAlignVertical: "center", 
-    textAlign: "center" 
+  confirmButtonText: {
+    color: "white",
+    textAlignVertical: "center",
+    textAlign: "center"
   },
   recuseButtonText: {
-      color: "#838383",
-      alignSelf: "center",
-      marginTop: hp('5%'),
-      marginBottom: hp('5%'),
-      textDecorationLine: "underline"
+    color: "#838383",
+    alignSelf: "center",
+    marginTop: hp('5%'),
+    marginBottom: hp('5%'),
+    textDecorationLine: "underline"
   }
 });

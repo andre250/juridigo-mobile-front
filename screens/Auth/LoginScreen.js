@@ -15,6 +15,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import User from '../../http_factory/user';
 import sha256 from 'js-sha256';
 import jwtDecode from 'jwt-decode';
+import { decode } from "punycode";
 
 
 
@@ -125,7 +126,10 @@ export default class LoginScreen extends React.Component {
       await AsyncStorage.setItem('userToken', token);
       
       const decoded = jwtDecode(token);
-      
+
+
+      await AsyncStorage.setItem('userLatitude', decoded.latitude.toString());
+      await AsyncStorage.setItem('userLongitude', decoded.longitude.toString());
       await AsyncStorage.setItem('userName', decoded.name);
       await AsyncStorage.setItem('userID', decoded.id);
       
@@ -133,6 +137,7 @@ export default class LoginScreen extends React.Component {
       this.props.navigation.navigate('App');
 
     } catch (error) {
+      console.log(error)
       this.setState({ loading: false });
       
       return Alert.alert(

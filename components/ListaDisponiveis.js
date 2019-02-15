@@ -5,6 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
 import Proposal from '../http_factory/proposal';
+import Distance from './Distance';
 
 
 export class ListaDisponiveis extends Component {
@@ -18,13 +19,25 @@ export class ListaDisponiveis extends Component {
       seed: 1,
       error: null,
       refreshing: false,
-      location: null,
+      latitude: null, 
+      longitude: null
     };
   }
 
   componentDidMount() {
     this.nav = this.props.nav
+    this._setUserLocation();
     this._makeRemoteRequestAsync();
+  }
+
+  _setUserLocation = async () => {
+    const userLatitude = await AsyncStorage.getItem('userLatitude');
+    const userLongitude = await AsyncStorage.getItem('userLongitude');
+
+    this.setState({
+      latitude: userLatitude,
+      longitude: userLongitude
+    });
   }
 
   _makeRemoteRequestAsync = async () => {
@@ -87,7 +100,11 @@ export class ListaDisponiveis extends Component {
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>KM</Text>
+              <Distance 
+                uLat={this.state.latitude}
+                uLong={this.state.longitude}
+                tLat={item.localizacao.latitude}
+                tLong={item.localizacao.longitude}/>
             </View>
           </View>
         </View>}
