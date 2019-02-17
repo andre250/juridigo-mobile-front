@@ -5,7 +5,6 @@ import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Platform } from 'react-native';
-import DateFormat from '../../../components/DataFormat';
 
 export default class DetailDisponiveisScreen extends React.Component {
   constructor(props) {
@@ -39,7 +38,6 @@ export default class DetailDisponiveisScreen extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.navigation.state.params.item.prazo)
     this._calculateDistance();
     this._timeConverter();
   }
@@ -113,15 +111,13 @@ export default class DetailDisponiveisScreen extends React.Component {
             description={`R$ ${this.state.item.valor - 50} Serviço + R$ 50,00 Transporte`} />
           <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} style={styles.Text} title={`${this.state.distance}${this.state.unit}`}
             description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
-          <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title="JuridiGo"
-            description="Empresa de Tecnologia" />
+          <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa}/>
           <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
             description={this.state.item.descricao} />
         </View>
         <TouchableOpacity style={styles.confirmButtonContainer} onPress={this._confirmJobAsync}>
           <Text style={styles.confirmButtonText}>ACEITAR</Text>
         </TouchableOpacity>
-        <Text style={styles.recuseButtonText}>Recusar oferta</Text>
       </ScrollView>
     );
   }
