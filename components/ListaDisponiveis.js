@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
 import Proposal from '../http_factory/proposal';
 import Distance from './Distance';
+import DateFormat from './DataFormat';
 
 
 export class ListaDisponiveis extends Component {
@@ -92,7 +93,7 @@ export class ListaDisponiveis extends Component {
           <View style={styles.listItemLowerContainer}>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>14h - 11/02</Text>
+              <DateFormat timestamp={item.prazo} />
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"} color="#9F9F9F" size={25} />
@@ -112,7 +113,7 @@ export class ListaDisponiveis extends Component {
       onPress={() => this.nav.navigate('DetailDisponivel', {
         item: item,
         localizacao: {
-          uLat: this.state.latitude,
+          uLat: this.state.latitude, 
           uLong: this.state.longitude
         }
       })}

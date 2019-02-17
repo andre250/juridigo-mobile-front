@@ -6,6 +6,7 @@ import geolib from 'geolib';
 class Distance extends React.Component {
     constructor(props) {
         super(props)
+        this.props.distance = 0;
         this.state = {
             distance: 0,
             unit: ""
@@ -34,6 +35,7 @@ class Distance extends React.Component {
         }
 
         this.setState({distance: distance});
+        this.props.distance = distance;
     }
 
     render() {
