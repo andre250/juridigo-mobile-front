@@ -1,11 +1,12 @@
 import React from 'react';
 import { TextInput, StyleSheet, Text, View, TouchableOpacity, CheckBox } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { ProgressBar } from '../ProgressBar'
+import { ProgressBar } from '../../components/ProgressBar'
 import { Platform } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons"
+import { TextTitle } from '../../components/TextTitle';
 
-class PaymentForm extends React.Component {
+class PaymentScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -13,6 +14,12 @@ class PaymentForm extends React.Component {
       Progress_Value: 1.00,
     }
   }
+
+  static navigationOptions = {
+    header: (
+      <TextTitle title='DADOS PAGAMENTO' showIcon={true} />
+    )
+  };
 
   render() {
     return (
@@ -47,13 +54,16 @@ class PaymentForm extends React.Component {
             <Text style={styles.checkLabel}>Declaro que li e aceito os Termos de Responsabilidade</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.buttonSignin}>
+        <TouchableOpacity style={styles.buttonSignin} onPress={this._movePagesAsync}>
           <Text style={styles.buttonSigninText}>CONCLUIR</Text>
         </TouchableOpacity>
         <ProgressBar Progress_Value={this.state.Progress_Value} />
       </View>
     );
   }
+  _movePagesAsync = async () => {
+    this.props.navigation.navigate('App');
+  };
 }
 
 const styles = StyleSheet.create({
@@ -162,4 +172,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentForm;
+export default PaymentScreen;

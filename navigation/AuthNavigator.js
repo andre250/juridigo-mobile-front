@@ -1,8 +1,10 @@
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
+import FormNavigator from './FormNavigator';
 import LoginScreen from '../screens/Auth/LoginScreen'
 import AuthLoadingScreen from '../screens/Auth/AuthLoadingScreen'
-import FormularioScreen from '../screens/FormularioScreen'
+import React from 'react';
+import { TextTitle } from '../components/TextTitle';
 
 
 const AppStack = createStackNavigator(
@@ -19,7 +21,7 @@ const AppStack = createStackNavigator(
 
 const FormStack = createStackNavigator(
     { 
-      Cadastral: FormularioScreen 
+      Main: FormNavigator
     }
   );
 
