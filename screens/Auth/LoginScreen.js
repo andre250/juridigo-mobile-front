@@ -8,7 +8,8 @@ import {
   Text,
   Image,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageBackground
 } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -34,7 +35,7 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ImageBackground source={require('../../assets/images/bg3x.png')} style={styles.container}>
         <Image style={styles.logoImage} source={require('../../assets/images/logo_final.png')} />
         <TextInput style={styles.inputLogin}
           autoCapitalize="none"
@@ -72,7 +73,7 @@ export default class LoginScreen extends React.Component {
             <Text style={styles.buttonFacebookText}>ENTRAR COM FACEBOOK</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 
