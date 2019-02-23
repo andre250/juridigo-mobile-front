@@ -11,11 +11,12 @@ const PlainTextInput = ({
     secure,
     keyboardType,
     placeholderTextColor,
+    value,
     field: {
         name,
         onBlur,
         onChange,
-        value,
+        // value,
     },
     form: {
         errors,
@@ -52,7 +53,7 @@ PlainTextInput.propTypes = {
         name: PropTypes.string.isRequired,
         onBlur: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
-        value: PropTypes.string,
+        // value: PropTypes.string,
     }).isRequired,
     form: PropTypes.shape({
         errors: PropTypes.object.isRequired,

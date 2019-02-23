@@ -4,7 +4,7 @@ import { FileSystem, FaceDetector, MediaLibrary, Permissions } from 'expo';
 import { MaterialIcons } from '@expo/vector-icons';
 import Photo from '../components/Photo';
 
-const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
+const PHOTOS_DIR = FileSystem.documentDirectory + 'juridigo';
 
 export default class GalleryScreen extends React.Component {
   state = {

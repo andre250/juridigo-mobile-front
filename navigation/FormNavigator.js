@@ -3,6 +3,7 @@ import FormCadastral from '../components/Forms/FormCadastral';
 import FormDocumento from '../components/Forms/FormDocumento';
 import FormEscolaridade from '../components/Forms/FormEscolaridade';
 import FormPagamento from '../components/Forms/FormPagamento';
+import CameraScreen from '../screens/CameraScreen';
 import React from 'react';
 import { TextTitle } from '../components/TextTitle';
 
@@ -11,6 +12,7 @@ const FormStack = createStackNavigator({
   Documento: FormDocumento,
   Escolaridade: FormEscolaridade,
   Pagamento: FormPagamento,
+  Camera: CameraScreen
 },
   {
     headerMode: 'none',

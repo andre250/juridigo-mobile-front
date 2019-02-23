@@ -2,22 +2,20 @@ import { PropTypes } from 'prop-types';
 import React from 'react';
 import { Text, TextInput, View, StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { TextInputMask } from 'react-native-masked-text'
 
-const MaskTextInput = ({
+
+const DynamicTextInput = ({
     disabled,
     placeholder,
     customStyle,
     secure,
-    maskOptions,
-    maskType,
     keyboardType,
     placeholderTextColor,
+    value,
     field: {
         name,
         onBlur,
         onChange,
-        value,
     },
     form: {
         errors,
@@ -25,7 +23,7 @@ const MaskTextInput = ({
     },
 }) => (
         <View>
-            <TextInputMask
+            <TextInput
                 onChangeText={onChange(name)}
                 onBlur={onBlur(name)}
                 editable={!disabled}
@@ -34,8 +32,6 @@ const MaskTextInput = ({
                 keyboardType={keyboardType}
                 selectTextOnFocus={!disabled}
                 placeholderTextColor={placeholderTextColor}
-                type={maskType}
-                options={maskOptions}
                 style={[
                     customStyle,
                     {
@@ -50,13 +46,12 @@ const MaskTextInput = ({
         </View>
     );
 
-MaskTextInput.propTypes = {
+DynamicTextInput.propTypes = {
     disabled: PropTypes.bool,
     field: PropTypes.shape({
         name: PropTypes.string.isRequired,
         onBlur: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
-        value: PropTypes.string,
     }).isRequired,
     form: PropTypes.shape({
         errors: PropTypes.object.isRequired,
@@ -64,7 +59,7 @@ MaskTextInput.propTypes = {
     }).isRequired,
 };
 
-MaskTextInput.defaultProps = {
+DynamicTextInput.defaultProps = {
     disabled: false,
 };
 
@@ -82,4 +77,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MaskTextInput;
+export default DynamicTextInput;

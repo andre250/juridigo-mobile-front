@@ -1,232 +1,281 @@
 import { Field, Formik } from 'formik';
 import React from 'react';
-import { Button, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import PlainTextInput from './Elements/PlainTextInput';
 import MaskTextInput from './Elements/MaskTextInput';
+import DynamicTextInput from './Elements/DynamicTextInput';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ProgressBar } from '../../components/ProgressBar'
 import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
+import Cep from '../../http_factory/cep';
 
-const state = {
-  date: null,
-  Progress_Value: 0.25,
-  page: 'documento'
-}
+export class FormCadastral extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: null,
+      Progress_Value: 0.25,
+      page: 'documento',
+      endereco: null,
+      bairro: null,
+      cidade: null,
+      uf: null,
+      complemento: null,
+      cep_search: true
+    }
+  }
 
-const validate = ({ name, email, pass, 
-  confirmPass, celphone, rg, cpf, 
-  numero, complemento, cep }) => {
-  const errors = {};
-  if (name === undefined) {
-    errors.name = 'Obrigatório';
-  } else if (name.trim() === '') {
-    errors.name = 'O campo não pode estar vazio.';
-  }
-  if (email === undefined) {
-    errors.email = 'Obrigatório';
-  } else if (email.trim() === '') {
-    errors.email = 'O campo não pode estar vazio.';
-  }
-  if (pass === undefined) {
-    errors.pass = 'Obrigatório';
-  } else if (pass.trim() === '') {
-    errors.pass = 'O campo não pode estar vazio.';
-  }
-  if (confirmPass === undefined) {
-    errors.confirmPass = 'Obrigatório';
-  } else if (confirmPass.trim() === '') {
-    errors.confirmPass = 'O campo não pode estar vazio.';
-  }
-  if (celphone === undefined) {
-    errors.celphone = 'Obrigatório';
-  } else if (celphone.trim() === '') {
-    errors.celphone = 'O campo não pode estar vazio.';
-  }
-  if (rg === undefined) {
-    errors.rg = 'Obrigatório';
-  } else if (rg.trim() === '') {
-    errors.rg = 'O campo não pode estar vazio.';
-  }
-  if (cpf === undefined) {
-    errors.cpf = 'Obrigatório';
-  } else if (cpf.trim() === '') {
-    errors.cpf = 'O campo não pode estar vazio.';
-  }
-  if (cep === undefined) {
-    errors.cep = 'Obrigatório';
-  } else if (cep.trim() === '') {
-    errors.cep = 'O campo não pode estar vazio.';
-  }
-  if (numero === undefined) {
-    errors.numero = 'Obrigatório';
-  } else if (numero.trim() === '') {
-    errors.numero = 'O campo não pode estar vazio.';
-  }
-  if (complemento === undefined) {
-    errors.complemento = 'Obrigatório';
-  } else if (complemento.trim() === '') {
-    errors.complemento = 'O campo não pode estar vazio.';
-  }
-  return errors;
-};
-
-const FormCadastral = (props) => (
-  <Formik
-    onSubmit={({ name, email, pass, celphone, telphone, 
-      birthday, rg, cpf, cep, endereco, numero, complemento, 
-      bairro, cidade, uf }) => {
-      cadastralForm = {
-        name: name,
-        email: email,
-        pass: pass,
-        celphone: celphone,
-        telphone: telphone,
-        birthday: birthday,
-        rg: rg,
-        cpf: cpf,
-        cep: cep,
-        numero: numero,
-        complemento: complemento,
-        bairro: bairro,
-        cidade: cidade,
-        uf: uf
+  _makeRemoteRequestAsync = async (cep) => {
+      try {
+        const data = await Cep.getFreeProposal(cep)
+        this.setState({
+          endereco: data.logradouro,
+          bairro: data.bairro,
+          cidade: data.localidade,
+          uf: data.uf,
+          complemento: data.complemento,
+        })
+      } catch (error) {
+        Alert.alert('Ops', 'Parece que algo deu errado na busca pelo seu CEP, verifique sua conexão e tente novamente.', [{ text: 'Ok' }]);
       }
-      props.navigation.navigate('Documento')
-    }}
-    //validate={validate}
-    render={({
-      handleSubmit,
-      isValid,
-    }) => (
-        <ScrollView style={styles.container}>
-          <View style={styles.spaceAroundContainer}>
-            <Field name="name"
-              component={PlainTextInput}
-              placeholder="Nome Completo"
-              customStyle={styles.input} />
-            <Field name="email"
-              component={PlainTextInput}
-              placeholder="Email"
-              keyboardType="email-address"
-              customStyle={styles.input} />
-          </View>
-          <View style={styles.spaceBetweenContainer}>
-            <Field name="pass"
-              component={PlainTextInput}
-              placeholder="Senha"
-              secure={'true'}
-              customStyle={[styles.input, {width:wp('42%')},]} />
-            <Field name="confirmPass"
-              component={PlainTextInput}
-              placeholder='Confirmar Senha'
-              secure={'true'}
-              customStyle={[styles.input, {width:wp('42%')},]} />
-          </View>
-          <View style={styles.spaceBetweenContainer}>
-            <Field name="celphone"
-              maskType="cel-phone"
-              maskOptions={{ withDDD: true, dddMask: '(99) 99999-9999' }}
-              component={MaskTextInput}
-              placeholder='Celular'
-              keyboardType='phone-pad'
-              customStyle={[styles.input, {width:wp('42%')},]} />
-            <Field name="telphone"
-              maskType="cel-phone"
-              maskOptions={{ withDDD: true, dddMask: '(99) 99999-9999' }}
-              component={MaskTextInput}
-              placeholder='Telefone'
-              keyboardType='phone-pad'
-              customStyle={[styles.input, {width:wp('42%')},]} />
-          </View>
-          <View style={styles.dataPickerContainer}>
-            <Field name="birthday"
-              maskType="datetime"
-              maskOptions={{ format: 'DD/MM/YYYY' }}
-              component={MaskTextInput}
-              placeholder='Data Nascimento'
-              placeholderTextColor={'#787974'}
-              keyboardType='phone-pad'
-              customStyle={[styles.input, {width:wp('35%')}, styles.protectedInput]} />
-            <Icon style={[styles.protectedInput, styles.birthdayIcon]} name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9E9C9D" size={hp('5%')} />
-          </View>
-          <View style={styles.spaceBetweenContainer}>
-            <Field name="rg"
-              maskType="custom"
-              maskOptions={{ mask: '99.999.999-99' }}
-              component={MaskTextInput}
-              placeholder='RG'
-              keyboardType='phone-pad'
-              customStyle={[styles.input, {width:wp('42%')},]} />
-            <Field name="cpf"
-              maskType="cpf"
-              component={MaskTextInput}
-              placeholder='CPF'
-              keyboardType='phone-pad'
-              customStyle={[styles.input, {width:wp('42%')},]} />
-          </View>
-          <View style={styles.spaceBetweenContainer}>
-            <Field name="cep"
-              maskType="zip-code"
-              component={MaskTextInput}
-              placeholder='CEP'
-              keyboardType='phone-pad'
-              customStyle={[styles.input, {width:wp('55%')},]} />
-            <Text style={styles.cepLabel}>Não sei o meu CEP</Text>
-          </View>
-          <View style={styles.spaceAroundContainer}>
-            <Field name="endereco"
-              component={PlainTextInput}
-              placeholder="Endereço"
-              disabled
-              placeholderTextColor={'#787974'}
-              customStyle={[styles.input, styles.protectedInput]} />
-          </View>
-          <View style={styles.flexStartContainer}>
-            <Field name="numero"
-              component={PlainTextInput}
-              placeholder="N."
-              customStyle={[styles.input, {width:wp('25%')},]} />
-            <Field name="complemento"
-              component={PlainTextInput}
-              placeholder="Complemento"
-              customStyle={[styles.input, {width:wp('42%')}, styles.complementMargin]} />
-          </View>
-          <View style={styles.flexStartContainer}>
-            <Field name="bairro"
-              component={PlainTextInput}
-              placeholder="Bairro"
-              disabled
-              placeholderTextColor={'#787974'}
-              customStyle={[styles.input, {width:wp('60%')}, styles.protectedInput]} />
-          </View>
-          <View style={styles.spaceBetweenContainer}>
-            <Field name="cidade"
-              component={PlainTextInput}
-              placeholder="Cidade"
-              disabled
-              placeholderTextColor={'#787974'}
-              customStyle={[styles.input, {width:wp('70%')}, styles.protectedInput]} />
-            <Field name="uf"
-              component={PlainTextInput}
-              placeholder="UF"
-              disabled
-              placeholderTextColor={'#787974'}
-              customStyle={[styles.input, {width:wp('20%')}, styles.protectedInput]} />
-          </View>
-          <TouchableOpacity style={styles.buttonSignin} /*disabled={!isValid}*/ onPress={handleSubmit}>
-            <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
-          </TouchableOpacity>
-          <ProgressBar Progress_Value={state.Progress_Value} />
-        </ScrollView>
-      )}
-  />
-);
+  };
 
+  validate = ({ name, email, pass,
+    confirmPass, celphone, rg, cpf,
+    numero, complemento, cep }) => {
+    const errors = {};
+    if (name === undefined) {
+      errors.name = 'Obrigatório';
+    } else if (name.trim() === '') {
+      errors.name = 'O campo não pode estar vazio.';
+    }
+    if (email === undefined) {
+      errors.email = 'Obrigatório';
+    } else if (email.trim() === '') {
+      errors.email = 'O campo não pode estar vazio.';
+    }
+    if (pass === undefined) {
+      errors.pass = 'Obrigatrio';
+    } else if (pass.trim() === '') {
+      errors.pass = 'O campo não pode estar vazio.';
+    }
+    if (confirmPass === undefined) {
+      errors.confirmPass = 'Obrigatório';
+    } else if (confirmPass.trim() === '') {
+      errors.confirmPass = 'O campo não pode estar vazio.';
+    }
+    if (celphone === undefined) {
+      errors.celphone = 'Obrigatório';
+    } else if (celphone.trim() === '') {
+      errors.celphone = 'O campo não pode estar vazio.';
+    }
+    if (rg === undefined) {
+      errors.rg = 'Obrigatório';
+    } else if (rg.trim() === '') {
+      errors.rg = 'O campo não pode estar vazio.';
+    }
+    if (cpf === undefined) {
+      errors.cpf = 'Obrigatório';
+    } else if (cpf.trim() === '') {
+      errors.cpf = 'O campo não pode estar vazio.';
+    }
+    if (cep === undefined) {
+      errors.cep = 'Obrigatório';
+    } else if (cep.trim() === '') {
+      errors.cep = 'O campo não pode estar vazio.';
+    } else if (cep.length < 8) {
+      errors.cep = 'O CEP deve possuir exatamente 8 digitos.';
+      this.state.cep_search = true
+    } else if (cep.length === 9) {
+      if (this.state.cep_search) {
+        this._makeRemoteRequestAsync(cep)
+        this.state.cep_search = false
+      }
+    }
+    if (numero === undefined) {
+      errors.numero = 'Obrigatório';
+    } else if (numero.trim() === '') {
+      errors.numero = 'O campo não pode estar vazio.';
+    }
+    if (complemento === undefined) {
+      errors.complemento = 'Obrigatório';
+    } else if (complemento.trim() === '') {
+      errors.complemento = 'O campo não pode estar vazio.';
+    }
+    return errors;
+  };
+
+  render() {
+    return (
+      <Formik
+        onSubmit={({ name, email, pass, celphone, telphone,
+          birthday, rg, cpf, cep, endereco, numero, complemento,
+          bairro, cidade, uf }) => {
+          cadastralForm = {
+            name: name,
+            email: email,
+            pass: pass,
+            celphone: celphone,
+            telphone: telphone,
+            birthday: birthday,
+            rg: rg,
+            cpf: cpf,
+            cep: cep,
+            numero: numero,
+            complemento: complemento,
+            bairro: bairro,
+            cidade: cidade,
+            uf: uf
+          }
+          this.props.navigation.navigate('Documento')
+        }}
+        validate={this.validate}
+        handleBlur={(cep) => console.log(cep)}
+        render={({
+          handleSubmit,
+          isValid,
+        }) => (
+            <ScrollView style={styles.container}>
+              <View style={styles.spaceAroundContainer}>
+                <Field name="name"
+                  component={PlainTextInput}
+                  placeholder="Nome Completo"
+                  customStyle={styles.input} />
+                <Field name="email"
+                  component={PlainTextInput}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                  customStyle={styles.input} />
+              </View>
+              <View style={styles.spaceBetweenContainer}>
+                <Field name="pass"
+                  component={PlainTextInput}
+                  placeholder="Senha"
+                  secure={'true'}
+                  customStyle={[styles.input, { width: wp('42%') },]} />
+                <Field name="confirmPass"
+                  component={PlainTextInput}
+                  placeholder='Confirmar Senha'
+                  secure={'true'}
+                  customStyle={[styles.input, { width: wp('42%') },]} />
+              </View>
+              <View style={styles.spaceBetweenContainer}>
+                <Field name="celphone"
+                  maskType="cel-phone"
+                  maskOptions={{ withDDD: true, dddMask: '(99) 99999-9999' }}
+                  component={MaskTextInput}
+                  placeholder='Celular'
+                  keyboardType='phone-pad'
+                  customStyle={[styles.input, { width: wp('42%') },]} />
+                <Field name="telphone"
+                  maskType="cel-phone"
+                  maskOptions={{ withDDD: true, dddMask: '(99) 99999-9999' }}
+                  component={MaskTextInput}
+                  placeholder='Telefone'
+                  keyboardType='phone-pad'
+                  customStyle={[styles.input, { width: wp('42%') },]} />
+              </View>
+              <View style={styles.dataPickerContainer}>
+                <Field name="birthday"
+                  maskType="datetime"
+                  maskOptions={{ format: 'DD/MM/YYYY' }}
+                  component={MaskTextInput}
+                  placeholder='Data Nascimento'
+                  placeholderTextColor={'#787974'}
+                  keyboardType='phone-pad'
+                  customStyle={[styles.input, { width: wp('35%') }, styles.protectedInput]} />
+                <Icon style={[styles.protectedInput, styles.birthdayIcon]} name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9E9C9D" size={hp('5%')} />
+              </View>
+              <View style={styles.spaceBetweenContainer}>
+                <Field name="rg"
+                  maskType="custom"
+                  maskOptions={{ mask: '99.999.999-99' }}
+                  component={MaskTextInput}
+                  placeholder='RG'
+                  keyboardType='phone-pad'
+                  customStyle={[styles.input, { width: wp('42%') },]} />
+                <Field name="cpf"
+                  maskType="cpf"
+                  component={MaskTextInput}
+                  placeholder='CPF'
+                  keyboardType='phone-pad'
+                  customStyle={[styles.input, { width: wp('42%') },]} />
+              </View>
+              <View style={styles.spaceBetweenContainer}>
+                <Field name="cep"
+                  maskType="zip-code"
+                  component={MaskTextInput}
+                  placeholder='CEP'
+                  keyboardType='phone-pad'
+                  customStyle={[styles.input, { width: wp('55%') }]}
+                />
+                <Text style={styles.cepLabel}>Não sei o meu CEP</Text>
+              </View>
+              <View style={styles.spaceAroundContainer}>
+                <Field name="endereco"
+                  component={DynamicTextInput}
+                  placeholder="Endereço"
+                  disabled
+                  placeholderTextColor={'#787974'}
+                  value={this.state.endereco}
+                  customStyle={[styles.input, styles.protectedInput]} />
+              </View>
+              <View style={styles.flexStartContainer}>
+                <Field name="numero"
+                  component={PlainTextInput}
+                  placeholder="N."
+                  customStyle={[styles.input, { width: wp('25%') },]} />
+                <Field name="complemento"
+                  component={PlainTextInput}
+                  placeholder="Complemento"
+                  customStyle={[styles.input, { width: wp('42%') }, styles.complementMargin]} />
+              </View>
+              <View style={styles.flexStartContainer}>
+                <Field name="bairro"
+                  component={DynamicTextInput}
+                  placeholder="Bairro"
+                  disabled
+                  placeholderTextColor={'#787974'}
+                  value={this.state.bairro}
+                  customStyle={[styles.input, { width: wp('60%') }, styles.protectedInput]} />
+              </View>
+              <View style={styles.spaceBetweenContainer}>
+                <Field name="cidade"
+                  component={DynamicTextInput}
+                  placeholder="Cidade"
+                  disabled
+                  placeholderTextColor={'#787974'}
+                  value={this.state.cidade}
+                  customStyle={[styles.input, { width: wp('70%') }, styles.protectedInput]} />
+                <Field name="uf"
+                  component={DynamicTextInput}
+                  placeholder="UF"
+                  disabled
+                  placeholderTextColor={'#787974'}
+                  value={this.state.uf}
+                  customStyle={[styles.input, { width: wp('20%') }, styles.protectedInput]} />
+              </View>
+              <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
+                <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
+              </TouchableOpacity>
+              <View style={styles.footer}>
+                <ProgressBar Progress_Value={this.state.Progress_Value} />
+              </View>
+            </ScrollView>
+          )}
+      />)
+  };
+}
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E8E9ED',
     flex: 1,
+  },
+  footer: {
+    flex: 1,
+    alignSelf: 'flex-end',
+    height: hp('7%')
   },
   spaceAroundContainer: {
     flex: 1,
@@ -299,11 +348,11 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   birthdayIcon: {
-    height:hp('7%'),
-    paddingRight:wp('5%'),
-    marginTop:hp('4%'),
-    alignSelf:'center',
-    textAlignVertical:'center',
+    height: hp('7%'),
+    paddingRight: wp('5%'),
+    marginTop: hp('4%'),
+    alignSelf: 'center',
+    textAlignVertical: 'center',
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0
   },
