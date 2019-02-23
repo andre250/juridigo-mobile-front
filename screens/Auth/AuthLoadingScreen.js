@@ -26,10 +26,10 @@ export default class AuthLoadingScreen extends React.Component {
       }
     }
     
-    return this.props.navigation.navigate('RegisterForm');
+    return this.props.navigation.navigate('Auth');
   };
 
-  // Render any loading content that you like here
+  // Render any loading content that you like here 
   render() {
     return (
       <View style={styles.container}>
