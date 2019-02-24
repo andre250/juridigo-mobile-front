@@ -14,30 +14,36 @@ export class FormDocumento extends React.Component {
       photo_document: null,
       colorDocument:'#2AA3D8',
       colorFace:'#2AA3D8',
+      buttonSignInColor: 'grey',
+      isValid: false
     }
-  } 
+  }
 
-  validate = ({ photo1, photo2 }) => {
-    const errors = {};
-    if (photo1 === undefined) {
-      errors.photo1 = 'Obrigatório';
-    } else if (photo1.trim() === '') {
-      errors.photo1 = 'O campo não pode estar vazio.';
+  _setNextButton = async (status) => {
+    if (status) {
+      this.setState({ buttonSignInColor: '#2AA3D8', isValid: true });
+
+    } else {
+      this.setState({ buttonSignInColor: 'grey', isValid: false });
     }
-    if (photo2 === undefined) {
-      errors.photo2 = 'Obrigatório';
-    } else if (photo2.trim() === '') {
-      errors.photo2 = 'O campo não pode estar vazio.';
-    }
-    return errors;
   };
 
   callbackDocumentFunction = async (photo_document) => {
     this.setState({ colorDocument: 'green', photo_document: photo_document });
+    if (this.state.photo_face != undefined && this.state.photo_document != undefined) {
+      this._setNextButton(true);
+    } else {
+      this._setNextButton(false);
+    }
   };
 
   callbackFaceFunction = async (photoFace) => {
     this.setState({ colorFace: 'green', photo_face: photoFace });
+    if (this.state.photo_face != undefined && this.state.photo_document != undefined) {
+      this._setNextButton(true);
+    } else {
+      this._setNextButton(false);
+    }
   };
 
   _openCameraForDocumentAsync = async () => {
@@ -57,7 +63,6 @@ export class FormDocumento extends React.Component {
             foto_pessoa: this.state.photo_face,
             foto_document: this.state.photo_document
           }
-          console.log(documentForm)
           this.props.navigation.navigate('Escolaridade')
         }}
         validate={this.validate}
@@ -80,7 +85,9 @@ export class FormDocumento extends React.Component {
                 </TouchableOpacity>
               </View>
               <Text style={styles.descriptionText}>Tire uma foto sua segurando o documento</Text>
-              <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
+              <TouchableOpacity style={[styles.buttonSignin, 
+                {backgroundColor:this.state.buttonSignInColor}]} 
+                disabled={!this.state.isValid} onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
               <View style={styles.footer}>
@@ -145,7 +152,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   buttonSignin: {
-    backgroundColor: '#2AA3D8',
     marginTop: hp('5%'),
     marginBottom: hp('5%'),
     width: wp('45%'),

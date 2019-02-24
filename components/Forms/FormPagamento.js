@@ -32,6 +32,8 @@ export class FormPagamento extends React.Component {
       this.setState({ cardType: 'cc-mastercard' });
     } else if (numero_cartao.charAt(0) != '4' || numero_cartao.charAt(0) != '5') {
       this.setState({ cardType: null });
+    } else if (numero_cartao.trim().length === '16') {
+      errors.numero_cartao = 'Quantidade de digitos está inválida.';
     }
     if (nome_impresso === undefined) {
       errors.nome_impresso = 'Obrigatório';
@@ -42,11 +44,15 @@ export class FormPagamento extends React.Component {
       errors.validade = 'Obrigatório';
     } else if (validade.trim() === '') {
       errors.validade = 'O campo não pode estar vazio.';
+    } else if (numero_cartao.trim().length === '5') {
+      errors.numero_cartao = 'Quantidade de digitos está inválida.';
     }
     if (ccv === undefined) {
       errors.ccv = 'Obrigatório';
     } else if (ccv.trim() === '') {
       errors.ccv = 'O campo não pode estar vazio.';
+    } else if (numero_cartao.trim().length === '3') {
+      errors.numero_cartao = 'Quantidade de digitos está inválida.';
     }
     if (banco === undefined) {
       errors.banco = 'Obrigatório';
@@ -152,12 +158,20 @@ export class FormPagamento extends React.Component {
               <View style={styles.optInContainer}>
                 <View style={styles.checkBoxContainer}>
                   <CheckBox style={styles.checkBox} />
-                  <Text style={styles.checkLabel}>Declaro que li e aceito os Termos de Uso</Text>
+                  <TouchableOpacity style={styles.checkLabel} onPress={this.navigateToTermosUso}>
+                    <Text style={{fontSize:hp('1.7%')}}>Declaro que li e aceito os 
+                      <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}> Termos de Uso</Text>
+                    </Text>
+                  </TouchableOpacity>
                 </View>
 
                 <View style={styles.checkBoxContainer}>
                   <CheckBox style={styles.checkBox} />
-                  <Text style={styles.checkLabel}>Declaro que li e aceito os Termos de Responsabilidade</Text>
+                  <TouchableOpacity style={styles.checkLabel} onPress={this.navigateToTermosResponsabilidade}>
+                  <Text style={{fontSize:hp('1.7%')}} >Declaro que li e aceito os 
+                      <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}> Termos de Responsabilidade</Text>
+                  </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
               <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
@@ -169,6 +183,14 @@ export class FormPagamento extends React.Component {
             </View>
           )}
       />)
+  };
+
+  navigateToTermosUso = async () => {
+    this.props.navigation.navigate('TermosUso')
+  };
+
+  navigateToTermosResponsabilidade = async () => {
+    this.props.navigation.navigate('TermosResponsabilidade')
   };
 }
 
@@ -191,6 +213,7 @@ const styles = StyleSheet.create({
   checkBoxContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    marginTop: hp('1%')
   },
   dataPickerContainer: {
     flexDirection: 'row',

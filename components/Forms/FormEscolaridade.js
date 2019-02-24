@@ -68,7 +68,7 @@ export class FormEscolaridade extends React.Component {
           }
           this.props.navigation.navigate('Pagamento')
         }}
-        validate={this.validate}
+        //validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -106,7 +106,7 @@ export class FormEscolaridade extends React.Component {
               {this.state.fileName ?
                 <Text style={styles.descriptionText}>{this.state.fileName}</Text> :
                 null}
-              <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
+              <TouchableOpacity style={styles.buttonSignin} /*disabled={!isValid}*/ onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
               <View style={styles.footer}>

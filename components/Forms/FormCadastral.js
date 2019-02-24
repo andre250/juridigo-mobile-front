@@ -22,7 +22,8 @@ export class FormCadastral extends React.Component {
       cidade: null,
       uf: null,
       complemento: null,
-      cep_search: true
+      cep_search: true,
+      buttonSignInColor: 'grey'
     }
   }
 
@@ -41,10 +42,19 @@ export class FormCadastral extends React.Component {
       }
   };
 
+  _setNextButton = async (status) => {
+    if (status) {
+      this.setState({ buttonSignInColor: '#2AA3D8' });
+    } else {
+      this.setState({ buttonSignInColor: 'grey' });
+    }
+  };
+
   validate = ({ name, email, pass,
     confirmPass, celphone, rg, cpf,
     numero, complemento, cep }) => {
     const errors = {};
+    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     if (name === undefined) {
       errors.name = 'Obrigatório';
     } else if (name.trim() === '') {
@@ -54,16 +64,22 @@ export class FormCadastral extends React.Component {
       errors.email = 'Obrigatório';
     } else if (email.trim() === '') {
       errors.email = 'O campo não pode estar vazio.';
+    } else if (emailReg.test(email) === false) {
+      errors.email = 'O email é inválido';
     }
     if (pass === undefined) {
-      errors.pass = 'Obrigatrio';
+      errors.pass = 'Obrigatório';
     } else if (pass.trim() === '') {
       errors.pass = 'O campo não pode estar vazio.';
+    } else if (pass != confirmPass) {
+      errors.pass = 'As senhas não são iguais.';
     }
     if (confirmPass === undefined) {
       errors.confirmPass = 'Obrigatório';
     } else if (confirmPass.trim() === '') {
       errors.confirmPass = 'O campo não pode estar vazio.';
+    } else if (confirmPass != pass) {
+      errors.confirmPass = 'As senhas não são iguais.';
     }
     if (celphone === undefined) {
       errors.celphone = 'Obrigatório';
@@ -103,6 +119,12 @@ export class FormCadastral extends React.Component {
     } else if (complemento.trim() === '') {
       errors.complemento = 'O campo não pode estar vazio.';
     }
+    // console.log('qtd_erros ',Object.keys(errors).length)
+    if (Object.keys(errors).length === 0) {
+      this._setNextButton(true);
+    } else {
+      this._setNextButton(false);
+    }
     return errors;
   };
 
@@ -112,23 +134,23 @@ export class FormCadastral extends React.Component {
         onSubmit={({ name, email, pass, celphone, telphone,
           birthday, rg, cpf, cep, endereco, numero, complemento,
           bairro, cidade, uf }) => {
-          cadastralForm = {
-            name: name,
-            email: email,
-            pass: pass,
-            celphone: celphone,
-            telphone: telphone,
-            birthday: birthday,
-            rg: rg,
-            cpf: cpf,
-            cep: cep,
-            numero: numero,
-            complemento: complemento,
-            bairro: bairro,
-            cidade: cidade,
-            uf: uf
-          }
-          this.props.navigation.navigate('Documento')
+              cadastralForm = {
+                name: name,
+                email: email,
+                pass: pass,
+                celphone: celphone,
+                telphone: telphone,
+                birthday: birthday,
+                rg: rg,
+                cpf: cpf,
+                cep: cep,
+                numero: numero,
+                complemento: complemento,
+                bairro: bairro,
+                cidade: cidade,
+                uf: uf
+              }
+              this.props.navigation.navigate('Documento')
         }}
         validate={this.validate}
         handleBlur={(cep) => console.log(cep)}
@@ -162,15 +184,15 @@ export class FormCadastral extends React.Component {
               </View>
               <View style={styles.spaceBetweenContainer}>
                 <Field name="celphone"
-                  maskType="cel-phone"
-                  maskOptions={{ withDDD: true, dddMask: '(99) 99999-9999' }}
+                  maskType="custom"
+                  maskOptions={{ mask:'(99) 99999-9999'}}
                   component={MaskTextInput}
                   placeholder='Celular'
                   keyboardType='phone-pad'
                   customStyle={[styles.input, { width: wp('42%') },]} />
                 <Field name="telphone"
-                  maskType="cel-phone"
-                  maskOptions={{ withDDD: true, dddMask: '(99) 99999-9999' }}
+                  maskType="custom"
+                  maskOptions={{ mask:'(99) 9999-9999'}}
                   component={MaskTextInput}
                   placeholder='Telefone'
                   keyboardType='phone-pad'
@@ -189,11 +211,8 @@ export class FormCadastral extends React.Component {
               </View>
               <View style={styles.spaceBetweenContainer}>
                 <Field name="rg"
-                  maskType="custom"
-                  maskOptions={{ mask: '99.999.999-99' }}
-                  component={MaskTextInput}
+                  component={PlainTextInput}
                   placeholder='RG'
-                  keyboardType='phone-pad'
                   customStyle={[styles.input, { width: wp('42%') },]} />
                 <Field name="cpf"
                   maskType="cpf"
@@ -210,7 +229,6 @@ export class FormCadastral extends React.Component {
                   keyboardType='phone-pad'
                   customStyle={[styles.input, { width: wp('55%') }]}
                 />
-                <Text style={styles.cepLabel}>Não sei o meu CEP</Text>
               </View>
               <View style={styles.spaceAroundContainer}>
                 <Field name="endereco"
@@ -256,7 +274,9 @@ export class FormCadastral extends React.Component {
                   value={this.state.uf}
                   customStyle={[styles.input, { width: wp('20%') }, styles.protectedInput]} />
               </View>
-              <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
+              <TouchableOpacity style={[styles.buttonSignin, 
+                {backgroundColor:this.state.buttonSignInColor}]} 
+                 disabled={!isValid} onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
               <View style={styles.footer}>
@@ -327,7 +347,6 @@ const styles = StyleSheet.create({
     marginLeft: wp('5%')
   },
   buttonSignin: {
-    backgroundColor: '#2AA3D8',
     marginTop: hp('5%'),
     marginBottom: hp('5%'),
     width: wp('45%'),
