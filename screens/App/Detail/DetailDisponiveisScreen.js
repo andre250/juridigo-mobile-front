@@ -1,10 +1,11 @@
 import React from 'react';
 import { MapView, Marker } from 'expo';
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native';
+import { Text, Alert, View, ScrollView, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native';
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Platform } from 'react-native';
+import Proposal from '../../../http_factory/proposal';
 
 export default class DetailDisponiveisScreen extends React.Component {
   constructor(props) {
@@ -58,6 +59,7 @@ export default class DetailDisponiveisScreen extends React.Component {
     this.setState({ distance: distance });
   }
 
+  
   _timeConverter = async () => {
     const a = new Date(this.props.navigation.state.params.item.prazo * 1000);
     const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -68,6 +70,37 @@ export default class DetailDisponiveisScreen extends React.Component {
     this.setState({ date: time })
   }
 
+  _jobAccept = async () => {
+    return Alert.alert(
+      'Aceitar Trabalho',
+      'Ao aceitar este trabalho, você esta de acordo com nossos termos',
+      [
+        {
+          text: 'Cancelar'
+        },
+        {text: 'Aceitar', onPress: async () => {
+          try {
+            const userID = await AsyncStorage.getItem("userID");
+            const userToken = await AsyncStorage.getItem("userToken");
+            await Proposal.acceptProposal({
+              "userID": userID,
+              "prazo": this.state.item.prazo,
+              "valor": this.state.item.valor,
+              "longitude": this.state.item.localizacao.longitude,
+              "latitude": this.state.item.localizacao.latitude,
+              "jobID": this.state.item["_id"]["$oid"],
+              "rotulo": this.state.item.rotulo
+            },userToken)
+            this.props.navigation.navigate('Aceitos');
+          } catch (error) {
+            Alert.alert('Algo deu errado', 'Por favor repita a operação.')
+          }
+        }},
+      ],
+      {cancelable: false},
+    );
+  }
+  
   static navigationOptions = {
     header: (
       <LogoTitle />
@@ -116,7 +149,7 @@ export default class DetailDisponiveisScreen extends React.Component {
             description={this.state.item.descricao} />
         </View>
         <TouchableOpacity style={styles.confirmButtonContainer} onPress={this._confirmJobAsync}>
-          <Text style={styles.confirmButtonText}>ACEITAR</Text>
+          <Text style={styles.confirmButtonText} onPress={this._jobAccept}>ACEITAR</Text>
         </TouchableOpacity>
       </ScrollView>
     );
@@ -138,6 +171,7 @@ const styles = StyleSheet.create({
     height: hp('7%'),
     alignSelf: "center",
     marginTop: hp('5%'),
+    marginBottom: hp('5%'),
     borderRadius: 7,
   },
   confirmButtonText: {
@@ -149,7 +183,6 @@ const styles = StyleSheet.create({
     color: "#838383",
     alignSelf: "center",
     marginTop: hp('5%'),
-    marginBottom: hp('5%'),
     textDecorationLine: "underline"
   },
   Text: {

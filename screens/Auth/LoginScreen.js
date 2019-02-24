@@ -125,7 +125,6 @@ export default class LoginScreen extends React.Component {
       const token = await User.login({ "credencial": hash });
 
       await AsyncStorage.setItem('userToken', token);
-      
       const decoded = jwtDecode(token);
 
 

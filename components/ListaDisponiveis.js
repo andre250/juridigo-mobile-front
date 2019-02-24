@@ -20,7 +20,7 @@ export class ListaDisponiveis extends Component {
       seed: 1,
       error: null,
       refreshing: false,
-      latitude: null, 
+      latitude: null,
       longitude: null
     };
   }
@@ -101,11 +101,11 @@ export class ListaDisponiveis extends Component {
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
-              <Distance 
+              <Distance
                 uLat={this.state.latitude}
                 uLong={this.state.longitude}
                 tLat={item.localizacao.latitude}
-                tLong={item.localizacao.longitude}/>
+                tLong={item.localizacao.longitude} />
             </View>
           </View>
         </View>}
@@ -113,12 +113,18 @@ export class ListaDisponiveis extends Component {
       onPress={() => this.nav.navigate('DetailDisponivel', {
         item: item,
         localizacao: {
-          uLat: this.state.latitude, 
+          uLat: this.state.latitude,
           uLong: this.state.longitude
         }
       })}
     />
   );
+
+  notFound = () => {
+    return (<View style={styles.container}>
+      <Text style={styles.Text}>Desculpe, não encontramos nenhum trabalho...</Text>
+    </View>)
+  }
 
   render() {
     return (
@@ -129,6 +135,7 @@ export class ListaDisponiveis extends Component {
             renderItem={this.renderItem}
             keyExtractor={item => item["_id"]["$oid"]}
             onRefresh={this.handleRefresh}
+            ListEmptyComponent={this.notFound}
             refreshing={this.state.refreshing}
             onEndReached={this.handleLoadMore}
             onEndReachedThreshold={50}
@@ -177,12 +184,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  NotFound:{
+    flex:1,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center' 
+  },
   infoLabel: {
     color: "#9F9F9F",
     fontWeight: 'bold',
     padding: hp('1%'),
   },
-  Text:{
+  Text: {
     color: "#9F9F9F",
     fontWeight: 'bold',
     flexDirection: 'row',

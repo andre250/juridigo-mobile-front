@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, Text, StyleSheet, AsyncStorage } from "react-native";
 import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons"
 import { Platform } from 'react-native';
 import JobSteps from "./JobSteps";
+import Proposal from "../http_factory/proposal";
+import DataFormat from "./DataFormat";
+import Distance from "./Distance";
 
 export class ListaAceitos extends Component {
   constructor(props) {
@@ -13,7 +16,7 @@ export class ListaAceitos extends Component {
     this.state = {
       loading: false,
       data: [],
-      id_usuario: "1",
+      userID: "0",
       page: 1,
       seed: 1,
       error: null,
@@ -27,47 +30,37 @@ export class ListaAceitos extends Component {
     this.makeRemoteRequest();
   }
 
-  makeRemoteRequest = () => {
-    const { page, seed, id_usuario } = this.state;
-    const url = `https://private-599c2-juridigo.apiary-mock.com/trabalhos/:id/propostas?usuario=${id_usuario}`;
+  makeRemoteRequest = async () => {
     this.setState({ loading: true });
+    this.state.userID = await AsyncStorage.getItem("userID");
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userLatitude = await AsyncStorage.getItem('userLatitude');
+    const userLongitude = await AsyncStorage.getItem('userLongitude');
 
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: res,
-          loading: false,
-          refreshing: false
-        });
-      })
-      .catch(error => {
-        this.setState({ loading: false });
+    this.setState({
+      latitude: userLatitude,
+      longitude: userLongitude
+    });
+
+    try {
+      const data = await Proposal.getUserProposal(this.state.userID, userToken)
+      this.setState({ 
+        loading: false,
+        data: data 
       });
+    } catch (error) {
+      this.setState({ 
+        loading: false
+      });
+    }
   };
 
   handleRefresh = () => {
-    this.setState(
-      {
-        page: 1,
-        seed: this.state.seed + 1,
-        refreshing: true
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
+    this.makeRemoteRequest();
   };
 
   handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
+    this.makeRemoteRequest();
   };
 
   renderItem = ({ item }) => (
@@ -83,15 +76,20 @@ export class ListaAceitos extends Component {
           <View style={styles.listItemLowerContainer}>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>14h - 11/02</Text>
+              <DataFormat timestamp={item.prazo} />
+              {/* <Text style={styles.infoLabel}>14h - 11/ 02</Text> */}
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>R$ 500,00</Text>
+              <Text style={styles.infoLabel}>R$ {item.valor}</Text>
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>4,3 KM</Text>
+              <Distance 
+                uLat={this.state.latitude}
+                uLong={this.state.longitude}
+                tLat={item.latitude}
+                tLong={item.longitude}/>
             </View>
           </View>
         </View>}
