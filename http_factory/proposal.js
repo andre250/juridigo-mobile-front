@@ -42,7 +42,6 @@ class Proposal {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)
-            console.log(proposalBody)
             let response = await fetch(`${this.mainRoute}/proposta?usuario=${userID}`, {
                 method: "GET",
                 headers: myHeaders
