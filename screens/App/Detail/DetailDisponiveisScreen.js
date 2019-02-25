@@ -1,16 +1,19 @@
 import React from 'react';
 import { MapView, Marker } from 'expo';
-import { Text, Alert, View, ScrollView, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native';
+import { Text, Alert, View, ScrollView, TouchableOpacity, StyleSheet, AsyncStorage, Modal } from 'react-native';
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Platform } from 'react-native';
 import Proposal from '../../../http_factory/proposal';
+import Icon from "react-native-vector-icons/Ionicons";
 
 export default class DetailDisponiveisScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      layout: null,
+      modalVisible: false,
       date: "",
       unit: "",
       distance: 0,
@@ -36,11 +39,6 @@ export default class DetailDisponiveisScreen extends React.Component {
         }
       ]
     };
-  }
-
-  componentDidMount() {
-    this._calculateDistance();
-    this._timeConverter();
   }
 
   _calculateDistance = async () => {
@@ -71,34 +69,35 @@ export default class DetailDisponiveisScreen extends React.Component {
   }
 
   _jobAccept = async () => {
-    return Alert.alert(
-      'Aceitar Trabalho',
-      'Ao aceitar este trabalho, você esta de acordo com nossos termos',
-      [
-        {
-          text: 'Cancelar'
-        },
-        {text: 'Aceitar', onPress: async () => {
-          try {
-            const userID = await AsyncStorage.getItem("userID");
-            const userToken = await AsyncStorage.getItem("userToken");
-            await Proposal.acceptProposal({
-              "userID": userID,
-              "prazo": this.state.item.prazo,
-              "valor": this.state.item.valor,
-              "longitude": this.state.item.localizacao.longitude,
-              "latitude": this.state.item.localizacao.latitude,
-              "jobID": this.state.item["_id"]["$oid"],
-              "rotulo": this.state.item.rotulo
-            },userToken)
-            this.props.navigation.navigate('Aceitos');
-          } catch (error) {
-            Alert.alert('Algo deu errado', 'Por favor repita a operação.')
-          }
-        }},
-      ],
-      {cancelable: false},
-    );
+    try {
+      const userID = await AsyncStorage.getItem("userID");
+      const userToken = await AsyncStorage.getItem("userToken");
+      await Proposal.acceptProposal({
+        "userID": userID,
+        "prazo": this.state.item.prazo,
+        "valor": this.state.item.valor,
+        "longitude": this.state.item.localizacao.longitude,
+        "latitude": this.state.item.localizacao.latitude,
+        "jobID": this.state.item["_id"]["$oid"],
+        "rotulo": this.state.item.rotulo
+      },userToken)
+      this.props.navigation.navigate('Aceitos');
+    } catch (error) {
+      Alert.alert('Algo deu errado', 'Por favor repita a operação.')
+    }
+  }
+
+  setModalVisible = (visible) => {
+    this.setState({modalVisible: visible});
+  }
+
+  setJobConfirmed = async () => {
+    this._jobAccept()
+    this.setModalVisible(false)
+  }
+
+  _confirmJobPressed = async () => {
+    this.setModalVisible(true)
   }
   
   static navigationOptions = {
@@ -108,55 +107,96 @@ export default class DetailDisponiveisScreen extends React.Component {
   };
 
   render() {
+    var modalBackgroundStyle = {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    };
+    var innerContainerTransparentStyle = 
+      {padding: 20};
     return (
-      <ScrollView style={{ height: "100%" }}>
-        <Text
-          style={{
-            backgroundColor: "#2AA3D8",
-            textAlign: "center",
-            color: "white",
-            fontSize: hp('3%'),
-            padding: hp('1%'),
-            paddingBottom: hp('3%')
-          }}>
-          {this.props.navigation.state.params.item.rotulo}</Text>
-        <View style={{ height: hp('20%') }}>
-          <MapView
-            ref={MapView => (this.MapView = MapView)}
-            style={{ flex: 1 }}
-            showsUserLocation={false}
-            initialRegion={this.state.markers[0].coordinate}
-          >
-            {this.state.markers.map((marker, i) => (
-              <MapView.Marker
-                key={marker.id}
-                coordinate={marker.coordinate}
-                title={marker.title}
-                description={marker.description}
-              />
-            ))}
-          </MapView>
-        </View>
-        <View>
-          <DetailItem name={Platform.OS === 'ios' ? 'ios-business' : 'md-business'} title={this.state.item.rotulo} />
-          <DetailItem name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} title={this.state.date} />
-          <DetailItem name={Platform.OS === 'ios' ? 'ios-cash' : 'md-cash'} title={`R$ ${this.state.item.valor}`}
-            description={`R$ ${this.state.item.valor - 50} Serviço + R$ 50,00 Transporte`} />
-          <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} style={styles.Text} title={`${this.state.distance}${this.state.unit}`}
-            description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
-          <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa}/>
-          <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
-            description={this.state.item.descricao} />
-        </View>
-        <TouchableOpacity style={styles.confirmButtonContainer} onPress={this._confirmJobAsync}>
-          <Text style={styles.confirmButtonText} onPress={this._jobAccept}>ACEITAR</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      <View>
+        <Modal
+              animationType='fade'
+              transparent={true}
+              visible={this.state.modalVisible}
+              onRequestClose={() => this.setModalVisible(false)}
+              >
+              <View style={[styles.modalContainer, modalBackgroundStyle, style={paddingLeft:wp('5%'), paddingRight:wp('5%')}]}>
+                <View style={[innerContainerTransparentStyle, 
+                style={marginTop:hp('50%'), backgroundColor:'white'}]}>
+                  <Text style={{fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start'}}>
+                    Lembre-se que ao aceitar um trabalho você se compromete com o cumprimento de todas as 
+                      <Text style={{ textDecorationLine:'underline'}}> etapas propostas pela contratante.{"\n"}</Text>
+                  </Text>
+                  <Text style={{fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start'}}>
+                    O não cumprimento de qualquer etapa do trabalho aceito acarretará em penas previstas nos termos da lei.
+                  </Text>
+                  <TouchableOpacity style={styles.confirmButtonContainer} onPress={this.setJobConfirmed.bind(this, false)}>
+                    <Text style={styles.confirmButtonText}>ACEITAR</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+          </Modal>
+        <ScrollView style={{ height: "100%" }}>
+          <Text
+            style={{
+              backgroundColor: "#2AA3D8",
+              textAlign: "center",
+              color: "white",
+              fontSize: hp('3%'),
+              padding: hp('1%'),
+              paddingBottom: hp('3%')
+            }}>
+            {this.props.navigation.state.params.item.rotulo}</Text>
+          <View style={{ height: hp('20%') }}>
+            <MapView
+              ref={MapView => (this.MapView = MapView)}
+              style={{ flex: 1 }}
+              showsUserLocation={false}
+              initialRegion={this.state.markers[0].coordinate}
+            >
+              {this.state.markers.map((marker, i) => (
+                <MapView.Marker
+                  key={marker.id}
+                  coordinate={marker.coordinate}
+                  title={marker.title}
+                  description={marker.description}
+                />
+              ))}
+            </MapView>
+          </View>
+          <View>
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-business' : 'md-business'} title={this.state.item.rotulo} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} title={this.state.date} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-cash' : 'md-cash'} title={`R$ ${this.state.item.valor}`}
+              description={`R$ ${this.state.item.valor - 50} Serviço + R$ 50,00 Transporte`} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} style={styles.Text} title={`${this.state.distance}${this.state.unit}`}
+              description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa}/>
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
+              description={this.state.item.descricao} />
+          </View>
+          <TouchableOpacity style={styles.confirmButtonContainer} onPress={this._confirmJobPressed}>
+            <Text style={styles.confirmButtonText}>ACEITAR</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     );
+  }
+
+  componentDidMount() {
+    this._calculateDistance();
+    this._timeConverter();
   }
 }
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+  },
   container: {
     paddingLeft: hp('3%'),
     paddingTop: hp('1%'),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View} from 'react-native';
+import { Text, ScrollView} from 'react-native';
 import { LogoTitle } from '../../components/LogoTitle';
 
 export default class TermosResponsabilidade extends React.Component {
@@ -12,7 +12,7 @@ export default class TermosResponsabilidade extends React.Component {
 
   render() {
     return (
-    <View>
+    <ScrollView>
         <Text>
 Política de Privacidade - JurídicoGo
 
@@ -113,7 +113,7 @@ Nós também combinamos esses dados entre nossos serviços e em todos os seus di
 Você no controle
 Dependendo das configurações da sua conta, alguns desses dados podem estar associados à sua Conta do Google. Nós os tratamos como informações pessoais. Você pode controlar a forma como coletamos e usamos esses dados clicando em “Mais opções” abaixo. Você poderá ajustar seus controles ou revogar seu consentimento no futuro sempre que quiser, visitando a página Minha Conta (myaccount.google.com).
 </Text>
-    </View>
+    </ScrollView>
     );
   }
 }
