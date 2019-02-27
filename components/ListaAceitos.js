@@ -8,6 +8,7 @@ import JobSteps from "./JobSteps";
 import Proposal from "../http_factory/proposal";
 import DataFormat from "./DataFormat";
 import Distance from "./Distance";
+import Job from "../http_factory/job";
 
 export class ListaAceitos extends Component {
   constructor(props) {
@@ -28,6 +29,18 @@ export class ListaAceitos extends Component {
   componentDidMount() {
     this.nav = this.props.nav
     this.makeRemoteRequest();
+  }
+
+  async _getUserInfo(job) {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      const jobDetail = await Job.getJobByID(job.idTrabalho, userToken);
+      this.nav.navigate('DetailAceitos', {
+        item: jobDetail
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   makeRemoteRequest = async () => {
@@ -94,9 +107,9 @@ export class ListaAceitos extends Component {
           </View>
         </View>}
       containerStyle={{ borderBottomWidth: 0 }}
-      onPress={() => this.nav.navigate('DetailAceitos', {
-        item: item
-      })}
+      onPress={() => {
+        this._getUserInfo(item)
+      }}
     />
   );
 

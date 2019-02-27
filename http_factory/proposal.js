@@ -9,7 +9,6 @@ class Proposal {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)
-
             let response = await fetch(`${this.mainRoute}/trabalho?status=0`, {
                 method: "GET",
                 headers: myHeaders
@@ -25,7 +24,6 @@ class Proposal {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)
-            console.log(proposalBody)
             let response = await fetch(`${this.mainRoute}/trabalho/aceite?trabalho=${proposalBody.jobID}`, {
                 method: "POST",
                 headers: myHeaders,
