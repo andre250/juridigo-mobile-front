@@ -36,6 +36,7 @@ export class ListaAceitos extends Component {
     try {
       const jobDetail = await Job.getJobByID(job.idTrabalho, userToken);
       this.nav.navigate('DetailAceitos', {
+        proposalID: job["_id"]["$oid"],
         item: jobDetail
       })
     } catch (error) {

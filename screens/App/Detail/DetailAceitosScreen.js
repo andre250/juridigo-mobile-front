@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapView, Marker } from 'expo';
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet, Modal, Button, AsyncStorage } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, StyleSheet, Modal, Alert, AsyncStorage } from 'react-native';
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -9,9 +9,7 @@ import { Platform } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import StepIndicator from 'react-native-step-indicator';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Job from '../../../http_factory/job';
-
-
+import Proposal from '../../../http_factory/proposal';
 export default class DetailAceitosScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -171,7 +169,9 @@ export default class DetailAceitosScreen extends React.Component {
               onPress={this.stepPressed}
             />
           </View>
-          <Text style={styles.recuseButtonText}>Recusar oferta</Text>
+          <TouchableOpacity onPress={()=>{this._refuseProposal(this.props.navigation.state.params.proposalID)}}>
+            <Text style={styles.recuseButtonText}>Recusar oferta</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     );
@@ -186,6 +186,16 @@ export default class DetailAceitosScreen extends React.Component {
     const time = `${hour}h - ${date}/${month}`
     this.setState({ date: time })
   }
+
+  _refuseProposal = async(proposalID) => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      await Proposal.refuseProposal(proposalID, userToken)
+      this.props.navigation.navigate("DetailDisponivel");
+    } catch (error) {
+      Alert.alert("Ops!", "Algo de errado do nosso lado. Por favor, repita a ação.");
+    }
+  } 
 
   _calculateDistance = async () => {
     const userLatitude = await AsyncStorage.getItem('userLatitude');

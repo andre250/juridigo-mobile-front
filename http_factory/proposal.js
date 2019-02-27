@@ -5,6 +5,21 @@ class Proposal {
         this.mainRoute = factory.interact;
     }
 
+    async refuseProposal(proposalID, userToken) {
+        try {
+            let myHeaders = new Headers();
+            myHeaders.append("Authtoken", userToken)
+            await fetch(`${this.mainRoute}/proposta/recusa?proposta=${proposalID}`, {
+                method: "PUT",
+                headers: myHeaders
+            });
+            return 
+        } catch(err) {
+            console.log(err)
+            throw err;
+        }
+    }
+
     async getFreeProposal(userToken) {
         try {
             let myHeaders = new Headers();
@@ -40,7 +55,7 @@ class Proposal {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)
-            let response = await fetch(`${this.mainRoute}/proposta?usuario=${userID}`, {
+            let response = await fetch(`${this.mainRoute}/proposta?usuario=${userID}&status=0,1,2,3,4`, {
                 method: "GET",
                 headers: myHeaders
             });
