@@ -228,7 +228,7 @@ export default class DetailAceitosScreen extends React.Component {
 
   setStepDone = async (position) => {
     this.setState({ currentPosition: this.state.currentPosition + 1 });
-    this.setModalVisible(false)
+    this.setModalVisible(false);
   }
 
   setStepCancel = async (position) => {
