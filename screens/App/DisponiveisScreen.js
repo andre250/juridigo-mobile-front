@@ -10,6 +10,18 @@ export default class HomeScreen extends React.Component {
     )
   };
 
+  componentDidMount() {
+    console.log('renderizou');
+  }
+
+  componentWillMount() {
+    console.log('renderizou2');
+  }
+
+  componentWillUpdate() {
+    console.log('updatou');
+  }
+
   render() {
     return (
       <ListaDisponiveis 

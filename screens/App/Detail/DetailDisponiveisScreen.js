@@ -41,6 +41,11 @@ export default class DetailDisponiveisScreen extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._calculateDistance();
+    this._timeConverter();
+  }
+
   _calculateDistance = async () => {
 
     let distance = ((geolib.getDistance(
@@ -181,11 +186,6 @@ export default class DetailDisponiveisScreen extends React.Component {
         </ScrollView>
       </View>
     );
-  }
-
-  componentDidMount() {
-    this._calculateDistance();
-    this._timeConverter();
   }
 }
 

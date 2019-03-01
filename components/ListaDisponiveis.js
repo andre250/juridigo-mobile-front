@@ -29,6 +29,11 @@ export class ListaDisponiveis extends Component {
     this.nav = this.props.nav
     this._setUserLocation();
     this._makeRemoteRequestAsync();
+    console.log('1');
+  }
+
+  componentWillMount() {
+    console.log('2');
   }
 
   _setUserLocation = async () => {
