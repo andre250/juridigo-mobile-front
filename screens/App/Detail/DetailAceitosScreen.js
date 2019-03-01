@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapView, Marker } from 'expo';
-import { Text, View, ScrollView, TouchableOpacity, StyleSheet, Modal, Button } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, StyleSheet, Modal, Alert, AsyncStorage } from 'react-native';
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -8,15 +8,29 @@ import { JobSteps } from '../../../components/JobSteps';
 import { Platform } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import StepIndicator from 'react-native-step-indicator';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
-
-
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Proposal from '../../../http_factory/proposal';
 export default class DetailAceitosScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false,
+      job: {},
+      item: this.props.navigation.state.params.item,
       scrollView: null,
+      markers: [
+        {
+          coordinate: {
+            latitude: this.props.navigation.state.params.item.localizacao.latitude,
+            longitude: this.props.navigation.state.params.item.localizacao.longitude,
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03,
+          },
+          title: "Localização",
+          description: "Forum",
+          id: 1
+        }
+      ],
       jobCanceled: false,
       currentPosition: 2,
       stepContainerHeight: '15%',
@@ -42,20 +56,10 @@ export default class DetailAceitosScreen extends React.Component {
         labelColor: '#333333',
         labelSize: 0,
         currentStepLabelColor: '#E2D249',
-      },
-      markers: [
-        {
-          coordinate: {
-            latitude: -23.519812,
-            longitude: -46.660077
-          },
-          title: "Best Place",
-          description: "Description1",
-          id: 1,
-        }
-      ]
+      }
     };
   }
+
 
   static navigationOptions = {
     header: (
@@ -67,54 +71,54 @@ export default class DetailAceitosScreen extends React.Component {
     var modalBackgroundStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.5)'
     };
-    var innerContainerTransparentStyle = 
-      {/*backgroundColor: '#fff'*/ padding: 20};
+    var innerContainerTransparentStyle =
+      {/*backgroundColor: '#fff'*/ padding: 20 };
     return (
       <View>
         <Modal
-            animationType='fade'
-            transparent={true}
-            visible={this.state.modalVisible}
-            onRequestClose={() => this.setModalVisible(false)}
-            >
-            <View style={[styles.modalContainer, modalBackgroundStyle]}>
-              <View style={innerContainerTransparentStyle}>
-                <TouchableOpacity
-                  style={{
-                      borderWidth:1,
-                      borderColor:'rgba(0,0,0,0.2)',
-                      alignItems:'center',
-                      justifyContent:'center',
-                      width:100,
-                      height:100,
-                      backgroundColor:'green',
-                      borderRadius:100,
-                    }}
-                    onPress={this.setStepDone.bind(this, false)}>
-                  <Icon name={"ios-checkmark-circle"}  size={30} color="#fff" />
-                  <Text style={{color:'#fff', textAlign: 'center', justifyContent:'center'}}>Concluir essa etapa</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={innerContainerTransparentStyle}>
-                <TouchableOpacity
-                  style={{
-                      borderWidth:1,
-                      borderColor:'rgba(0,0,0,0.2)',
-                      alignItems:'center',
-                      justifyContent:'center',
-                      width:100,
-                      height:100,
-                      backgroundColor:'red',
-                      borderRadius:100,
-                    }}
-                    onPress={this.setStepCancel.bind(this, false)}>
-                  <Icon name={"ios-close-circle"}  size={30} color="#fff" />
-                  <Text style={{color:'#fff', textAlign: 'center', justifyContent:'center'}}>Cancelar essa etapa</Text>
-                </TouchableOpacity>
-              </View>
+          animationType='fade'
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => this.setModalVisible(false)}
+        >
+          <View style={[styles.modalContainer, modalBackgroundStyle]}>
+            <View style={innerContainerTransparentStyle}>
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'rgba(0,0,0,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 100,
+                  height: 100,
+                  backgroundColor: 'green',
+                  borderRadius: 100,
+                }}
+                onPress={this.setStepDone.bind(this, false)}>
+                <Icon name={"ios-checkmark-circle"} size={30} color="#fff" />
+                <Text style={{ color: '#fff', textAlign: 'center', justifyContent: 'center' }}>Concluir essa etapa</Text>
+              </TouchableOpacity>
             </View>
+            <View style={innerContainerTransparentStyle}>
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'rgba(0,0,0,0.2)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 100,
+                  height: 100,
+                  backgroundColor: 'red',
+                  borderRadius: 100,
+                }}
+                onPress={this.setStepCancel.bind(this, false)}>
+                <Icon name={"ios-close-circle"} size={30} color="#fff" />
+                <Text style={{ color: '#fff', textAlign: 'center', justifyContent: 'center' }}>Cancelar essa etapa</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </Modal>
-        <ScrollView 
+        <ScrollView
           ref="scrollView"
           style={{ height: "100%" }}>
           <Text
@@ -131,13 +135,8 @@ export default class DetailAceitosScreen extends React.Component {
             <MapView
               ref={MapView => (this.MapView = MapView)}
               style={{ flex: 1 }}
-              showsUserLocation={true}
-              initialRegion={{
-                latitude: -23.519812,
-                longitude: -46.660077,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
+              showsUserLocation={false}
+              initialRegion={this.state.markers[0].coordinate}
             >
               {this.state.markers.map((marker, i) => (
                 <MapView.Marker
@@ -150,53 +149,98 @@ export default class DetailAceitosScreen extends React.Component {
             </MapView>
           </View>
           <View>
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-business' : 'md-business'} title="Forum Trabalhista da Barra Funda" />
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} title="14h - 11/02" />
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-cash' : 'md-cash'} title="R$ 500,00"
-              description="R$ 450,00 Serviço + R$ 50,00 Transporte" />
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} title="4,3 KM"
-              description="Av. Marquês de São Vincente, 235 - Várzea da Barra Funda, São Paulo" />
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title="JuridiGo"
-              description="Empresa de Tecnologia" />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-business' : 'md-business'} title={this.props.navigation.state.params.item.audiencia.forum} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} title={this.state.date} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-cash' : 'md-cash'} title={`R$ ${this.state.item.valor}`}
+              description={`R$ ${this.state.item.valor - 50} Serviço + R$ 50,00 Transporte`} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} title={`${this.state.distance}${this.state.unit}`}
+              description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa}/>
             <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
-              description="Lorem Ipsum" />
+              description={this.state.item.descricao} />
           </View>
-          <TouchableOpacity style={styles.confirmButtonContainer} onPress={this._confirmJobAsync}>
-            <Text style={styles.confirmButtonText}>ACEITAR</Text>
-          </TouchableOpacity>
-          <Text style={styles.recuseButtonText}>Recusar oferta</Text>
           <View style={styles.containerJobSteps}>
             <Text style={styles.stepInteractorButtonText}>Clique abaixo para interagir com a etapa em andamento</Text>
             <StepIndicator
-                customStyles={this.state.customStyles}
-                renderStepIndicator={this.renderStepIndicator}
-                currentPosition={this.state.currentPosition}
-                labels={this.state.labels}
-                onPress={this.stepPressed}
+              customStyles={this.state.customStyles}
+              renderStepIndicator={this.renderStepIndicator}
+              currentPosition={this.state.currentPosition}
+              labels={this.state.labels}
+              onPress={this.stepPressed}
             />
           </View>
+          <TouchableOpacity onPress={()=>{this._refuseProposal(this.props.navigation.state.params.proposalID)}}>
+            <Text style={styles.recuseButtonText}>Recusar oferta</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     );
   }
 
+  _timeConverter = async () => {
+    const a = new Date(this.props.navigation.state.params.item.prazo * 1000);
+    const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    const month = months[a.getMonth()];
+    const date = a.getDate();
+    const hour = a.getHours();
+    const time = `${hour}h - ${date}/${month}`
+    this.setState({ date: time })
+  }
+
+  _refuseProposal = async(proposalID) => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      await Proposal.refuseProposal(proposalID, userToken)
+      this.props.navigation.navigate("DetailDisponivel");
+    } catch (error) {
+      Alert.alert("Ops!", "Algo de errado do nosso lado. Por favor, repita a ação.");
+    }
+  } 
+
+  _calculateDistance = async () => {
+    const userLatitude = await AsyncStorage.getItem('userLatitude');
+    const userLongitude = await AsyncStorage.getItem('userLongitude');
+
+    let distance = ((geolib.getDistance(
+      { latitude: userLatitude, longitude: userLongitude },
+      { latitude: this.props.navigation.state.params.item.localizacao.latitude, longitude: this.props.navigation.state.params.item.localizacao.longitude }
+    )) / 1000).toFixed(2);
+
+    if (distance < 1) {
+      this.setState({ unit: "m" });
+    } else {
+      this.setState({ unit: "Km" });
+    }
+
+    this.setState({ distance: distance });
+  }
+
+
   setModalVisible = (visible) => {
-    this.setState({modalVisible: visible});
+    this.setState({ modalVisible: visible });
+  }
+
+
+  componentDidMount() {
+    this._calculateDistance();
+    this._timeConverter();
   }
 
   setStepDone = async (position) => {
-    this.setState({currentPosition: this.state.currentPosition + 1});
-    this.setModalVisible(false)
+    this.setState({ currentPosition: this.state.currentPosition + 1 });
+    this.setModalVisible(false);
   }
 
   setStepCancel = async (position) => {
-    this.setState({jobCanceled:true, 
+    this.setState({
+      jobCanceled: true,
       customStyles: {
-      ...this.state.customStyles,
-      stepStrokeCurrentColor: 'red',
-      stepIndicatorCurrentColor: 'red',
-      currentStepLabelColor: 'red'
-    }});
+        ...this.state.customStyles,
+        stepStrokeCurrentColor: 'red',
+        stepIndicatorCurrentColor: 'red',
+        currentStepLabelColor: 'red'
+      }
+    });
     this.setModalVisible(false)
   }
 
@@ -238,20 +282,21 @@ export default class DetailAceitosScreen extends React.Component {
     <MaterialIcon {...this.getStepIndicatorIconConfig(params)} />
   )
   stepPressed = (position) => {
-    if (!this.state.jobCanceled){
+    if (!this.state.jobCanceled) {
       setTimeout(() => {
         this.refs.scrollView.scrollToEnd();
       }, 50);
 
       this.setModalVisible(true);
 
-      if (this.state.customStyles.labelSize === 0){
+      if (this.state.customStyles.labelSize === 0) {
         this.setState({
-        customStyles: {
-          ...this.state.customStyles,
-          labelSize: hp('1.7%')
-        }
-      })} 
+          customStyles: {
+            ...this.state.customStyles,
+            labelSize: hp('1.7%')
+          }
+        })
+      }
       else {
         this.setState({
           customStyles: {
@@ -260,7 +305,7 @@ export default class DetailAceitosScreen extends React.Component {
           }
         })
       }
-  }
+    }
   }
 }
 
@@ -296,8 +341,8 @@ const styles = StyleSheet.create({
   recuseButtonText: {
     color: "#838383",
     alignSelf: "center",
-    marginTop: hp('5%'),
-    marginBottom: hp('5%'),
+    marginTop: hp('2%'),
+    marginBottom: hp('2%'),
     textDecorationLine: "underline"
   },
   stepInteractorButtonText: {
