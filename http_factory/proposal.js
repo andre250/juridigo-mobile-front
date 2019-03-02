@@ -55,7 +55,22 @@ class Proposal {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)
-            let response = await fetch(`${this.mainRoute}/proposta?usuario=${userID}&status=0,1,2,3,4`, {
+            let response = await fetch(`${this.mainRoute}/proposta?usuario=${userID}&status=0,1,2,3`, {
+                method: "GET",
+                headers: myHeaders
+            });
+            let data = await response.json();
+            return data;
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    async getUserEndProposal(userID, userToken) {
+        try {
+            let myHeaders = new Headers();
+            myHeaders.append("Authtoken", userToken)
+            let response = await fetch(`${this.mainRoute}/proposta?usuario=${userID}&status=4`, {
                 method: "GET",
                 headers: myHeaders
             });
