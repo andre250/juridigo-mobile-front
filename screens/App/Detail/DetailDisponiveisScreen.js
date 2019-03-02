@@ -7,6 +7,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { Platform } from 'react-native';
 import Proposal from '../../../http_factory/proposal';
 import Icon from "react-native-vector-icons/Ionicons";
+import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class DetailDisponiveisScreen extends React.Component {
   constructor(props) {
@@ -40,7 +41,7 @@ export default class DetailDisponiveisScreen extends React.Component {
       ]
     };
   }
-
+  
   componentDidMount() {
     this._calculateDistance();
     this._timeConverter();
@@ -86,10 +87,22 @@ export default class DetailDisponiveisScreen extends React.Component {
         "jobID": this.state.item["_id"]["$oid"],
         "rotulo": this.state.item.rotulo
       },userToken)
-      this.props.navigation.navigate('Aceitos');
     } catch (error) {
+      console.log(error)
       Alert.alert('Algo deu errado', 'Por favor repita a operação.')
     }
+    // Reseta a rota do stack de navegação
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({
+          index: 0,
+          routeName: 'Disponivel',
+        })
+      ]
+    });
+    this.props.navigation.dispatch(resetAction)
+    this.props.navigation.navigate('Aceitos');
   }
 
   setModalVisible = (visible) => {

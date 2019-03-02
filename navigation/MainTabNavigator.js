@@ -17,15 +17,12 @@ const DisponivelStack = createStackNavigator({
 });
 
 DisponivelStack.navigationOptions = {
+
   tabBarLabel: 'Disponíveis',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? 'ios-briefcase'
-          : 'md-briefcase'
-      }
+      name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'}
     />
   ),
 };

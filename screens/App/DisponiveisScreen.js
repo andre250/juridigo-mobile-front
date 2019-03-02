@@ -1,6 +1,7 @@
 import React from 'react';
 import { ListaDisponiveis } from '../../components/ListaDisponiveis';
 import { LogoTitle } from '../../components/LogoTitle';
+import { View } from "react-native";
 
 export default class HomeScreen extends React.Component {
 
@@ -10,22 +11,9 @@ export default class HomeScreen extends React.Component {
     )
   };
 
-  componentDidMount() {
-    console.log('renderizou');
-  }
-
-  componentWillMount() {
-    console.log('renderizou2');
-  }
-
-  componentWillUpdate() {
-    console.log('updatou');
-  }
-
   render() {
     return (
-      <ListaDisponiveis 
-      nav={this.props.navigation}/>
+        <ListaDisponiveis nav={this.props.navigation}/>
     );
   }
 }

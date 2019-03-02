@@ -9,6 +9,8 @@ import Proposal from "../http_factory/proposal";
 import DataFormat from "./DataFormat";
 import Distance from "./Distance";
 import Job from "../http_factory/job";
+import { NavigationEvents } from "react-navigation";
+
 
 export class ListaAceitos extends Component {
   constructor(props) {
@@ -28,7 +30,6 @@ export class ListaAceitos extends Component {
 
   componentDidMount() {
     this.nav = this.props.nav
-    this.makeRemoteRequest();
   }
 
   async _getUserInfo(job) {
@@ -117,6 +118,9 @@ export class ListaAceitos extends Component {
   render() {
     return (
       <View style={styles.container}>
+      <NavigationEvents onWillFocus={() => {
+          this.makeRemoteRequest();
+          }}/>
         <FlatList
           data={this.state.data}
           renderItem={this.renderItem}

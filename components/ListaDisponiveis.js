@@ -7,6 +7,8 @@ import { Platform } from 'react-native';
 import Proposal from '../http_factory/proposal';
 import Distance from './Distance';
 import DateFormat from './DataFormat';
+import { NavigationEvents } from "react-navigation";
+
 
 
 export class ListaDisponiveis extends Component {
@@ -27,13 +29,6 @@ export class ListaDisponiveis extends Component {
 
   componentDidMount() {
     this.nav = this.props.nav
-    this._setUserLocation();
-    this._makeRemoteRequestAsync();
-    console.log('1');
-  }
-
-  componentWillMount() {
-    console.log('2');
   }
 
   _setUserLocation = async () => {
@@ -134,6 +129,10 @@ export class ListaDisponiveis extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <NavigationEvents onWillFocus={() => {
+          this._setUserLocation();
+          this._makeRemoteRequestAsync();
+          }}/>
         {this.state.refreshing == false
           ? <FlatList
             data={this.state.data}

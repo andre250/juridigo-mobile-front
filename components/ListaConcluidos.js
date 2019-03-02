@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons"
 import { Platform } from 'react-native';
 import JobSteps from "./JobSteps";
 import RatingStar from "./RatingStar";
+import { NavigationEvents } from "react-navigation";
 
 export class ListaConcluidos extends Component {
   constructor(props) {
@@ -24,7 +25,6 @@ export class ListaConcluidos extends Component {
 
   componentDidMount() {
     this.nav = this.props.nav
-    this.makeRemoteRequest();
   }
 
   makeRemoteRequest = () => {
@@ -108,6 +108,9 @@ export class ListaConcluidos extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <NavigationEvents onWillFocus={() => {
+            this.makeRemoteRequest();
+            }}/>
         <FlatList
           data={this.state.data}
           renderItem={this.renderItem}
