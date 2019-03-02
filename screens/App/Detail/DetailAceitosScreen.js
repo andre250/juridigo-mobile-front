@@ -10,6 +10,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import StepIndicator from 'react-native-step-indicator';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Proposal from '../../../http_factory/proposal';
+
 export default class DetailAceitosScreen extends React.Component {
   constructor(props) {
     super(props);

@@ -35,6 +35,20 @@ class User {
             throw error;
         }
     }
+
+    async register(registerInformation) {
+        try {
+            let response = await fetch(`${this.mainRoute}/register`, {
+                method: "POST",
+                body: JSON.stringify(registerInformation)
+            });
+            let data = await response.json();
+            return data.token;
+        } catch (error) {
+            console.log(error)
+            throw error;
+        }
+    }
 };
 
 module.exports = new User();

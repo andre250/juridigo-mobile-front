@@ -15,7 +15,8 @@ export class FormDocumento extends React.Component {
       colorDocument:'#2AA3D8',
       colorFace:'#2AA3D8',
       buttonSignInColor: 'grey',
-      isValid: false
+      isValid: false,
+      form: this.props.navigation.state.params.form
     }
   }
 
@@ -63,7 +64,13 @@ export class FormDocumento extends React.Component {
             foto_pessoa: this.state.photo_face,
             foto_document: this.state.photo_document
           }
-          this.props.navigation.navigate('Escolaridade')
+          // Persiste os formularios para a próxima página
+          this.props.navigation.navigate('Escolaridade', {
+            form: {
+              cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+              documentForm:  documentForm // Pega o formulario da pagina atual
+            }
+          })
         }}
         validate={this.validate}
         render={({

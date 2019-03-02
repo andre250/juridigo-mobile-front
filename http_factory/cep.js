@@ -5,7 +5,7 @@ class cep {
         this.mainRoute = factory.cep;
     }
 
-    async getFreeProposal(cep) {
+    async getAddress(cep) {
         try {
             let myHeaders = new Headers();
 

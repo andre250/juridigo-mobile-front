@@ -89,9 +89,18 @@ export class FormPagamento extends React.Component {
             banco: banco,
             agencia: agencia,
             conta: conta,
-            dv: dv
+            dv: dv,
+            form: this.props.navigation.state.params.form
           }
-          props.navigation.navigate('App')
+          this.props
+          this.props.navigation.navigate('App', {
+            form: {
+              cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+              documentForm:  this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+              escolaridadeForm:  this.state.form.escolaridadeForm, // Pega o formulario da pagina anterior
+              pagamentoForm: pagamentoForm // Pega o formulario da pagina atual
+            }
+          })
         }}
         validate={this.validate}
         render={({

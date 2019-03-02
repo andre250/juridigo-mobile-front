@@ -21,7 +21,8 @@ export class FormEscolaridade extends React.Component {
       colorFace: '#2AA3D8',
       fileName: null,
       buttonColor: '#2AA3D8',
-      buttonIcon: 'ios-paper'
+      buttonIcon: 'ios-paper',
+      form: this.props.navigation.state.params.form
     }
   }
 
@@ -66,7 +67,14 @@ export class FormEscolaridade extends React.Component {
             oab: oab,
             curriculum: curriculum
           }
-          this.props.navigation.navigate('Pagamento')
+          // Persiste os formularios para a próxima página
+          this.props.navigation.navigate('Pagamento', {
+            form: {
+              cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+              documentForm:  this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+              escolaridadeForm: escolaridadeForm // Pega o formulario da pagina atual
+            }
+          })
         }}
         //validate={this.validate}
         render={({

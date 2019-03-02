@@ -1,6 +1,6 @@
 import { Field, Formik } from 'formik';
 import React from 'react';
-import { Alert, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, Text, View, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native';
 import PlainTextInput from './Elements/PlainTextInput';
 import MaskTextInput from './Elements/MaskTextInput';
 import DynamicTextInput from './Elements/DynamicTextInput';
@@ -9,6 +9,7 @@ import { ProgressBar } from '../../components/ProgressBar'
 import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
 import Cep from '../../http_factory/cep';
+import OpenCage from '../../http_factory/opencage';
 
 export class FormCadastral extends React.Component {
   constructor(props) {
@@ -23,22 +24,29 @@ export class FormCadastral extends React.Component {
       uf: null,
       complemento: null,
       cep_search: true,
-      buttonSignInColor: 'grey'
+      buttonSignInColor: 'grey',
+      latitude: null,
+      longitude: null
     }
   }
 
   _makeRemoteRequestAsync = async (cep) => {
       try {
-        const data = await Cep.getFreeProposal(cep)
+        const data = await Cep.getAddress(cep) // Inicia requisição para buscar endereço por CEP
+        const completeAddress = data.logradouro + ' ' + data.localidade // Buildou o endereço com endereço + bairro
+        // const latlong = await OpenCage.getLatLong(completeAddress) // Inicia requisição para buscar latitude e longitude
+        // Atualiza state da página com novas informações
         this.setState({
           endereco: data.logradouro,
           bairro: data.bairro,
           cidade: data.localidade,
           uf: data.uf,
           complemento: data.complemento,
+          // latitude: latlong.results[0].geometry.lat, // Pega sempre o 1 elemento do array de retorno
+          // longitude: latlong.results[0].geometry.lng // Pega sempre o 1 elemento do array de retorno
         })
       } catch (error) {
-        Alert.alert('Ops', 'Parece que algo deu errado na busca pelo seu CEP, verifique sua conexão e tente novamente.', [{ text: 'Ok' }]);
+        Alert.alert('Ops', 'Parece que algo deu errado na busca pelo seu endereço, verifique sua conexão e tente novamente mais tarde.', [{ text: 'Ok' }]);
       }
   };
 
@@ -119,7 +127,6 @@ export class FormCadastral extends React.Component {
     } else if (complemento.trim() === '') {
       errors.complemento = 'O campo não pode estar vazio.';
     }
-    // console.log('qtd_erros ',Object.keys(errors).length)
     if (Object.keys(errors).length === 0) {
       this._setNextButton(true);
     } else {
@@ -145,15 +152,21 @@ export class FormCadastral extends React.Component {
                 cpf: cpf,
                 cep: cep,
                 numero: numero,
+                endereco: endereco,
                 complemento: complemento,
                 bairro: bairro,
                 cidade: cidade,
-                uf: uf
+                uf: uf,
+                // latitude: this.state.latitude,
+                // longitude: this.state.longitude
               }
-              this.props.navigation.navigate('Documento')
+              this.props.navigation.navigate('Documento', {
+                form: {
+                  cadastralForm: cadastralForm
+                }
+              });
         }}
         validate={this.validate}
-        handleBlur={(cep) => console.log(cep)}
         render={({
           handleSubmit,
           isValid,

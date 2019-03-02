@@ -19,10 +19,10 @@ export default class AuthLoadingScreen extends React.Component {
   _bootstrapAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     if (userToken) {
-      const decoded = jwtDecode(userToken);
+      const decoded = jwtDecode(userToken); 
       const timeNow = Math.round(new Date().getTime()/1000);
       if (timeNow < decoded.exp) {
-        return this.props.navigation.navigate('App');
+        return this.props.navigation.navigate('RegisterForm'); 
       }
     }
     
