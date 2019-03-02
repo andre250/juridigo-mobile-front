@@ -59,7 +59,7 @@ export class FormCadastral extends React.Component {
   };
 
   validate = ({ name, email, pass,
-    confirmPass, celphone, rg, cpf,
+    confirmPass, user, telphone, rg, cpf,
     numero, complemento, cep }) => {
     const errors = {};
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
@@ -89,10 +89,15 @@ export class FormCadastral extends React.Component {
     } else if (confirmPass != pass) {
       errors.confirmPass = 'As senhas não são iguais.';
     }
-    if (celphone === undefined) {
-      errors.celphone = 'Obrigatório';
-    } else if (celphone.trim() === '') {
-      errors.celphone = 'O campo não pode estar vazio.';
+    if (user === undefined) {
+      errors.user = 'Obrigatório';
+    } else if (user.trim() === '') {
+      errors.user = 'O campo não pode estar vazio.';
+    }
+    if (telphone === undefined) {
+      errors.telphone = 'Obrigatório';
+    } else if (telphone.trim() === '') {
+      errors.telphone = 'O campo não pode estar vazio.';
     }
     if (rg === undefined) {
       errors.rg = 'Obrigatório';
@@ -138,14 +143,14 @@ export class FormCadastral extends React.Component {
   render() {
     return (
       <Formik
-        onSubmit={({ name, email, pass, celphone, telphone,
+        onSubmit={({ name, email, pass, user, telphone,
           birthday, rg, cpf, cep, endereco, numero, complemento,
           bairro, cidade, uf }) => {
               cadastralForm = {
                 name: name,
                 email: email,
                 pass: pass,
-                celphone: celphone,
+                user: user,
                 telphone: telphone,
                 birthday: birthday,
                 rg: rg,
@@ -196,12 +201,9 @@ export class FormCadastral extends React.Component {
                   customStyle={[styles.input, { width: wp('42%') },]} />
               </View>
               <View style={styles.spaceBetweenContainer}>
-                <Field name="celphone"
-                  maskType="custom"
-                  maskOptions={{ mask:'(99) 99999-9999'}}
-                  component={MaskTextInput}
-                  placeholder='Celular'
-                  keyboardType='phone-pad'
+                <Field name="user"
+                  component={PlainTextInput}
+                  placeholder='Usuário'
                   customStyle={[styles.input, { width: wp('42%') },]} />
                 <Field name="telphone"
                   maskType="custom"

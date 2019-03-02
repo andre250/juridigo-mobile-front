@@ -14,8 +14,10 @@ export class FormPagamento extends React.Component {
     super(props);
     this.state = {
       Progress_Value: 1.00,
-      cardType: null
+      cardType: null,
+      form: this.props.navigation.state.params.form
     }
+    
   }
 
   validate = ({ numero_cartao, nome_impresso, validade, ccv, 
@@ -90,17 +92,10 @@ export class FormPagamento extends React.Component {
             agencia: agencia,
             conta: conta,
             dv: dv,
-            form: this.props.navigation.state.params.form
           }
-          this.props
-          this.props.navigation.navigate('App', {
-            form: {
-              cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
-              documentForm:  this.state.form.cadastralForm, // Pega o formulario da pagina anterior
-              escolaridadeForm:  this.state.form.escolaridadeForm, // Pega o formulario da pagina anterior
-              pagamentoForm: pagamentoForm // Pega o formulario da pagina atual
-            }
-          })
+          this.state.form.pagamentoForm = pagamentoForm
+          this._requestForm()
+          //this.props.navigation.navigate('App')
         }}
         validate={this.validate}
         render={({
@@ -200,6 +195,45 @@ export class FormPagamento extends React.Component {
 
   navigateToTermosResponsabilidade = async () => {
     this.props.navigation.navigate('TermosResponsabilidade')
+  };
+
+  _requestForm = async () => {
+    const formRequest = {
+      credenciais: {
+          credencial: null,
+          usuario: this.state.form.cadastralForm.user,
+          tipo: 0
+      },
+      cadastrais: {
+          nome: this.state.form.cadastralForm.name,
+          dataNascimento: this.state.form.cadastralForm.birthday,
+          email: this.state.form.cadastralForm.email,
+          telefone: this.state.form.cadastralForm.telphone,
+          rg: this.state.form.cadastralForm.rg,
+          cpf: this.state.form.cadastralForm.cpf,
+          cep: this.state.form.cadastralForm.cep,
+          cidade: this.state.form.cadastralForm.cidade,
+          bairro: this.state.form.cadastralForm.bairro,
+          rua: this.state.form.cadastralForm.endereco,
+          numero: this.state.form.cadastralForm.numero,
+          complemento: this.state.form.cadastralForm.complemento,
+          longitude: this.state.form.cadastralForm.longitude,
+          latitude: this.state.form.cadastralForm.latitude
+      },
+      // Faltou objeto para enviar foto de documento e pessoa
+      curriculares: {
+          formacao: [
+              {
+                  escolaridade: this.state.form.escolaridadeForm.escolaridade,
+                  instituicao: this.state.form.escolaridadeForm.instituicao,
+                  anoConclusao: this.state.form.escolaridadeForm.ano
+              }
+          ],
+          oab: this.state.form.escolaridadeForm.oab,
+          curriculum: this.state.form.escolaridadeForm.curriculum
+      },
+      pagamento: null
+  }
   };
 }
 

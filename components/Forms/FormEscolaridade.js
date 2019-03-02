@@ -71,7 +71,7 @@ export class FormEscolaridade extends React.Component {
           this.props.navigation.navigate('Pagamento', {
             form: {
               cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
-              documentForm:  this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+              documentForm:  this.state.form.documentForm, // Pega o formulario da pagina anterior
               escolaridadeForm: escolaridadeForm // Pega o formulario da pagina atual
             }
           })
