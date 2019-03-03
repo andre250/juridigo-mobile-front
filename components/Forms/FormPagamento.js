@@ -234,6 +234,7 @@ export class FormPagamento extends React.Component {
       },
       pagamento: null
   }
+  console.log(formRequest)
   };
 }
 

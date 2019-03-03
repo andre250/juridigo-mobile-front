@@ -99,9 +99,6 @@ export class ListaConcluidos extends Component {
           </View>
         </View>}
       containerStyle={{ borderBottomWidth: 0 }}
-    /*onPress={() => this.nav.navigate('DetailDisponivel', {
-      item: item
-    })}*/
     />
   );
 
