@@ -1,4 +1,4 @@
-const teste  = require('./cryptoFactory');
+/*const teste  = require('./cryptoFactory');
 
 const paymentInfo = {
     numero: "5476570006164731",
@@ -10,4 +10,4 @@ const paymentInfo = {
     banco: "121"
 }
 
- console.log(teste.encryptText("JUR1d1G00S3cr377",JSON.stringify(paymentInfo).toString()))
+ console.log(teste.encryptText("JUR1d1G00S3cr377",JSON.stringify(paymentInfo).toString()))*/

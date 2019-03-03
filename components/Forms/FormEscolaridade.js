@@ -24,13 +24,8 @@ export class FormEscolaridade extends React.Component {
     }
   }
 
-  validate = ({ escolaridade, instituicao, ano, oab, curriculum }) => {
+  validate = ({instituicao, ano, oab }) => {
     const errors = {};
-    if (escolaridade === undefined) {
-      errors.escolaridade = 'Obrigatório';
-    } else if (escolaridade.trim() === '') {
-      errors.escolaridade = 'O campo não pode estar vazio.';
-    }
     if (instituicao === undefined) {
       errors.instituicao = 'Obrigatório';
     } else if (instituicao.trim() === '') {
@@ -40,16 +35,15 @@ export class FormEscolaridade extends React.Component {
       errors.ano = 'Obrigatório';
     } else if (ano.trim() === '') {
       errors.ano = 'O campo não pode estar vazio.';
-    }
+    } else if (ano.length !== 4) {
+      errors.ano = 'O campo ano deve possuir 4 caracteres.';
+    } 
     if (oab === undefined) {
       errors.oab = 'Obrigatório';
     } else if (oab.trim() === '') {
       errors.oab = 'O campo não pode estar vazio.';
-    }
-    if (curriculum === undefined) {
-      errors.curriculum = 'Obrigatório';
-    } else if (curriculum.trim() === '') {
-      errors.curriculum = 'O campo não pode estar vazio.';
+    } else if (oab.length !== 7) {
+      errors.oab = 'O campo oab deve possuir 7 caracteres.';
     }
     return errors;
   };

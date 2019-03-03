@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 const crypto = require('crypto');
 
@@ -31,4 +31,4 @@ function decryptText(keyStr, text) {
   return res;
 } 
 
-module.exports = {encryptText, decryptText};
+module.exports = {encryptText, decryptText};*/

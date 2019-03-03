@@ -72,7 +72,7 @@ export class FormDocumento extends React.Component {
             }
           })
         }}
-        // validate={this.validate}
+        //validate={this.validate}
         render={({
           handleSubmit,
           isValid,

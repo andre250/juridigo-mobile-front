@@ -82,6 +82,8 @@ export class FormCadastral extends React.Component {
       errors.pass = 'O campo não pode estar vazio.';
     } else if (pass != confirmPass) {
       errors.pass = 'As senhas não são iguais.';
+    } else if (pass.length <= 5) {
+      errors.pass = 'A senha deve possuir \n mais que 5 caracteres.';
     }
     if (confirmPass === undefined) {
       errors.confirmPass = 'Obrigatório';
@@ -89,16 +91,22 @@ export class FormCadastral extends React.Component {
       errors.confirmPass = 'O campo não pode estar vazio.';
     } else if (confirmPass != pass) {
       errors.confirmPass = 'As senhas não são iguais.';
+    } else if (confirmPass.length <= 5) {
+      errors.confirmPass = 'A senha deve possuir \n mais que 5 caracteres.';
     }
     if (user === undefined) {
       errors.user = 'Obrigatório';
     } else if (user.trim() === '') {
       errors.user = 'O campo não pode estar vazio.';
+    } else if (user.length < 5) {
+      errors.user = 'O usuário deve possuir \n no mínimo 5 caracteres.';
     }
     if (telphone === undefined) {
       errors.telphone = 'Obrigatório';
     } else if (telphone.trim() === '') {
       errors.telphone = 'O campo não pode estar vazio.';
+    } else if (telphone.length <= 14) {
+      errors.telphone = 'O campo de telefone deve possuir \n mais que 8 caracteres.';
     }
     if (rg === undefined) {
       errors.rg = 'Obrigatório';
@@ -109,13 +117,15 @@ export class FormCadastral extends React.Component {
       errors.cpf = 'Obrigatório';
     } else if (cpf.trim() === '') {
       errors.cpf = 'O campo não pode estar vazio.';
+    } else if (cpf.length !== 14) {
+      errors.cpf = 'O campo de cpf deve \n possuir 11 caracteres.';
     }
     if (cep === undefined) {
       errors.cep = 'Obrigatório';
     } else if (cep.trim() === '') {
       errors.cep = 'O campo não pode estar vazio.';
     } else if (cep.length < 8) {
-      errors.cep = 'O CEP deve possuir exatamente 8 digitos.';
+      errors.cep = 'O CEP deve possuir \n exatamente 8 digitos.';
       this.state.cep_search = true
     } else if (cep.length === 9) {
       if (this.state.cep_search) {
@@ -310,7 +320,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     alignSelf: 'flex-end',
-    height: hp('7%')
+    height: hp('9%')
   },
   spaceAroundContainer: {
     flex: 1,

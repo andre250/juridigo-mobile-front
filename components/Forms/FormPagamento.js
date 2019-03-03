@@ -1,13 +1,15 @@
 import { Field, Formik } from 'formik';
 import React from 'react';
-import { TextInput, CheckBox, StyleSheet, Text, View, TouchableOpacity, Picker } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Picker, Linking } from 'react-native';
 import PlainTextInput from './Elements/PlainTextInput';
 import MaskTextInput from './Elements/MaskTextInput';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ProgressBar } from '../ProgressBar'
 import Icon from "react-native-vector-icons";
 import { Platform } from 'react-native';
-import EncryptPayment from '../../utils/cryptoFactory';
+import CheckBox from 'react-native-check-box';
+import User from '../../http_factory/user';
+// import EncryptPayment from '../../utils/cryptoFactory';
 
 export class FormPagamento extends React.Component {
   constructor(props) {
@@ -15,13 +17,16 @@ export class FormPagamento extends React.Component {
     this.state = {
       Progress_Value: 1.00,
       cardType: null,
+      usoCheck: false,
+      responsabilidadeCheck: false,
+      banco:"Selecione um banco",
       form: this.props.navigation.state.params.form
     }
     
   }
 
   validate = ({ numero_cartao, nome_impresso, validade, ccv, 
-    banco, agencia, conta, dv }) => {
+    agencia, conta }) => {
     const errors = {};
     if (numero_cartao === undefined) {
       errors.numero_cartao = 'Obrigatório';
@@ -34,7 +39,7 @@ export class FormPagamento extends React.Component {
       this.setState({ cardType: 'cc-mastercard' });
     } else if (numero_cartao.charAt(0) != '4' || numero_cartao.charAt(0) != '5') {
       this.setState({ cardType: null });
-    } else if (numero_cartao.trim().length === '16') {
+    } else if (numero_cartao.trim().length !== '16') {
       errors.numero_cartao = 'Quantidade de digitos está inválida.';
     }
     if (nome_impresso === undefined) {
@@ -46,20 +51,15 @@ export class FormPagamento extends React.Component {
       errors.validade = 'Obrigatório';
     } else if (validade.trim() === '') {
       errors.validade = 'O campo não pode estar vazio.';
-    } else if (numero_cartao.trim().length === '5') {
-      errors.numero_cartao = 'Quantidade de digitos está inválida.';
+    } else if (validade.length !== 5) {
+      errors.validade = 'Quantidade de \n digitos está inválida.';
     }
     if (ccv === undefined) {
       errors.ccv = 'Obrigatório';
     } else if (ccv.trim() === '') {
       errors.ccv = 'O campo não pode estar vazio.';
-    } else if (numero_cartao.trim().length === '3') {
-      errors.numero_cartao = 'Quantidade de digitos está inválida.';
-    }
-    if (banco === undefined) {
-      errors.banco = 'Obrigatório';
-    } else if (banco.trim() === '') {
-      errors.banco = 'O campo não pode estar vazio.';
+    } else if (ccv.length !== 3) {
+      errors.ccv = 'Quantidade de \n digitos está inválida.';
     }
     if (agencia === undefined) {
       errors.agencia = 'Obrigatório';
@@ -71,18 +71,13 @@ export class FormPagamento extends React.Component {
     } else if (conta.trim() === '') {
       errors.conta = 'O campo não pode estar vazio.';
     }
-    if (dv === undefined) {
-      errors.dv = 'Obrigatório';
-    } else if (dv.trim() === '') {
-      errors.dv = 'O campo não pode estar vazio.';
-    }
     return errors;
   };
 
   render() {
     return (
       <Formik
-        onSubmit={({ numero_cartao, nome_impresso, validade, ccv, banco, agencia, conta, dv }) => {
+        onSubmit={({ numero_cartao, nome_impresso, validade, ccv, banco, agencia, conta }) => {
           pagamentoForm = {
             numero_cartao: numero_cartao,
             nome_impresso: nome_impresso,
@@ -91,7 +86,6 @@ export class FormPagamento extends React.Component {
             banco: banco,
             agencia: agencia,
             conta: conta,
-            dv: dv,
           }
           this.state.form.pagamentoForm = pagamentoForm
           this._requestForm()
@@ -137,44 +131,64 @@ export class FormPagamento extends React.Component {
                   customStyle={[styles.input, { width: wp('20%') }]} />
               </View>
               <View style={styles.flexStartContainer}>
-                <Field name="banco"
-                  component={PlainTextInput}
-                  placeholderTextColor={'#787974'}
-                  placeholder='Banco'
-                  customStyle={[styles.input, { width: wp('60%') }]} />
+                <Picker name="banco"
+                  selectedValue={this.state.banco}
+                  onValueChange={(bank) => this.setState({banco: bank})}
+                  style={[styles.input, { width: wp('60%'), color: '#787974' }]} >
+                  <Picker.Item label="Selecione um banco" value="null" />
+                  <Picker.Item label="Banco do Brasil S.A." value="001" />
+                  <Picker.Item label="Banco Santander (Brasil) S.A." value="033" />
+                  <Picker.Item label="Itaú Unibanco Holding S.A." value="652" />   
+                  <Picker.Item label="Banco Bradesco S.A." value="237" />   
+                  <Picker.Item label="Banco Citibank S.A." value="745" />   
+                  <Picker.Item label="HSBC Bank Brasil S.A. – Banco Múltiplo" value="399" />    
+                  <Picker.Item label="Caixa Econômica Federal" value="104" />   
+                  <Picker.Item label="Banco Mercantil do Brasil S.A." value="389" />   
+                  <Picker.Item label="Banco Rural S.A." value="453" />
+                  <Picker.Item label="Banco Safra S.A." value="422" />   
+                  <Picker.Item label="Banco Itaú S.A." value="341" />   
+                  <Picker.Item label="Banco Rendimento S.A." value="633" />   
+                  </Picker>
               </View>
-              <View style={styles.spaceBetweenContainer}>
+              <View style={styles.flexStartContainer}>
                 <Field name="agencia"
                   component={PlainTextInput}
                   placeholderTextColor={'#787974'}
                   placeholder='Agência'
-                  customStyle={[styles.input, { width: wp('20%') }, styles.protectedInput]} />
+                  customStyle={[styles.input, { width: wp('20%'), marginRight: wp('2%') }, styles.protectedInput]} />
                 <Field name="conta"
                   component={PlainTextInput}
                   placeholderTextColor={'#787974'}
-                  placeholder='Conta'
-                  customStyle={[styles.input, { width: wp('40%') }, styles.protectedInput]} />
-                <Field name="dv"
-                  component={PlainTextInput}
-                  placeholder='DV'
-                  customStyle={[styles.input, { width: wp('10%') }]} />
+                  placeholder='Conta (Com o digito)'
+                  customStyle={[styles.input, { width: wp('70%') }, styles.protectedInput]} />
               </View>
               <View style={styles.optInContainer}>
                 <View style={styles.checkBoxContainer}>
-                  <CheckBox style={styles.checkBox} />
-                  <TouchableOpacity style={styles.checkLabel} onPress={this.navigateToTermosUso}>
-                    <Text style={{fontSize:hp('1.7%')}}>Declaro que li e aceito os 
-                      <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}> Termos de Uso</Text>
-                    </Text>
+                <CheckBox
+                      style={styles.checkBox}
+                      onClick={()=>{
+                        this.setState({
+                          usoCheck:!this.state.usoCheck
+                        })
+                      }}
+                      isChecked={this.state.usoCheck}
+                  />
+                  <TouchableOpacity style={styles.checkLabel} onPress={ ()=>{ Linking.openURL('https://juridigo.com.br/politica-de-privacidade-juridigo/')}}>
+                    <Text style={{fontSize:hp('1.7%')}}>Declaro que li e aceito os <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}>Termos de Uso</Text></Text>
                   </TouchableOpacity>
                 </View>
-
                 <View style={styles.checkBoxContainer}>
-                  <CheckBox style={styles.checkBox} />
-                  <TouchableOpacity style={styles.checkLabel} onPress={this.navigateToTermosResponsabilidade}>
-                  <Text style={{fontSize:hp('1.7%')}} >Declaro que li e aceito os 
-                      <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}> Termos de Responsabilidade</Text>
-                  </Text>
+                <CheckBox
+                      style={styles.checkBox}
+                      onClick={()=>{
+                        this.setState({
+                          responsabilidadeCheck:!this.state.responsabilidadeCheck
+                        })
+                      }}
+                      isChecked={this.state.responsabilidadeCheck}
+                  />
+                  <TouchableOpacity style={styles.checkLabel} onPress={ ()=>{ Linking.openURL('https://juridigo.com.br/termos-e-condicoes-gerais-de-uso-juridigo-ltda/')}}>
+                  <Text style={{fontSize:hp('1.7%')}} >Declaro que li e aceito os <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}>Termos de Responsabilidade</Text></Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -185,9 +199,12 @@ export class FormPagamento extends React.Component {
                 <ProgressBar Progress_Value={this.state.Progress_Value} />
               </View>
             </View>
+          
           )}
       />)
   };
+
+
 
   navigateToTermosUso = async () => {
     this.props.navigation.navigate('TermosUso')
@@ -227,10 +244,9 @@ export class FormPagamento extends React.Component {
           complemento: this.state.form.cadastralForm.complemento,
           longitude: this.state.form.cadastralForm.longitude,
           latitude: this.state.form.cadastralForm.latitude,
-          documento: null,
-          prova: null
+          documento: this.state.form.documentForm.foto_documento,
+          prova: this.state.form.documentForm.foto_pessoa
       },
-      // Faltou objeto para enviar foto de documento e pessoa
       curriculares: {
           formacao: [
               {
@@ -245,7 +261,21 @@ export class FormPagamento extends React.Component {
       pagamento: paymentInfo
       // pagamento: EncryptPayment(paymentInfo)
   }
-  console.log(formRequest)
+  console.log('aqui')
+  try {
+    console.log(formRequest)
+    //const registro = await User.register(formRequest);
+    //await AsyncStorage.setItem('userToken', token);
+    //const decoded = jwtDecode(token);    
+    //this.setState({ loading: false });
+  } catch (error) {
+    console.log(error)
+    //this.setState({ loading: false });
+    return Alert.alert(
+      'Houve um erro no processo de cadastro',
+      'Por favor verifique e tente novamente mais tarde.'
+    );
+  };
   };
 }
 
@@ -257,7 +287,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     alignSelf: 'flex-end',
-    height: hp('7%')
+    height: hp('5%')
   },
   optInContainer: {
     flexDirection: 'column',
