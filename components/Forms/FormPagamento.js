@@ -7,7 +7,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { ProgressBar } from '../ProgressBar'
 import Icon from "react-native-vector-icons";
 import { Platform } from 'react-native';
-
+import EncryptPayment from '../../utils/cryptoFactory';
 
 export class FormPagamento extends React.Component {
   constructor(props) {
@@ -198,9 +198,17 @@ export class FormPagamento extends React.Component {
   };
 
   _requestForm = async () => {
+    const paymentInfo = {
+      numero:this.state.form.pagamentoForm.numero_cartao,
+      cvv:this.state.form.pagamentoForm.ccv,
+      anoVencimento:'20'+this.state.form.pagamentoForm.validade.substring(3,5),
+      mesVencimento:this.state.form.pagamentoForm.validade.substring(0,2),
+      agencia:this.state.form.pagamentoForm.agencia,
+      conta:this.state.form.pagamentoForm.conta,
+   }
     const formRequest = {
       credenciais: {
-          credencial: null,
+          credencial: this.state.form.cadastralForm.credencial,
           usuario: this.state.form.cadastralForm.user,
           tipo: 0
       },
@@ -218,7 +226,9 @@ export class FormPagamento extends React.Component {
           numero: this.state.form.cadastralForm.numero,
           complemento: this.state.form.cadastralForm.complemento,
           longitude: this.state.form.cadastralForm.longitude,
-          latitude: this.state.form.cadastralForm.latitude
+          latitude: this.state.form.cadastralForm.latitude,
+          documento: null,
+          prova: null
       },
       // Faltou objeto para enviar foto de documento e pessoa
       curriculares: {
@@ -232,7 +242,8 @@ export class FormPagamento extends React.Component {
           oab: this.state.form.escolaridadeForm.oab,
           curriculum: this.state.form.escolaridadeForm.curriculum
       },
-      pagamento: null
+      pagamento: paymentInfo
+      // pagamento: EncryptPayment(paymentInfo)
   }
   console.log(formRequest)
   };

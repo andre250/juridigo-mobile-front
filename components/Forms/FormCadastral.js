@@ -10,6 +10,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
 import Cep from '../../http_factory/cep';
 import OpenCage from '../../http_factory/opencage';
+import sha256 from 'js-sha256';
 
 export class FormCadastral extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ export class FormCadastral extends React.Component {
       try {
         const data = await Cep.getAddress(cep) // Inicia requisição para buscar endereço por CEP
         const completeAddress = data.logradouro + ' ' + data.localidade // Buildou o endereço com endereço + bairro
-        // const latlong = await OpenCage.getLatLong(completeAddress) // Inicia requisição para buscar latitude e longitude
+        const latlong = await OpenCage.getLatLong(completeAddress) // Inicia requisição para buscar latitude e longitude
         // Atualiza state da página com novas informações
         this.setState({
           endereco: data.logradouro,
@@ -42,8 +43,8 @@ export class FormCadastral extends React.Component {
           cidade: data.localidade,
           uf: data.uf,
           complemento: data.complemento,
-          // latitude: latlong.results[0].geometry.lat, // Pega sempre o 1 elemento do array de retorno
-          // longitude: latlong.results[0].geometry.lng // Pega sempre o 1 elemento do array de retorno
+          latitude: latlong.results[0].geometry.lat, // Pega sempre o 1 elemento do array de retorno
+          longitude: latlong.results[0].geometry.lng // Pega sempre o 1 elemento do array de retorno
         })
       } catch (error) {
         Alert.alert('Ops', 'Parece que algo deu errado na busca pelo seu endereço, verifique sua conexão e tente novamente mais tarde.', [{ text: 'Ok' }]);
@@ -144,26 +145,25 @@ export class FormCadastral extends React.Component {
     return (
       <Formik
         onSubmit={({ name, email, pass, user, telphone,
-          birthday, rg, cpf, cep, endereco, numero, complemento,
-          bairro, cidade, uf }) => {
+          birthday, rg, cpf, cep, numero }) => {
               cadastralForm = {
                 name: name,
                 email: email,
-                pass: pass,
-                user: user,
                 telphone: telphone,
                 birthday: birthday,
                 rg: rg,
                 cpf: cpf,
                 cep: cep,
                 numero: numero,
-                endereco: endereco,
-                complemento: complemento,
-                bairro: bairro,
-                cidade: cidade,
-                uf: uf,
-                // latitude: this.state.latitude,
-                // longitude: this.state.longitude
+                user: user,
+                endereco: this.state.endereco,
+                complemento: this.state.complemento,
+                bairro: this.state.bairro,
+                cidade: this.state.cidade,
+                uf: this.state.uf,
+                latitude: this.state.latitude,
+                longitude: this.state.longitude,
+                credencial: sha256.create().update(user + "@" + pass).hex()
               }
               this.props.navigation.navigate('Documento', {
                 form: {
@@ -171,7 +171,7 @@ export class FormCadastral extends React.Component {
                 }
               });
         }}
-        validate={this.validate}
+        //validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -207,7 +207,7 @@ export class FormCadastral extends React.Component {
                   customStyle={[styles.input, { width: wp('42%') },]} />
                 <Field name="telphone"
                   maskType="custom"
-                  maskOptions={{ mask:'(99) 9999-9999'}}
+                  maskOptions={{ mask:'(99) 9999-99999'}}
                   component={MaskTextInput}
                   placeholder='Telefone'
                   keyboardType='phone-pad'
@@ -291,7 +291,7 @@ export class FormCadastral extends React.Component {
               </View>
               <TouchableOpacity style={[styles.buttonSignin, 
                 {backgroundColor:this.state.buttonSignInColor}]} 
-                 disabled={!isValid} onPress={handleSubmit}>
+                 /*disabled={!isValid}*/ onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
               <View style={styles.footer}>

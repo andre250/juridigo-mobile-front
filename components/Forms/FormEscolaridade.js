@@ -8,18 +8,16 @@ import { ProgressBar } from '../../components/ProgressBar'
 import Icon from "react-native-vector-icons/Ionicons";
 import { Platform } from 'react-native';
 import { DocumentPicker } from 'expo';
+import base64 from 'base-64';
+import utf8 from 'utf8';
 
 export class FormEscolaridade extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       Progress_Value: 0.75,
-      photo_face: null,
-      photoFace: null,
-      photo_document: null,
-      colorDocument: '#2AA3D8',
-      colorFace: '#2AA3D8',
       fileName: null,
+      fileContent: null,
       buttonColor: '#2AA3D8',
       buttonIcon: 'ios-paper',
       form: this.props.navigation.state.params.form
@@ -59,13 +57,13 @@ export class FormEscolaridade extends React.Component {
   render() {
     return (
       <Formik
-        onSubmit={({ escolaridade, instituicao, ano, oab, curriculum }) => {
+        onSubmit={({ instituicao, ano, oab }) => {
           escolaridadeForm = {
-            escolaridade: escolaridade,
+            escolaridade: 'Ensino Superior',
             instituicao: instituicao,
             ano: ano,
             oab: oab,
-            curriculum: curriculum
+            curriculum: this.state.fileContent,
           }
           // Persiste os formularios para a próxima página
           this.props.navigation.navigate('Pagamento', {
@@ -125,8 +123,15 @@ export class FormEscolaridade extends React.Component {
       />)
   };
   _pickDocument = async () => {
-    let arquivo = await DocumentPicker.getDocumentAsync({});
-    this.setState({ fileName: arquivo.name, buttonColor: 'green', buttonIcon: 'ios-checkbox' });
+    let arquivo = await DocumentPicker.getDocumentAsync({
+      base64: true,
+      copyToCacheDirectory: false,
+      type: '*/*',
+    });
+    const file = await Expo.FileSystem.readAsStringAsync(arquivo.uri);
+    const bytes = utf8.encode(file);
+    const encoded = base64.encode(bytes);
+    this.setState({ fileName: arquivo.name, fileContent: encoded, buttonColor: 'green', buttonIcon: 'ios-checkbox' });
   }
 }
 

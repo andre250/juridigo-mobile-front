@@ -10,6 +10,8 @@ import {
   Platform
 } from 'react-native';
 import isIPhoneX from 'react-native-is-iphonex';
+import base64 from 'base-64';
+import utf8 from 'utf8';
 
 import { 
   Ionicons,
@@ -121,9 +123,13 @@ export default class CameraScreen extends React.Component {
       from: photo.uri,
       to: location,
     });
+    const file = await Expo.FileSystem.readAsStringAsync(location);
+    const bytes = utf8.encode(file);
+    const encoded = base64.encode(bytes);
     const navigation = this.props.navigation;
-    let newPhoto = location
-    navigation.getParam('callback')(newPhoto);
+    let newPhoto = encoded
+    let locationPhoto = location
+    navigation.getParam('callback')(newPhoto, locationPhoto);
     this.props.navigation.goBack()
   }
 

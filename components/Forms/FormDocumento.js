@@ -29,8 +29,8 @@ export class FormDocumento extends React.Component {
     }
   };
 
-  callbackDocumentFunction = async (photo_document) => {
-    this.setState({ colorDocument: 'green', photo_document: photo_document });
+  callbackDocumentFunction = async (photo_document, location) => {
+    this.setState({ colorDocument: 'green', photo_document: photo_document, photoDocumentLocation: location });
     if (this.state.photo_face != undefined && this.state.photo_document != undefined) {
       this._setNextButton(true);
     } else {
@@ -38,8 +38,8 @@ export class FormDocumento extends React.Component {
     }
   };
 
-  callbackFaceFunction = async (photoFace) => {
-    this.setState({ colorFace: 'green', photo_face: photoFace });
+  callbackFaceFunction = async (photoFace, location) => {
+    this.setState({ colorFace: 'green', photo_face: photoFace, photoFaceLocation: location });
     if (this.state.photo_face != undefined && this.state.photo_document != undefined) {
       this._setNextButton(true);
     } else {
@@ -72,7 +72,7 @@ export class FormDocumento extends React.Component {
             }
           })
         }}
-        validate={this.validate}
+        // validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -81,20 +81,20 @@ export class FormDocumento extends React.Component {
               <View style={[styles.spaceCenterContainer, {backgroundColor:this.state.colorDocument}]}>
                 <TouchableOpacity style={styles.imagePhoto} onPress={this._openCameraForDocumentAsync}>
                   <Image style={styles.imagePhotoImage}
-                              source={this.state.photo_document ? {uri:this.state.photo_document} : require('../../assets/images/rg-exemplo.png')} />
+                              source={this.state.photoDocumentLocation ? {uri:this.state.photoDocumentLocation} : require('../../assets/images/rg-exemplo.png')} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.descriptionText}>Tire a foto de um documento (RG ou CNH)</Text>
               <View style={[styles.spaceCenterContainerOther, {backgroundColor:this.state.colorFace}]}>
                 <TouchableOpacity style={styles.imagePhoto} onPress={this._openCameraForFaceAsync}>
                   <Image style={styles.imagePhotoImagePerson}
-                              source={this.state.photo_face ? {uri:this.state.photo_face} : require('../../assets/images/foto-exemplo.png')} />
+                              source={this.state.photoFaceLocation ? {uri:this.state.photoFaceLocation} : require('../../assets/images/foto-exemplo.png')} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.descriptionText}>Tire uma foto sua segurando o documento</Text>
               <TouchableOpacity style={[styles.buttonSignin, 
                 {backgroundColor:this.state.buttonSignInColor}]} 
-                disabled={!this.state.isValid} onPress={handleSubmit}>
+                /*disabled={!this.state.isValid}*/ onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
               <View style={styles.footer}>
