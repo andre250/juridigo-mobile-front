@@ -151,7 +151,7 @@ export class ListaAceitos extends Component {
             <StepIndicator
               customStyles={this.state.customStyles}
               renderStepIndicator={this.renderStepIndicator}
-              currentPosition={this.state.currentPosition}
+              currentPosition={parseInt(item.status)+1}
               labels={this.state.labels}
               onPress={() => {
                 this._getUserInfo(item)

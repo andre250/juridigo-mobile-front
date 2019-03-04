@@ -72,7 +72,7 @@ export default class DetailAceitosScreen extends React.Component {
       backgroundColor: 'rgba(0, 0, 0, 0.5)'
     };
     var innerContainerTransparentStyle =
-      {/*backgroundColor: '#fff'*/ padding: 20 };
+      { padding: 20 };
     return (
       <View>
         <Modal
@@ -94,7 +94,7 @@ export default class DetailAceitosScreen extends React.Component {
                   backgroundColor: 'green',
                   borderRadius: 100,
                 }}
-                onPress={this.setStepDone.bind(this, false)}>
+                onPress={this.setStepDone.bind(this, this.props.navigation.state.params.proposalID)}>
                 <Icon name={"ios-checkmark-circle"} size={30} color="#fff" />
                 <Text style={{ color: '#fff', textAlign: 'center', justifyContent: 'center' }}>Concluir essa etapa</Text>
               </TouchableOpacity>
@@ -111,7 +111,7 @@ export default class DetailAceitosScreen extends React.Component {
                   backgroundColor: 'red',
                   borderRadius: 100,
                 }}
-                onPress={this.setStepCancel.bind(this, false)}>
+                onPress={this.setStepCancel.bind(this, this.props.navigation.state.params.proposalID)}>
                 <Icon name={"ios-close-circle"} size={30} color="#fff" />
                 <Text style={{ color: '#fff', textAlign: 'center', justifyContent: 'center' }}>Cancelar essa etapa</Text>
               </TouchableOpacity>
@@ -174,7 +174,7 @@ export default class DetailAceitosScreen extends React.Component {
             <StepIndicator
               customStyles={this.state.customStyles}
               renderStepIndicator={this.renderStepIndicator}
-              currentPosition={this.state.currentPosition}
+              currentPosition={parseInt(this.props.navigation.state.params.item.status)}
               labels={this.state.labels}
               onPress={this.stepPressed}
             />
@@ -233,12 +233,23 @@ export default class DetailAceitosScreen extends React.Component {
     this._timeConverter();
   }
 
-  setStepDone = async (position) => {
+  setStepDone = async (proposalID) => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      await Proposal.updateProposal(proposalID, userToken)
+    } catch (error) {
+      Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");
+    }
     this.setState({ currentPosition: this.state.currentPosition + 1 });
     this.setModalVisible(false);
   }
 
-  setStepCancel = async (position) => {
+  setStepCancel = async (proposalID) => {
+    try {
+      await Proposal.refuseProposal(proposalID, userToken)
+    } catch (error) {
+      Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");
+    }
     this.setState({
       jobCanceled: true,
       customStyles: {
@@ -288,7 +299,7 @@ export default class DetailAceitosScreen extends React.Component {
   renderStepIndicator = params => (
     <MaterialIcon {...this.getStepIndicatorIconConfig(params)} />
   )
-  stepPressed = (position) => {
+  stepPressed = () => {
     if (!this.state.jobCanceled) {
       setTimeout(() => {
         this.refs.scrollView.scrollToEnd();
