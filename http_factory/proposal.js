@@ -85,14 +85,15 @@ class Proposal {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)
-            let response = await fetch(`${this.mainRoute}/atualiza?proposta=${proposalID}`, {
+            console.log(proposalID)
+            let response = await fetch(`${this.mainRoute}/proposta/atualiza?proposta=${proposalID}`, {
                 method: "PUT",
                 headers: myHeaders
             });
             let data = await response.json();
             return data;
         } catch(err) {
-            throw err;
+            throw err;  
         }
     }
 
