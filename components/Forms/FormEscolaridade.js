@@ -20,11 +20,15 @@ export class FormEscolaridade extends React.Component {
       fileContent: null,
       buttonColor: '#2AA3D8',
       buttonIcon: 'ios-paper',
+      buttonSignInColor: 'grey',
+      isValid: false,
+      postCurriculum:true,
       form: this.props.navigation.state.params.form
     }
   }
 
   validate = ({instituicao, ano, oab }) => {
+    
     const errors = {};
     if (instituicao === undefined) {
       errors.instituicao = 'Obrigatório';
@@ -42,8 +46,14 @@ export class FormEscolaridade extends React.Component {
       errors.oab = 'Obrigatório';
     } else if (oab.trim() === '') {
       errors.oab = 'O campo não pode estar vazio.';
-    } else if (oab.length !== 7) {
-      errors.oab = 'O campo oab deve possuir 7 caracteres.';
+    } 
+    if (Object.keys(errors).length === 0) {
+      console.log('true')
+      this._setNextButton(true);
+    } else {
+      console.log('false')
+      console.log(errors)
+      this._setNextButton(false);
     }
     return errors;
   };
@@ -59,16 +69,21 @@ export class FormEscolaridade extends React.Component {
             oab: oab,
             curriculum: this.state.fileContent,
           }
-          // Persiste os formularios para a próxima página
-          this.props.navigation.navigate('Pagamento', {
-            form: {
-              cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
-              documentForm:  this.state.form.documentForm, // Pega o formulario da pagina anterior
-              escolaridadeForm: escolaridadeForm // Pega o formulario da pagina atual
-            }
-          })
+          if (escolaridadeForm.curriculum) {
+            // Persiste os formularios para a próxima página
+            this.props.navigation.navigate('Pagamento', {
+              form: {
+                cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+                documentForm:  this.state.form.documentForm, // Pega o formulario da pagina anterior
+                escolaridadeForm: escolaridadeForm // Pega o formulario da pagina atual
+              }
+            })
+          } else {
+            this.setState({ postCurriculum: false });
+          }
+          
         }}
-        //validate={this.validate}
+        validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -93,9 +108,7 @@ export class FormEscolaridade extends React.Component {
               </View>
               <View style={styles.flexStartContainer}>
                 <Field name="oab"
-                  maskType="custom"
-                  maskOptions={{ mask: '99999999' }}
-                  component={MaskTextInput}
+                  component={PlainTextInput}
                   placeholder='OAB'
                   customStyle={[styles.input, { width: wp('42%') },]} />
               </View>
@@ -106,7 +119,10 @@ export class FormEscolaridade extends React.Component {
               {this.state.fileName ?
                 <Text style={styles.descriptionText}>{this.state.fileName}</Text> :
                 null}
-              <TouchableOpacity style={styles.buttonSignin} /*disabled={!isValid}*/ onPress={handleSubmit}>
+              {this.state.postCurriculum ? null :
+                <Text style={[styles.descriptionText, {color:'red'}]}>Por favor anexe o seu curriculum aqui.</Text>}
+              <TouchableOpacity style={[styles.buttonSignin, 
+                {backgroundColor:this.state.buttonSignInColor}]} disabled={!isValid} onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
               <View style={styles.footer}>
@@ -116,6 +132,16 @@ export class FormEscolaridade extends React.Component {
           )}
       />)
   };
+
+  _setNextButton = async (status) => {
+    if (status) {
+      this.setState({ buttonSignInColor: '#2AA3D8'});
+
+    } else {
+      this.setState({ buttonSignInColor: 'grey' });
+    }
+  };
+
   _pickDocument = async () => {
     let arquivo = await DocumentPicker.getDocumentAsync({
       base64: true,
@@ -125,7 +151,7 @@ export class FormEscolaridade extends React.Component {
     const file = await Expo.FileSystem.readAsStringAsync(arquivo.uri);
     const bytes = utf8.encode(file);
     const encoded = base64.encode(bytes);
-    this.setState({ fileName: arquivo.name, fileContent: encoded, buttonColor: 'green', buttonIcon: 'ios-checkbox' });
+    this.setState({ fileName: arquivo.name, fileContent: encoded, buttonColor: 'green', buttonIcon: 'ios-checkbox', postCurriculum: true });
   }
 }
 
