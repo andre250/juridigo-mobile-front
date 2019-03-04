@@ -4,7 +4,8 @@ import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons"
 import { Platform } from 'react-native';
-import JobSteps from "./JobSteps";
+import StepIndicator from 'react-native-step-indicator';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import RatingStar from "./RatingStar";
 import { NavigationEvents } from "react-navigation";
 
@@ -19,7 +20,30 @@ export class ListaConcluidos extends Component {
       page: 1,
       seed: 1,
       error: null,
-      refreshing: false
+      refreshing: false,
+      currentPosition: 0,
+      labels: ["Contestação", "Saída", "Chegada", "Audiência", "Pagamento"],
+      customStyles: {
+        stepIndicatorSize: 40,
+        currentStepIndicatorSize: 60,
+        separatorStrokeWidth: 5,
+        currentStepStrokeWidth: 5,
+        stepStrokeCurrentColor: '#E2D249',
+        stepStrokeWidth: 5,
+        separatorStrokeFinishedWidth: 5,
+        stepStrokeFinishedColor: '#89B63F',
+        stepStrokeUnFinishedColor: '#7A7A7A',
+        separatorFinishedColor: '#89B63F',
+        separatorUnFinishedColor: '#7A7A7A',
+        stepIndicatorFinishedColor: '#89B63F',
+        stepIndicatorUnFinishedColor: '#7A7A7A',
+        stepIndicatorCurrentColor: '#E2D249',
+        stepIndicatorLabelFontSize: 13,
+        currentStepIndicatorLabelFontSize: 13,
+        labelColor: '#333333',
+        labelSize: 0,
+        currentStepLabelColor: '#E2D249',
+      }
     };
   }
 
@@ -70,6 +94,44 @@ export class ListaConcluidos extends Component {
     );
   };
 
+  getStepIndicatorIconConfig = ({ position, stepStatus }) => {
+    const iconConfig = {
+      name: 'feed',
+      color: stepStatus === 'finished' ? '#ffffff' : '#ffffff',
+      size: 25,
+    }
+    switch (position) {
+      case 0: {
+        iconConfig.name = 'library-books'
+        break
+      }
+      case 1: {
+        iconConfig.name = 'transfer-within-a-station'
+        break
+      }
+      case 2: {
+        iconConfig.name = 'location-on'
+        break
+      }
+      case 3: {
+        iconConfig.name = 'work'
+        break
+      }
+      case 4: {
+        iconConfig.name = 'payment'
+        break
+      }
+      default: {
+        break
+      }
+    }
+    return iconConfig
+  }
+
+  renderStepIndicator = params => (
+    <MaterialIcon {...this.getStepIndicatorIconConfig(params)} />
+  )
+
   renderItem = ({ item }) => (
     <ListItem
       roundAvatar
@@ -81,7 +143,15 @@ export class ListaConcluidos extends Component {
             <RatingStar name={Platform.OS === "ios" ? "ios-star" : "md-star"} color="yellow" size={hp('7%')} rating={5} />
           </View>
           <View style={styles.jobStepContainer}>
-            <JobSteps />
+            <StepIndicator
+              customStyles={this.state.customStyles}
+              renderStepIndicator={this.renderStepIndicator}
+              currentPosition={this.state.currentPosition}
+              labels={this.state.labels}
+              /*onPress={() => {
+                this._getUserInfo(item)
+              }}*/
+            />
           </View>
           <View style={styles.listItemLowerContainer}>
             <View style={styles.infoContainer}>

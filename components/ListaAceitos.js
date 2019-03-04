@@ -4,7 +4,8 @@ import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons"
 import { Platform } from 'react-native';
-import JobSteps from "./JobSteps";
+import StepIndicator from 'react-native-step-indicator';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Proposal from "../http_factory/proposal";
 import DataFormat from "./DataFormat";
 import Distance from "./Distance";
@@ -24,7 +25,29 @@ export class ListaAceitos extends Component {
       seed: 1,
       error: null,
       refreshing: false,
-      currentPosition: 0
+      currentPosition: 0,
+      labels: ["Contestação", "Saída", "Chegada", "Audiência", "Pagamento"],
+      customStyles: {
+        stepIndicatorSize: 40,
+        currentStepIndicatorSize: 60,
+        separatorStrokeWidth: 5,
+        currentStepStrokeWidth: 5,
+        stepStrokeCurrentColor: '#E2D249',
+        stepStrokeWidth: 5,
+        separatorStrokeFinishedWidth: 5,
+        stepStrokeFinishedColor: '#89B63F',
+        stepStrokeUnFinishedColor: '#7A7A7A',
+        separatorFinishedColor: '#89B63F',
+        separatorUnFinishedColor: '#7A7A7A',
+        stepIndicatorFinishedColor: '#89B63F',
+        stepIndicatorUnFinishedColor: '#7A7A7A',
+        stepIndicatorCurrentColor: '#E2D249',
+        stepIndicatorLabelFontSize: 13,
+        currentStepIndicatorLabelFontSize: 13,
+        labelColor: '#333333',
+        labelSize: 0,
+        currentStepLabelColor: '#E2D249',
+      }
     };
   }
 
@@ -59,6 +82,7 @@ export class ListaAceitos extends Component {
 
     try {
       const data = await Proposal.getUserProposal(this.state.userID, userToken)
+      
       this.setState({ 
         loading: false,
         data: data 
@@ -78,6 +102,44 @@ export class ListaAceitos extends Component {
     this.makeRemoteRequest();
   };
 
+  getStepIndicatorIconConfig = ({ position, stepStatus }) => {
+    const iconConfig = {
+      name: 'feed',
+      color: stepStatus === 'finished' ? '#ffffff' : '#ffffff',
+      size: 25,
+    }
+    switch (position) {
+      case 0: {
+        iconConfig.name = 'library-books'
+        break
+      }
+      case 1: {
+        iconConfig.name = 'transfer-within-a-station'
+        break
+      }
+      case 2: {
+        iconConfig.name = 'location-on'
+        break
+      }
+      case 3: {
+        iconConfig.name = 'work'
+        break
+      }
+      case 4: {
+        iconConfig.name = 'payment'
+        break
+      }
+      default: {
+        break
+      }
+    }
+    return iconConfig
+  }
+
+  renderStepIndicator = params => (
+    <MaterialIcon {...this.getStepIndicatorIconConfig(params)} />
+  )
+
   renderItem = ({ item }) => (
     <ListItem
       roundAvatar
@@ -86,13 +148,20 @@ export class ListaAceitos extends Component {
         <View style={styles.listItemContainer}>
           <Text style={styles.labelText}>{item.rotulo}</Text>
           <View style={styles.jobStepContainer}>
-            <JobSteps />
+            <StepIndicator
+              customStyles={this.state.customStyles}
+              renderStepIndicator={this.renderStepIndicator}
+              currentPosition={this.state.currentPosition}
+              labels={this.state.labels}
+              onPress={() => {
+                this._getUserInfo(item)
+              }}
+            />
           </View>
           <View style={styles.listItemLowerContainer}>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9F9F9F" size={25} />
               <DataFormat timestamp={item.prazo} />
-              {/* <Text style={styles.infoLabel}>14h - 11/ 02</Text> */}
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"} color="#9F9F9F" size={25} />
@@ -108,7 +177,7 @@ export class ListaAceitos extends Component {
             </View>
           </View>
         </View>}
-      containerStyle={{ borderBottomWidth: 0 }}
+      containerStyle={{ borderBottomWidth: 0, zIndex:1}}
       onPress={() => {
         this._getUserInfo(item)
       }}

@@ -88,7 +88,6 @@ export default class DetailDisponiveisScreen extends React.Component {
         "rotulo": this.state.item.rotulo
       },userToken)
     } catch (error) {
-      console.log(error)
       Alert.alert('Algo deu errado', 'Por favor repita a operação.')
     }
     // Reseta a rota do stack de navegação

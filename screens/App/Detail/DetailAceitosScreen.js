@@ -4,7 +4,6 @@ import { Text, View, ScrollView, TouchableOpacity, StyleSheet, Modal, Alert, Asy
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { JobSteps } from '../../../components/JobSteps';
 import { Platform } from 'react-native';
 import Icon from "react-native-vector-icons/Ionicons";
 import StepIndicator from 'react-native-step-indicator';
@@ -195,15 +194,11 @@ export default class DetailAceitosScreen extends React.Component {
     this.setState({ date: time })
   }
 
-  _refuseProposal = async() => {
-    
-  } 
-
   _refuseProposal = async(proposalID) => {
     const userToken = await AsyncStorage.getItem('userToken');
     try {
       await Proposal.refuseProposal(proposalID, userToken)
-      this.props.navigation.navigate("DetailDisponivel");
+      this.props.navigation.navigate("Aceitos");
     } catch (error) {
       Alert.alert("Ops!", "Algo de errado do nosso lado. Por favor, repita a ação.");
     }

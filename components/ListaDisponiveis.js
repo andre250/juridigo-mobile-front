@@ -46,6 +46,7 @@ export class ListaDisponiveis extends Component {
     this.setState({ loading: true });
     try {
       const data = await Proposal.getFreeProposal(userToken);
+      console.log(data)
       this.setState({
         data: data,
         loading: false,

@@ -48,7 +48,9 @@ class Distance extends React.Component {
 
 const styles = StyleSheet.create({
     text: {
-        padding: wp('1%')
+        padding: wp('1%'),
+        color:"#9F9F9F",
+        fontWeight:"bold"
     }   
 })
 
