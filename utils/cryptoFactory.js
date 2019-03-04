@@ -1,34 +1,23 @@
-/*'use strict';
+const CryptoJS = require("crypto-js")
 
-const crypto = require('crypto');
-
-const algorithm = 'aes-256-cfb';
-
-
-function encryptText(keyStr, text) {
-  const hash = crypto.createHash('sha256');
-  hash.update(keyStr);
-  const keyBytes = hash.digest();
-
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(algorithm, keyBytes, iv);
-  let enc = [iv, cipher.update(text, 'utf8')];
-  enc.push(cipher.final());
-  return Buffer.concat(enc).toString('base64');
+function encrypt(message) {
+  var keyHex = CryptoJS.enc.Utf8.parse("jur1d1g0");
+  var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.ZeroPadding
+  });
+  return encrypted.toString();
+}
+function decrypt(ciphertext) {
+    var keyHex = CryptoJS.enc.Utf8.parse("jur1d1g0");
+    var decrypted = CryptoJS.DES.decrypt({
+        ciphertext: CryptoJS.enc.Base64.parse(ciphertext)
+    }, keyHex, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.ZeroPadding
+    });
+    return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
-function decryptText(keyStr, text) {
-  const hash = crypto.createHash('sha256');
-  hash.update(keyStr);
-  const keyBytes = hash.digest();
 
-  const contents = Buffer.from(text, 'base64');
-  const iv = contents.slice(0, 16);
-  const textBytes = contents.slice(16);
-  const decipher = crypto.createDecipheriv(algorithm, keyBytes, iv);
-  let res = decipher.update(textBytes, '', 'utf8');
-  res += decipher.final('utf8');
-  return res;
-} 
-
-module.exports = {encryptText, decryptText};*/
+module.exports = {encrypt, decrypt}
