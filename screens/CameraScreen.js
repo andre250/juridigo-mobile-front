@@ -123,11 +123,10 @@ export default class CameraScreen extends React.Component {
       from: photo.uri,
       to: location,
     });
-    const file = await Expo.FileSystem.readAsStringAsync(location);
-    const bytes = utf8.encode(file);
-    const encoded = base64.encode(bytes);
+    const file = await Expo.FileSystem.readAsStringAsync(location,
+      { encoding: Expo.FileSystem.EncodingTypes.Base64 });
     const navigation = this.props.navigation;
-    let newPhoto = encoded
+    let newPhoto = file
     let locationPhoto = location
     navigation.getParam('callback')(newPhoto, locationPhoto);
     this.props.navigation.goBack()

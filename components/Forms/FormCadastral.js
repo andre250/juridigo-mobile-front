@@ -181,7 +181,7 @@ export class FormCadastral extends React.Component {
                 }
               });
         }}
-        //validate={this.validate}
+        validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -226,7 +226,7 @@ export class FormCadastral extends React.Component {
               <View style={styles.dataPickerContainer}>
                 <Field name="birthday"
                   maskType="datetime"
-                  maskOptions={{ format: 'DD/MM/YYYY' }}
+                  maskOptions={{ format: 'DD-MM-YYYY' }}
                   component={MaskTextInput}
                   placeholder='Data Nascimento'
                   placeholderTextColor={'#787974'}
@@ -301,7 +301,7 @@ export class FormCadastral extends React.Component {
               </View>
               <TouchableOpacity style={[styles.buttonSignin, 
                 {backgroundColor:this.state.buttonSignInColor}]} 
-                 /*disabled={!isValid}*/ onPress={handleSubmit}>
+                 disabled={!isValid} onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
               <View style={styles.footer}>

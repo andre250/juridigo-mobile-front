@@ -48,11 +48,8 @@ export class FormEscolaridade extends React.Component {
       errors.oab = 'O campo não pode estar vazio.';
     } 
     if (Object.keys(errors).length === 0) {
-      console.log('true')
       this._setNextButton(true);
     } else {
-      console.log('false')
-      console.log(errors)
       this._setNextButton(false);
     }
     return errors;
@@ -63,7 +60,7 @@ export class FormEscolaridade extends React.Component {
       <Formik
         onSubmit={({ instituicao, ano, oab }) => {
           escolaridadeForm = {
-            escolaridade: 'Ensino Superior',
+            escolaridade: 0,
             instituicao: instituicao,
             ano: ano,
             oab: oab,
@@ -144,14 +141,12 @@ export class FormEscolaridade extends React.Component {
 
   _pickDocument = async () => {
     let arquivo = await DocumentPicker.getDocumentAsync({
-      base64: true,
       copyToCacheDirectory: false,
       type: '*/*',
     });
-    const file = await Expo.FileSystem.readAsStringAsync(arquivo.uri);
-    const bytes = utf8.encode(file);
-    const encoded = base64.encode(bytes);
-    this.setState({ fileName: arquivo.name, fileContent: encoded, buttonColor: 'green', buttonIcon: 'ios-checkbox', postCurriculum: true });
+    const file = await Expo.FileSystem.readAsStringAsync(arquivo.uri,
+    { encoding: Expo.FileSystem.EncodingTypes.Base64 });
+    this.setState({ fileName: arquivo.name, fileContent: file, buttonColor: 'green', buttonIcon: 'ios-checkbox', postCurriculum: true });
   }
 }
 

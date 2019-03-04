@@ -43,7 +43,7 @@ class User {
                 body: JSON.stringify(registerInformation)
             });
             let data = await response.json();
-            return data.token;
+            return data;
         } catch (error) {
             console.log(error)
             throw error;

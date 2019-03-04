@@ -9,7 +9,9 @@ import Icon from "react-native-vector-icons";
 import { Platform, Alert } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import User from '../../http_factory/user';
-// import EncryptPayment from '../../utils/cryptoFactory';
+import moment from 'moment';
+
+const cryptoFact = require("../../utils/cryptoFactory")
 
 export class FormPagamento extends React.Component {
   constructor(props) {
@@ -19,13 +21,13 @@ export class FormPagamento extends React.Component {
       cardType: null,
       usoCheck: false,
       responsabilidadeCheck: false,
-      banco:"Selecione um banco",
+      banco: "Selecione um banco",
       form: this.props.navigation.state.params.form
     }
-    
+
   }
 
-  validate = ({ numero_cartao, nome_impresso, validade, ccv, 
+  validate = ({ numero_cartao, nome_impresso, validade, ccv,
     agencia, conta }) => {
     const errors = {};
     if (numero_cartao === undefined) {
@@ -83,7 +85,7 @@ export class FormPagamento extends React.Component {
             nome_impresso: nome_impresso,
             validade: validade,
             ccv: ccv,
-            banco: banco,
+            banco: this.state.banco,
             agencia: agencia,
             conta: conta,
           }
@@ -91,11 +93,11 @@ export class FormPagamento extends React.Component {
             // Persiste os formularios para a próxima página
             this.state.form.pagamentoForm = pagamentoForm
             this._requestForm()
-            //this.props.navigation.navigate('App')
+            this.props.navigation.navigate('Auth')
           } else {
             Alert.alert('Você precisa aceitar os termos para continuar.');
           }
-          
+
         }}
         validate={this.validate}
         render={({
@@ -139,22 +141,22 @@ export class FormPagamento extends React.Component {
               <View style={styles.flexStartContainer}>
                 <Picker name="banco"
                   selectedValue={this.state.banco}
-                  onValueChange={(bank) => this.setState({banco: bank})}
+                  onValueChange={(bank) => this.setState({ banco: bank })}
                   style={[styles.input, { width: wp('60%'), color: '#787974' }]} >
                   <Picker.Item label="Selecione um banco" value="null" />
                   <Picker.Item label="Banco do Brasil S.A." value="001" />
                   <Picker.Item label="Banco Santander (Brasil) S.A." value="033" />
-                  <Picker.Item label="Itaú Unibanco Holding S.A." value="652" />   
-                  <Picker.Item label="Banco Bradesco S.A." value="237" />   
-                  <Picker.Item label="Banco Citibank S.A." value="745" />   
-                  <Picker.Item label="HSBC Bank Brasil S.A. – Banco Múltiplo" value="399" />    
-                  <Picker.Item label="Caixa Econômica Federal" value="104" />   
-                  <Picker.Item label="Banco Mercantil do Brasil S.A." value="389" />   
+                  <Picker.Item label="Itaú Unibanco Holding S.A." value="652" />
+                  <Picker.Item label="Banco Bradesco S.A." value="237" />
+                  <Picker.Item label="Banco Citibank S.A." value="745" />
+                  <Picker.Item label="HSBC Bank Brasil S.A. – Banco Múltiplo" value="399" />
+                  <Picker.Item label="Caixa Econômica Federal" value="104" />
+                  <Picker.Item label="Banco Mercantil do Brasil S.A." value="389" />
                   <Picker.Item label="Banco Rural S.A." value="453" />
-                  <Picker.Item label="Banco Safra S.A." value="422" />   
-                  <Picker.Item label="Banco Itaú S.A." value="341" />   
-                  <Picker.Item label="Banco Rendimento S.A." value="633" />   
-                  </Picker>
+                  <Picker.Item label="Banco Safra S.A." value="422" />
+                  <Picker.Item label="Banco Itaú S.A." value="341" />
+                  <Picker.Item label="Banco Rendimento S.A." value="633" />
+                </Picker>
               </View>
               <View style={styles.flexStartContainer}>
                 <Field name="agencia"
@@ -170,31 +172,31 @@ export class FormPagamento extends React.Component {
               </View>
               <View style={styles.optInContainer}>
                 <View style={styles.checkBoxContainer}>
-                <CheckBox
-                      style={styles.checkBox}
-                      onClick={()=>{
-                        this.setState({
-                          usoCheck:!this.state.usoCheck
-                        })
-                      }}
-                      isChecked={this.state.usoCheck}
+                  <CheckBox
+                    style={styles.checkBox}
+                    onClick={() => {
+                      this.setState({
+                        usoCheck: !this.state.usoCheck
+                      })
+                    }}
+                    isChecked={this.state.usoCheck}
                   />
-                  <TouchableOpacity style={styles.checkLabel} onPress={ ()=>{ Linking.openURL('https://juridigo.com.br/politica-de-privacidade-juridigo/')}}>
-                    <Text style={{fontSize:hp('1.7%')}}>Declaro que li e aceito os <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}>Termos de Uso</Text></Text>
+                  <TouchableOpacity style={styles.checkLabel} onPress={() => { Linking.openURL('https://juridigo.com.br/politica-de-privacidade-juridigo/') }}>
+                    <Text style={{ fontSize: hp('1.7%') }}>Declaro que li e aceito os <Text style={{ fontWeight: "bold", textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.checkBoxContainer}>
-                <CheckBox
-                      style={styles.checkBox}
-                      onClick={()=>{
-                        this.setState({
-                          responsabilidadeCheck:!this.state.responsabilidadeCheck
-                        })
-                      }}
-                      isChecked={this.state.responsabilidadeCheck}
+                  <CheckBox
+                    style={styles.checkBox}
+                    onClick={() => {
+                      this.setState({
+                        responsabilidadeCheck: !this.state.responsabilidadeCheck
+                      })
+                    }}
+                    isChecked={this.state.responsabilidadeCheck}
                   />
-                  <TouchableOpacity style={styles.checkLabel} onPress={ ()=>{ Linking.openURL('https://juridigo.com.br/termos-e-condicoes-gerais-de-uso-juridigo-ltda/')}}>
-                  <Text style={{fontSize:hp('1.7%')}} >Declaro que li e aceito os <Text style={{fontWeight: "bold", textDecorationLine:'underline'}}>Termos de Responsabilidade</Text></Text>
+                  <TouchableOpacity style={styles.checkLabel} onPress={() => { Linking.openURL('https://juridigo.com.br/termos-e-condicoes-gerais-de-uso-juridigo-ltda/') }}>
+                    <Text style={{ fontSize: hp('1.7%') }} >Declaro que li e aceito os <Text style={{ fontWeight: "bold", textDecorationLine: 'underline' }}>Termos de Responsabilidade</Text></Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -205,7 +207,7 @@ export class FormPagamento extends React.Component {
                 <ProgressBar Progress_Value={this.state.Progress_Value} />
               </View>
             </View>
-          
+
           )}
       />)
   };
@@ -221,67 +223,95 @@ export class FormPagamento extends React.Component {
   };
 
   _requestForm = async () => {
-    const paymentInfo = {
-      numero:this.state.form.pagamentoForm.numero_cartao,
-      cvv:this.state.form.pagamentoForm.ccv,
-      anoVencimento:'20'+this.state.form.pagamentoForm.validade.substring(3,5),
-      mesVencimento:this.state.form.pagamentoForm.validade.substring(0,2),
-      agencia:this.state.form.pagamentoForm.agencia,
-      conta:this.state.form.pagamentoForm.conta,
-   }
+   const paymentInfo = {
+      numero: this.state.form.pagamentoForm.numero_cartao.replace(/\s/g, ''),
+      cvv: this.state.form.pagamentoForm.ccv,
+      anoVencimento: '20' + this.state.form.pagamentoForm.validade.substring(3, 5),
+      mesVencimento: this.state.form.pagamentoForm.validade.substring(0, 2),
+      agencia: this.state.form.pagamentoForm.agencia,
+      conta: this.state.form.pagamentoForm.conta,
+      banco: this.state.form.pagamentoForm.banco,
+    }
     const formRequest = {
       credenciais: {
-          credencial: this.state.form.cadastralForm.credencial,
-          usuario: this.state.form.cadastralForm.user,
-          tipo: 0
+        credencial: this.state.form.cadastralForm.credencial,
+        usuario: this.state.form.cadastralForm.user,
+        tipo: 0
       },
       cadastrais: {
-          nome: this.state.form.cadastralForm.name,
-          dataNascimento: this.state.form.cadastralForm.birthday,
-          email: this.state.form.cadastralForm.email,
-          telefone: this.state.form.cadastralForm.telphone,
-          rg: this.state.form.cadastralForm.rg,
-          cpf: this.state.form.cadastralForm.cpf,
-          cep: this.state.form.cadastralForm.cep,
-          cidade: this.state.form.cadastralForm.cidade,
-          bairro: this.state.form.cadastralForm.bairro,
-          rua: this.state.form.cadastralForm.endereco,
-          numero: this.state.form.cadastralForm.numero,
-          complemento: this.state.form.cadastralForm.complemento,
-          longitude: this.state.form.cadastralForm.longitude,
-          latitude: this.state.form.cadastralForm.latitude,
-          documento: this.state.form.documentForm.foto_documento,
-          prova: this.state.form.documentForm.foto_pessoa
+        nome: this.state.form.cadastralForm.name,
+        dataNascimento: new Date(this.state.form.cadastralForm.birthday.split("-").reverse().join("-")).toISOString(),
+        email: this.state.form.cadastralForm.email,
+        telefone: this.state.form.cadastralForm.telphone,
+        rg: this.state.form.cadastralForm.rg,
+        cpf: this.state.form.cadastralForm.cpf.split('.').join("").split('-').join(""),
+        cep: this.state.form.cadastralForm.cep,
+        cidade: this.state.form.cadastralForm.cidade,
+        bairro: this.state.form.cadastralForm.bairro,
+        rua: this.state.form.cadastralForm.endereco,
+        numero: this.state.form.cadastralForm.numero,
+        complemento: this.state.form.cadastralForm.complemento,
+        longitude: this.state.form.cadastralForm.longitude,
+        latitude: this.state.form.cadastralForm.latitude,
+        documento: this.state.form.documentForm.foto_document,
+        prova: this.state.form.documentForm.foto_pessoa
       },
       curriculares: {
-          formacao: [
-              {
-                  escolaridade: this.state.form.escolaridadeForm.escolaridade,
-                  instituicao: this.state.form.escolaridadeForm.instituicao,
-                  anoConclusao: this.state.form.escolaridadeForm.ano
-              }
-          ],
-          oab: this.state.form.escolaridadeForm.oab,
-          curriculum: this.state.form.escolaridadeForm.curriculum
+        formacao: [
+          {
+            escolaridade: this.state.form.escolaridadeForm.escolaridade,
+            instituicao: this.state.form.escolaridadeForm.instituicao,
+            anoConclusao: this.state.form.escolaridadeForm.ano
+          }
+        ],
+        oab: this.state.form.escolaridadeForm.oab,
+        curriculum: this.state.form.escolaridadeForm.curriculum
       },
-      pagamento: paymentInfo
-      // pagamento: EncryptPayment(paymentInfo)
-  }
-  console.log('aqui')
-  try {
-    console.log(formRequest)
-    //const registro = await User.register(formRequest);
-    //await AsyncStorage.setItem('userToken', token);
-    //const decoded = jwtDecode(token);    
-    //this.setState({ loading: false });
-  } catch (error) {
-    console.log(error)
-    //this.setState({ loading: false });
-    return Alert.alert(
-      'Houve um erro no processo de cadastro',
-      'Por favor verifique e tente novamente mais tarde.'
-    );
-  };
+      pagamento: cryptoFact.encrypt(JSON.stringify(paymentInfo))
+    }
+    try {
+      const registro = await User.register(formRequest);
+      //const registro = {"msg": "Conta criada com sucesso!"}
+      let response = registro.erro 
+      switch (response) {
+        case undefined:
+          //Instruções executadas quando a conta for criada com sucesso
+          return Alert.alert(registro.msg, 
+            'Seu cadastro está em validação, você receberá um email quando for confirmado.');
+        case "cpf":
+          //Instruções executadas quando houve erro no CPF 
+          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+        case "email":
+          //Instruções executadas quando houve erro no Email
+          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+        case "rg":
+          //Instruções executadas quando houve erro no RG
+          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+        case "pagamento":
+          //Instruções executadas quando houve erro nas informações de pagamento
+          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+        case "cartao":
+          //Instruções executadas quando houve erro no número do cartão
+          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+        case "curriculum":
+          //Instruções executadas quando houve erro no curriculum
+          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+        case "Insert":
+          //Instruções executadas quando houve erro na criação da conta
+          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+        default:
+          //Instruções executadas quando a resposta do servidor não for mapeada
+          return Alert.alert('Houve um problema com o servidor, tente novamente mais tarde.');
+      }
+      //this.setState({ loading: false });
+
+    } catch (error) {
+      //this.setState({ loading: false });
+      return Alert.alert(
+        'Houve um erro no processo de cadastro',
+        'Por favor verifique e tente novamente mais tarde.'
+      );
+    };
   };
 }
 
@@ -403,4 +433,4 @@ const styles = StyleSheet.create({
   }
 });
 
-  export default FormPagamento;
+export default FormPagamento;
