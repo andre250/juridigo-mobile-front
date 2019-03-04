@@ -22,7 +22,7 @@ export default class AuthLoadingScreen extends React.Component {
       const decoded = jwtDecode(userToken); 
       const timeNow = Math.round(new Date().getTime()/1000);
       if (timeNow < decoded.exp) {
-        return this.props.navigation.navigate('RegisterForm'); 
+        return this.props.navigation.navigate('App'); 
       }
     }
     

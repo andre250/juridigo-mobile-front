@@ -5,10 +5,13 @@ class Payment {
         this.mainRoute = factory.payment;
     }
 
-    async getUserPayment(userID) {
+    async getUserPayment(userID,userToken) {
         try {
+            let myHeaders = new Headers();
+            myHeaders.append("Authtoken", userToken)
             let response = await fetch(`${this.mainRoute}?usuario=${userID}`, {
-                method: "GET"
+                method: "GET",
+                headers: myHeaders
             });
             let data = await response.json();
             return data;

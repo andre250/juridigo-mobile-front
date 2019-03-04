@@ -34,7 +34,11 @@ class DateFormat extends React.Component {
 
 const styles = StyleSheet.create({
     text: {
-        padding: wp('1%')
+        color: "#3a3a3a",
+        textAlign: "center",
+        fontSize: hp("2%"),
+        padding: hp("1%"),
+        width: wp('28%')
     }   
 })
 
