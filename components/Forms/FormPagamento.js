@@ -6,7 +6,7 @@ import MaskTextInput from './Elements/MaskTextInput';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ProgressBar } from '../ProgressBar'
 import Icon from "react-native-vector-icons";
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import User from '../../http_factory/user';
 // import EncryptPayment from '../../utils/cryptoFactory';
@@ -87,9 +87,15 @@ export class FormPagamento extends React.Component {
             agencia: agencia,
             conta: conta,
           }
-          this.state.form.pagamentoForm = pagamentoForm
-          this._requestForm()
-          //this.props.navigation.navigate('App')
+          if (this.state.usoCheck && this.state.responsabilidadeCheck) {
+            // Persiste os formularios para a próxima página
+            this.state.form.pagamentoForm = pagamentoForm
+            this._requestForm()
+            //this.props.navigation.navigate('App')
+          } else {
+            Alert.alert('Você precisa aceitar os termos para continuar.');
+          }
+          
         }}
         validate={this.validate}
         render={({

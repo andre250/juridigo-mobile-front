@@ -157,9 +157,19 @@ export default class DetailAceitosScreen extends React.Component {
             <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} title={`${this.state.distance}${this.state.unit}`}
               description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa}/>
+            <View style={styles.atachedContainer}>
+                <Text style={{fontWeight:'bold', color:'#777777'}}>Anexos</Text>
+                <TouchableOpacity style={styles.atachedIcon} onPress={()=>{this._downloadDocument()}}>
+                  <Icon style={{alignSelf:'center', paddingTop:hp('1%')}} name={"ios-paper"} size={40} color="#fff" />
+                  <Text style={{fontWeight:'bold', color:'#ffffff', textAlignVertical:'center', textAlign:'center', paddingLeft:hp('1%')}}>Documento</Text>
+                </TouchableOpacity>
+            </View>
             <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
               description={this.state.item.descricao} />
           </View>
+          <TouchableOpacity onPress={()=>{this._refuseProposal(this.props.navigation.state.params.proposalID)}}>
+            <Text style={styles.recuseButtonText}>Cancelar trabalho</Text>
+          </TouchableOpacity>
           <View style={styles.containerJobSteps}>
             <Text style={styles.stepInteractorButtonText}>Clique abaixo para interagir com a etapa em andamento</Text>
             <StepIndicator
@@ -170,9 +180,6 @@ export default class DetailAceitosScreen extends React.Component {
               onPress={this.stepPressed}
             />
           </View>
-          <TouchableOpacity onPress={()=>{this._refuseProposal(this.props.navigation.state.params.proposalID)}}>
-            <Text style={styles.recuseButtonText}>Recusar oferta</Text>
-          </TouchableOpacity>
         </ScrollView>
       </View>
     );
@@ -187,6 +194,10 @@ export default class DetailAceitosScreen extends React.Component {
     const time = `${hour}h - ${date}/${month}`
     this.setState({ date: time })
   }
+
+  _refuseProposal = async() => {
+    
+  } 
 
   _refuseProposal = async(proposalID) => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -359,5 +370,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: hp('1%'),
     backgroundColor: '#E8E9ED',
-  }
+  },
+  atachedContainer: {
+    marginLeft: wp('10%'),
+  },
+  atachedIcon: {
+    backgroundColor: '#2AA3D8',
+    width: wp('35%'),
+    height: hp('10%'),
+    marginLeft: wp('15%'),
+    marginTop: hp('2%'),
+    marginBottom: hp('2%'),
+    borderRadius: 7,
+    flexDirection: 'row',
+    padding:hp('1%')
+  },
 });
