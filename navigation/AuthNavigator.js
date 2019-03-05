@@ -6,6 +6,7 @@ import AuthLoadingScreen from '../screens/Auth/AuthLoadingScreen'
 import React from 'react';
 import { TextTitle } from '../components/TextTitle';
 import WaitingScreen from '../screens/WaitingConfirmation';
+import IntroductionScreen from '../screens/IntroductionScreen';
 
 const AppStack = createStackNavigator(
     { 
@@ -31,7 +32,8 @@ export default createSwitchNavigator(
     Auth: LoginScreen,
     RegisterForm: FormStack,
     App: AppStack,
-    Waiting: WaitingScreen
+    Waiting: WaitingScreen,
+    Introduction: IntroductionScreen
   },
   {
     initialRouteName: 'AuthLoading',

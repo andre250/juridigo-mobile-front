@@ -62,7 +62,7 @@ export default class LoginScreen extends React.Component {
             : <Text style={styles.buttonSigninText}>ENTRAR</Text> }
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonSignup}
-          onPress={() => this.props.navigation.navigate('RegisterForm')}>
+          onPress={() => this.props.navigation.navigate('Introduction')}>
           <Text style={styles.buttonSignupText}>Ainda não possuo cadastro</Text>
         </TouchableOpacity>
         <Text style={styles.separatorText}>────────  ou  ────────</Text>
