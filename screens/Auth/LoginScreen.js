@@ -92,7 +92,7 @@ export default class LoginScreen extends React.Component {
         // Get the user's name using Facebook's Graph API
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
         await AsyncStorage.setItem('userToken', token);
-        const signUp = 0 
+        const signUp = 1 
         if (signUp===0){
           this.props.navigation.navigate('Waiting');
         } else {
@@ -139,7 +139,7 @@ export default class LoginScreen extends React.Component {
       await AsyncStorage.setItem('userID', decoded.id);
       
       this.setState({ loading: false });
-      const signUp = 0 
+      const signUp = 1 
       if (signUp===0){
         this.props.navigation.navigate('Waiting');
       } else {
