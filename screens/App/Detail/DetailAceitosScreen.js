@@ -13,6 +13,7 @@ import Proposal from '../../../http_factory/proposal';
 export default class DetailAceitosScreen extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props)
     this.state = {
       modalVisible: false,
       job: {},
@@ -32,7 +33,7 @@ export default class DetailAceitosScreen extends React.Component {
         }
       ],
       jobCanceled: false,
-      currentPosition: 2,
+      currentPosition: this.props.navigation.state.params.currentPosition,
       stepContainerHeight: '15%',
       labels: ["Contestação", "Saída", "Chegada", "Audiência", "Pagamento"],
       labelSize: 0,
@@ -156,13 +157,13 @@ export default class DetailAceitosScreen extends React.Component {
             <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} title={`${this.state.distance}${this.state.unit}`}
               description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa} />
-            <View style={styles.atachedContainer}>
-              <Text style={{ fontWeight: 'bold', color: '#777777' }}>Anexos</Text>
-              <TouchableOpacity style={styles.atachedIcon} onPress={() => { this._downloadDocument() }}>
-                <Icon style={{ alignSelf: 'center', paddingTop: hp('1%') }} name={"ios-paper"} size={40} color="#fff" />
-                <Text style={{ fontWeight: 'bold', color: '#ffffff', textAlignVertical: 'center', textAlign: 'center', paddingLeft: hp('1%') }}>Documento</Text>
-              </TouchableOpacity>
-            </View>
+            {/*<View style={styles.atachedContainer}>
+                <Text style={{ fontWeight: 'bold', color: '#777777' }}>Anexos</Text>
+                <TouchableOpacity style={styles.atachedIcon} onPress={() => { this._downloadDocument() }}>
+                  <Icon style={{ alignSelf: 'center', paddingTop: hp('1%') }} name={"ios-paper"} size={40} color="#fff" />
+                  <Text style={{ fontWeight: 'bold', color: '#ffffff', textAlignVertical: 'center', textAlign: 'center', paddingLeft: hp('1%') }}>Documento</Text>
+                </TouchableOpacity>
+              </View>*/}
             <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
               description={this.state.item.descricao} />
           </View>
@@ -174,7 +175,7 @@ export default class DetailAceitosScreen extends React.Component {
             <StepIndicator
               customStyles={this.state.customStyles}
               renderStepIndicator={this.renderStepIndicator}
-              currentPosition={parseInt(this.props.navigation.state.params.item.status)}
+              currentPosition={parseInt(this.state.currentPosition)}
               labels={this.state.labels}
               onPress={this.stepPressed}
             />
@@ -198,7 +199,7 @@ export default class DetailAceitosScreen extends React.Component {
     const userToken = await AsyncStorage.getItem('userToken');
     try {
       await Proposal.refuseProposal(proposalID, userToken)
-      this.props.navigation.navigate("Aceitos");
+      this.props.navigation.pop();
     } catch (error) {
       Alert.alert("Ops!", "Algo de errado do nosso lado. Por favor, repita a ação.");
     }
@@ -236,12 +237,18 @@ export default class DetailAceitosScreen extends React.Component {
   setStepDone = async (proposalID) => {
     const userToken = await AsyncStorage.getItem('userToken');
     try {
-      await Proposal.updateProposal(proposalID, userToken)
+      if (this.state.currentPosition === '3'){
+        //await Proposal.generateProposalPayments(proposalID, userToken)
+        this.setState({ currentPosition: parseInt(this.state.currentPosition) + 1 });
+        this.props.navigation.navigate('Concluidos')
+      } else {
+        await Proposal.updateProposal(proposalID, userToken)
+        this.setState({ currentPosition: parseInt(this.state.currentPosition) + 1 });
+      }
+      this.setModalVisible(false);
     } catch (error) {
       Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");
     }
-    this.setState({ currentPosition: this.state.currentPosition + 1 });
-    this.setModalVisible(false);
   }
 
   setStepCancel = async (proposalID) => {

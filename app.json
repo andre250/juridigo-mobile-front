@@ -13,7 +13,7 @@
     "icon": "./assets/images/profile.png",
     "splash": {
       "image": "./assets/images/bg3x.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -27,6 +27,9 @@
     },
     "android": {
       "package": "com.juridigo.juridigo"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#000000"
     },
     "description": ""
   }

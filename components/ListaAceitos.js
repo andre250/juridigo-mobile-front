@@ -61,7 +61,8 @@ export class ListaAceitos extends Component {
       const jobDetail = await Job.getJobByID(job.idTrabalho, userToken);
       this.nav.navigate('DetailAceitos', {
         proposalID: job["_id"]["$oid"],
-        item: jobDetail
+        item: jobDetail,
+        currentPosition: job.status
       })
     } catch (error) {
       console.log(error)
@@ -151,7 +152,7 @@ export class ListaAceitos extends Component {
             <StepIndicator
               customStyles={this.state.customStyles}
               renderStepIndicator={this.renderStepIndicator}
-              currentPosition={parseInt(item.status)+1}
+              currentPosition={parseInt(item.status)}
               labels={this.state.labels}
               onPress={() => {
                 this._getUserInfo(item)

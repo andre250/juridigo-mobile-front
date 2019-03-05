@@ -1,6 +1,6 @@
 import { Field, Formik } from 'formik';
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Picker } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Picker, ScrollView } from 'react-native';
 import PlainTextInput from './Elements/PlainTextInput';
 import MaskTextInput from './Elements/MaskTextInput';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -57,6 +57,7 @@ export class FormEscolaridade extends React.Component {
 
   render() {
     return (
+      <ScrollView>
       <Formik
         onSubmit={({ instituicao, ano, oab }) => {
           escolaridadeForm = {
@@ -80,7 +81,7 @@ export class FormEscolaridade extends React.Component {
           }
           
         }}
-        validate={this.validate}
+        //validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -119,15 +120,16 @@ export class FormEscolaridade extends React.Component {
               {this.state.postCurriculum ? null :
                 <Text style={[styles.descriptionText, {color:'red'}]}>Por favor anexe o seu curriculum aqui.</Text>}
               <TouchableOpacity style={[styles.buttonSignin, 
-                {backgroundColor:this.state.buttonSignInColor}]} disabled={!isValid} onPress={handleSubmit}>
+                {backgroundColor:this.state.buttonSignInColor}]} /*disabled={!isValid}*/ onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
-              <View style={styles.footer}>
-                <ProgressBar Progress_Value={this.state.Progress_Value} />
-              </View>
             </View>
           )}
-      />)
+      />
+      <View style={styles.footer}>
+        <ProgressBar Progress_Value={this.state.Progress_Value} />
+      </View>
+      </ScrollView>)
   };
 
   _setNextButton = async (status) => {
@@ -158,6 +160,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     alignSelf: 'flex-end',
+    height: hp('8%')
   },
   dataPickerContainer: {
     flexDirection: 'row',

@@ -153,6 +153,7 @@ export class FormCadastral extends React.Component {
 
   render() {
     return (
+      <ScrollView>
       <Formik
         onSubmit={({ name, email, pass, user, telphone,
           birthday, rg, cpf, cep, numero }) => {
@@ -181,7 +182,7 @@ export class FormCadastral extends React.Component {
                 }
               });
         }}
-        validate={this.validate}
+        //validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -301,15 +302,16 @@ export class FormCadastral extends React.Component {
               </View>
               <TouchableOpacity style={[styles.buttonSignin, 
                 {backgroundColor:this.state.buttonSignInColor}]} 
-                 disabled={!isValid} onPress={handleSubmit}>
+                 /*disabled={!isValid}*/ onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
-              <View style={styles.footer}>
-                <ProgressBar Progress_Value={this.state.Progress_Value} />
-              </View>
             </ScrollView>
           )}
-      />)
+      />
+      <View style={styles.footer}>
+        <ProgressBar Progress_Value={this.state.Progress_Value} />
+      </View>
+      </ScrollView>)
   };
 }
 const styles = StyleSheet.create({
@@ -320,7 +322,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     alignSelf: 'flex-end',
-    height: hp('9%')
+    height: hp('8%')
   },
   spaceAroundContainer: {
     flex: 1,

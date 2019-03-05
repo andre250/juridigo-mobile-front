@@ -1,6 +1,6 @@
 import { Field, Formik } from 'formik';
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Picker, Linking } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Picker, Linking, ScrollView } from 'react-native';
 import PlainTextInput from './Elements/PlainTextInput';
 import MaskTextInput from './Elements/MaskTextInput';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -78,6 +78,7 @@ export class FormPagamento extends React.Component {
 
   render() {
     return (
+      <ScrollView>
       <Formik
         onSubmit={({ numero_cartao, nome_impresso, validade, ccv, banco, agencia, conta }) => {
           pagamentoForm = {
@@ -93,7 +94,7 @@ export class FormPagamento extends React.Component {
             // Persiste os formularios para a próxima página
             this.state.form.pagamentoForm = pagamentoForm
             this._requestForm()
-            this.props.navigation.navigate('Auth')
+            this.props.navigation.navigate('Waiting')
           } else {
             Alert.alert('Você precisa aceitar os termos para continuar.');
           }
@@ -203,23 +204,13 @@ export class FormPagamento extends React.Component {
               <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>CONCLUIR</Text>
               </TouchableOpacity>
-              <View style={styles.footer}>
-                <ProgressBar Progress_Value={this.state.Progress_Value} />
-              </View>
             </View>
-
           )}
-      />)
-  };
-
-
-
-  navigateToTermosUso = async () => {
-    this.props.navigation.navigate('TermosUso')
-  };
-
-  navigateToTermosResponsabilidade = async () => {
-    this.props.navigation.navigate('TermosResponsabilidade')
+      />
+      <View style={styles.footer}>
+        <ProgressBar Progress_Value={this.state.Progress_Value} />
+      </View>
+      </ScrollView>)
   };
 
   _requestForm = async () => {
@@ -323,7 +314,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     alignSelf: 'flex-end',
-    height: hp('5%')
+    height: hp('8%')
   },
   optInContainer: {
     flexDirection: 'column',

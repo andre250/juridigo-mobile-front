@@ -1,6 +1,6 @@
 import { Field, Formik } from 'formik';
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ProgressBar } from '../ProgressBar'
 
@@ -58,6 +58,7 @@ export class FormDocumento extends React.Component {
 
   render() {
     return (
+      <ScrollView>
       <Formik
         onSubmit={() => {
           documentForm = {
@@ -72,7 +73,7 @@ export class FormDocumento extends React.Component {
             }
           })
         }}
-        validate={this.validate}
+        //validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -94,15 +95,16 @@ export class FormDocumento extends React.Component {
               <Text style={styles.descriptionText}>Tire uma foto sua segurando o documento</Text>
               <TouchableOpacity style={[styles.buttonSignin, 
                 {backgroundColor:this.state.buttonSignInColor}]} 
-                disabled={!this.state.isValid} onPress={handleSubmit}>
+                /*disabled={!this.state.isValid}*/ onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
-              <View style={styles.footer}>
-                <ProgressBar Progress_Value={this.state.Progress_Value} />
-              </View>
             </View>
           )}
-      />)
+      />
+      <View style={styles.footer}>
+        <ProgressBar Progress_Value={this.state.Progress_Value} />
+      </View>
+      </ScrollView>)
   };
 }
 
@@ -115,8 +117,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footer: {
+    flex: 1,
     alignSelf: 'flex-end',
-    height: hp('7%')
+    height: hp('8%')
   },
   spaceCenterContainer: {
     marginTop: hp('2%'),
@@ -145,8 +148,8 @@ const styles = StyleSheet.create({
   },
   imagePhotoImage: {
     alignSelf: 'center',
-    width: wp('45%'),
-    height: hp('15%')
+    width: wp('35%'),
+    height: hp('11%')
   },
   imagePhotoImagePerson: {
     alignSelf: 'center',
@@ -159,8 +162,8 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
   buttonSignin: {
-    marginTop: hp('5%'),
-    marginBottom: hp('5%'),
+    marginTop: hp('4%'),
+    marginBottom: hp('4%'),
     width: wp('45%'),
     height: hp('7%'),
     alignSelf: 'center',
