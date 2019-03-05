@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList, Text, StyleSheet, AsyncStorage } from "react-native";
+import { View, FlatList, Text, StyleSheet, AsyncStorage, ActivityIndicator } from "react-native";
 import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons"
@@ -65,7 +65,6 @@ export class ListaAceitos extends Component {
         currentPosition: job.status
       })
     } catch (error) {
-      console.log(error)
     }
   }
 
@@ -83,19 +82,23 @@ export class ListaAceitos extends Component {
 
     try {
       const data = await Proposal.getUserProposal(this.state.userID, userToken)
-      
-      this.setState({ 
+
+      this.setState({
         loading: false,
-        data: data 
+        refreshing: false,
+        data: data
       });
     } catch (error) {
-      this.setState({ 
-        loading: false
+      this.setState({
+        loading: false,
       });
     }
   };
 
   handleRefresh = () => {
+    this.setState({
+      refreshing: true
+    });
     this.makeRemoteRequest();
   };
 
@@ -170,36 +173,49 @@ export class ListaAceitos extends Component {
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
-              <Distance 
+              <Distance
                 uLat={this.state.latitude}
                 uLong={this.state.longitude}
                 tLat={item.latitude}
-                tLong={item.longitude}/>
+                tLong={item.longitude} />
             </View>
           </View>
         </View>}
-      containerStyle={{ borderBottomWidth: 0, zIndex:1}}
+      containerStyle={{ borderBottomWidth: 0, zIndex: 1 }}
       onPress={() => {
         this._getUserInfo(item)
       }}
     />
   );
 
+  notFound = () => {
+    return (<View style={styles.listView}>
+      <Text style={styles.Text}>Você ainda não possui trabalhos aceitos.</Text>
+    </View>)
+  }
+
   render() {
     return (
       <View style={styles.container}>
-      <NavigationEvents onWillFocus={() => {
+        <NavigationEvents onWillFocus={() => {
           this.makeRemoteRequest();
-          }}/>
-        <FlatList
-          data={this.state.data}
-          renderItem={this.renderItem}
-          keyExtractor={item => item.idTrabalho}
-          onRefresh={this.handleRefresh}
-          refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={50}
-        />
+        }} />
+        {this.state.refreshing == false
+          ? <FlatList
+            data={this.state.data}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.idTrabalho}
+            onRefresh={this.handleRefresh}
+            refreshing={this.state.refreshing}
+            ListEmptyComponent={this.notFound}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={50}
+          />
+          : <View style={styles.container}>
+            <Text style={styles.Text}>Buscando sua lista de aceitos...</Text>
+            <ActivityIndicator size="large" color="#13438F" />
+          </View>
+        }
       </View>
     );
   }
@@ -249,6 +265,17 @@ const styles = StyleSheet.create({
     color: "#9F9F9F",
     fontWeight: 'bold',
     padding: hp('1%'),
+  },
+  Text: {
+    color: "#9F9F9F",
+    fontWeight: 'bold',
+    flexDirection: 'row',
+    padding: hp('1%'),
+    alignItems: 'center',
+    textAlign: 'center'
+  },
+  listView: {
+    paddingVertical: hp('38%')
   }
 });
 

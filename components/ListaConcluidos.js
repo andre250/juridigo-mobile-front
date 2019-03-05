@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList, Text, StyleSheet, AsyncStorage } from "react-native";
+import { View, FlatList, Text, StyleSheet, AsyncStorage, ActivityIndicator } from "react-native";
 import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons"
@@ -64,7 +64,6 @@ export class ListaConcluidos extends Component {
         item: jobDetail
       })
     } catch (error) {
-      console.log(error)
     }
   }
 
@@ -82,19 +81,30 @@ export class ListaConcluidos extends Component {
 
     try {
       const data = await Proposal.getUserEndProposal(this.state.userID, userToken)
-      
-      this.setState({ 
+
+      this.setState({
         loading: false,
-        data: data 
+        refreshing: false,
+        data: data
       });
     } catch (error) {
-      this.setState({ 
-        loading: false
+      this.setState({
+        loading: false,
+        refreshing: false
       });
     }
   };
 
+  notFound = () => {
+    return (<View style={styles.listView}>
+      <Text style={styles.Text}>Você ainda não concluiu nenhum trabalho.</Text>
+    </View>)
+  }
+
   handleRefresh = () => {
+    this.setState({
+      refreshing: true
+    })
     this.makeRemoteRequest();
   };
 
@@ -155,7 +165,7 @@ export class ListaConcluidos extends Component {
               customStyles={this.state.customStyles}
               renderStepIndicator={this.renderStepIndicator}
               currentPosition={this.state.currentPosition}
-              labels={this.state.labels} 
+              labels={this.state.labels}
             />
           </View>
           <View style={styles.listItemLowerContainer}>
@@ -169,11 +179,11 @@ export class ListaConcluidos extends Component {
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
-              <Distance 
+              <Distance
                 uLat={this.state.latitude}
                 uLong={this.state.longitude}
                 tLat={item.latitude}
-                tLong={item.longitude}/>
+                tLong={item.longitude} />
             </View>
           </View>
         </View>}
@@ -185,17 +195,24 @@ export class ListaConcluidos extends Component {
     return (
       <View style={styles.container}>
         <NavigationEvents onWillFocus={() => {
-            this.makeRemoteRequest();
-            }}/>
-        <FlatList
-          data={this.state.data}
-          renderItem={this.renderItem}
-          keyExtractor={item => item.idTrabalho}
-          onRefresh={this.handleRefresh}
-          refreshing={this.state.refreshing}
-          onEndReached={this.handleLoadMore}
-          onEndReachedThreshold={50}
-        />
+          this.makeRemoteRequest();
+        }} />
+        {this.state.refreshing == false
+          ? <FlatList
+            data={this.state.data}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.idTrabalho}
+            onRefresh={this.handleRefresh}
+            refreshing={this.state.refreshing}
+            ListEmptyComponent={this.notFound}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={50}
+          />
+          : <View style={styles.container}>
+            <Text style={styles.Text}>Buscando sua lista de aceitos...</Text>
+            <ActivityIndicator size="large" color="#13438F" />
+          </View>
+        }
       </View>
     );
   }
@@ -222,7 +239,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingLeft: wp("5%"),
     textAlignVertical: "center",
-    width:'80%'
+    width: '80%'
   },
   listItemContainer: {
     backgroundColor: "#3D3D3D",
@@ -249,10 +266,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  Text: {
+    color: "#9F9F9F",
+    fontWeight: 'bold',
+    flexDirection: 'row',
+    padding: hp('1%'),
+    alignItems: 'center',
+    textAlign: 'center'
+  },
   infoLabel: {
     color: "#9F9F9F",
     fontWeight: 'bold',
     padding: hp('1%'),
+  },
+  listView: {
+    paddingVertical: hp('38%')
   }
 });
 

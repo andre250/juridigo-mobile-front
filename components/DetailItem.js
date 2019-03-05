@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         paddingTop: hp('1%'),
         paddingBottom: hp('1%'),
         flexDirection: 'row',
-        alignItems:"center"
+        alignItems: "center"
     },
     textContainer: {
         marginLeft: wp('3%')
@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     labelTitle: {
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color:"#777777",
-        fontSize:hp('2.2%')
+        color: "#777777",
+        fontSize: hp('2.2%')
     },
     labelDescription: {
         fontSize: hp('2%'),

@@ -41,7 +41,7 @@ export default class DetailDisponiveisScreen extends React.Component {
       ]
     };
   }
-  
+
   componentDidMount() {
     this._calculateDistance();
     this._timeConverter();
@@ -63,7 +63,7 @@ export default class DetailDisponiveisScreen extends React.Component {
     this.setState({ distance: distance });
   }
 
-  
+
   _timeConverter = async () => {
     const a = new Date(this.props.navigation.state.params.item.prazo * 1000);
     const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
@@ -86,7 +86,7 @@ export default class DetailDisponiveisScreen extends React.Component {
         "latitude": this.state.item.localizacao.latitude,
         "jobID": this.state.item["_id"]["$oid"],
         "rotulo": this.state.item.rotulo
-      },userToken)
+      }, userToken)
     } catch (error) {
       Alert.alert('Algo deu errado', 'Por favor repita a operação.')
     }
@@ -105,7 +105,7 @@ export default class DetailDisponiveisScreen extends React.Component {
   }
 
   setModalVisible = (visible) => {
-    this.setState({modalVisible: visible});
+    this.setState({ modalVisible: visible });
   }
 
   setJobConfirmed = async () => {
@@ -116,7 +116,7 @@ export default class DetailDisponiveisScreen extends React.Component {
   _confirmJobPressed = async () => {
     this.setModalVisible(true)
   }
-  
+
   static navigationOptions = {
     header: (
       <LogoTitle />
@@ -127,32 +127,32 @@ export default class DetailDisponiveisScreen extends React.Component {
     var modalBackgroundStyle = {
       backgroundColor: 'rgba(0, 0, 0, 0.5)'
     };
-    var innerContainerTransparentStyle = 
-      {padding: 20};
+    var innerContainerTransparentStyle =
+      { padding: 20 };
     return (
       <View>
         <Modal
-              animationType='fade'
-              transparent={true}
-              visible={this.state.modalVisible}
-              onRequestClose={() => this.setModalVisible(false)}
-              >
-              <View style={[styles.modalContainer, modalBackgroundStyle, style={paddingLeft:wp('5%'), paddingRight:wp('5%')}]}>
-                <View style={[innerContainerTransparentStyle, 
-                style={marginTop:hp('50%'), backgroundColor:'white'}]}>
-                  <Text style={{fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start'}}>
-                    Lembre-se que ao aceitar um trabalho você se compromete com o cumprimento de todas as 
-                      <Text style={{ textDecorationLine:'underline'}}> etapas propostas pela contratante.{"\n"}</Text>
+          animationType='fade'
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => this.setModalVisible(false)}
+        >
+          <View style={[styles.modalContainer, modalBackgroundStyle, style = { paddingLeft: wp('5%'), paddingRight: wp('5%') }]}>
+            <View style={[innerContainerTransparentStyle,
+              style = { marginTop: hp('50%'), backgroundColor: 'white' }]}>
+              <Text style={{ fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start' }}>
+                Lembre-se que ao aceitar um trabalho você se compromete com o cumprimento de todas as
+                      <Text style={{ textDecorationLine: 'underline' }}> etapas propostas pela contratante.{"\n"}</Text>
+              </Text>
+              <Text style={{ fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start' }}>
+                O não cumprimento de qualquer etapa do trabalho aceito acarretará em penas previstas nos termos da lei.
                   </Text>
-                  <Text style={{fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start'}}>
-                    O não cumprimento de qualquer etapa do trabalho aceito acarretará em penas previstas nos termos da lei.
-                  </Text>
-                  <TouchableOpacity style={styles.confirmButtonContainer} onPress={this.setJobConfirmed.bind(this, false)}>
-                    <Text style={styles.confirmButtonText}>ACEITAR</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-          </Modal>
+              <TouchableOpacity style={styles.confirmButtonContainer} onPress={this.setJobConfirmed.bind(this, false)}>
+                <Text style={styles.confirmButtonText}>ACEITAR</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
         <ScrollView style={{ height: "100%" }}>
           <Text
             style={{
@@ -188,7 +188,7 @@ export default class DetailDisponiveisScreen extends React.Component {
               description={`R$ ${this.state.item.valor - 50} Serviço + R$ 50,00 Transporte`} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} style={styles.Text} title={`${this.state.distance}${this.state.unit}`}
               description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa}/>
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
               description={this.state.item.descricao} />
           </View>

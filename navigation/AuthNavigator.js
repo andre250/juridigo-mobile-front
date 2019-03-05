@@ -9,22 +9,22 @@ import WaitingScreen from '../screens/WaitingConfirmation';
 import IntroductionScreen from '../screens/IntroductionScreen';
 
 const AppStack = createStackNavigator(
-    { 
-      Main: MainTabNavigator 
-    },
-    {
-      headerMode: 'none',
-      navigationOptions: {
-        headerVisible: false,
-      }
-     }
-  );
+  {
+    Main: MainTabNavigator
+  },
+  {
+    headerMode: 'none',
+    navigationOptions: {
+      headerVisible: false,
+    }
+  }
+);
 
 const FormStack = createStackNavigator(
-    { 
-      Main: FormNavigator
-    }
-  );
+  {
+    Main: FormNavigator
+  }
+);
 
 export default createSwitchNavigator(
   {

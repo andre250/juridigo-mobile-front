@@ -13,7 +13,7 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-        <ListaDisponiveis nav={this.props.navigation}/>
+      <ListaDisponiveis nav={this.props.navigation} />
     );
   }
 }

@@ -14,8 +14,8 @@ class Proposal {
                 method: "PUT",
                 headers: myHeaders
             });
-            return 
-        } catch(err) {
+            return
+        } catch (err) {
             throw err;
         }
     }
@@ -30,7 +30,7 @@ class Proposal {
             });
             let data = await response.json();
             return data;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -46,7 +46,7 @@ class Proposal {
             });
             let data = await response.json();
             return data;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -61,7 +61,7 @@ class Proposal {
             });
             let data = await response.json();
             return data;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -76,7 +76,7 @@ class Proposal {
             });
             let data = await response.json();
             return data;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -85,15 +85,14 @@ class Proposal {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)
-            console.log(proposalID)
             let response = await fetch(`${this.mainRoute}/proposta/atualiza?proposta=${proposalID}`, {
                 method: "PUT",
                 headers: myHeaders
             });
             let data = await response.json();
             return data;
-        } catch(err) {
-            throw err;  
+        } catch (err) {
+            throw err;
         }
     }
 
@@ -108,7 +107,7 @@ class Proposal {
             });
             let data = await response.json();
             return data;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }

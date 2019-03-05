@@ -5,7 +5,7 @@ class Payment {
         this.mainRoute = factory.payment;
     }
 
-    async getUserPayment(userID,userToken) {
+    async getUserPayment(userID, userToken) {
         try {
             let myHeaders = new Headers();
             myHeaders.append("Authtoken", userToken)

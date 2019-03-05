@@ -57,9 +57,9 @@ export default class LoginScreen extends React.Component {
 
         <TouchableOpacity style={styles.buttonSignin}
           onPress={this._logInAsync}>
-          { this.state.loading == true 
+          {this.state.loading == true
             ? <ActivityIndicator size="small" color="#FFFFFF" />
-            : <Text style={styles.buttonSigninText}>ENTRAR</Text> }
+            : <Text style={styles.buttonSigninText}>ENTRAR</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonSignup}
           onPress={() => this.props.navigation.navigate('Introduction')}>
@@ -79,7 +79,7 @@ export default class LoginScreen extends React.Component {
 
   _facebookLogInAsync = async () => {
     try {
-      const { 
+      const {
         type,
         token,
         expires,
@@ -92,13 +92,12 @@ export default class LoginScreen extends React.Component {
         // Get the user's name using Facebook's Graph API
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
         await AsyncStorage.setItem('userToken', token);
-        const signUp = 1 
-        if (signUp===0){
+        const signUp = 0
+        if (signUp === 0) {
           this.props.navigation.navigate('Waiting');
         } else {
           this.props.navigation.navigate('App');
         }
-        console.log(`Response ${(await JSON.stringify(response))}!`);
       } else {
         // type === 'cancel'
       }
@@ -119,7 +118,7 @@ export default class LoginScreen extends React.Component {
     }
     else if (!this.state.ps) {
       this.setState({ loading: false });
-      
+
       return Alert.alert(
         'Senha não preenchida',
         'Por favor entre com a sua senha.');
@@ -137,18 +136,17 @@ export default class LoginScreen extends React.Component {
       await AsyncStorage.setItem('userLongitude', decoded.longitude.toString());
       await AsyncStorage.setItem('userName', decoded.name);
       await AsyncStorage.setItem('userID', decoded.id);
-      
+
       this.setState({ loading: false });
-      const signUp = 1 
-      if (signUp===0){
+      const signUp = decoded.status;
+      if (signUp === "0") {
         this.props.navigation.navigate('Waiting');
       } else {
         this.props.navigation.navigate('App');
       }
     } catch (error) {
-      console.log(error)
       this.setState({ loading: false });
-      
+
       return Alert.alert(
         'Usuário ou senha inválido',
         'Por favor verifique e tente novamente.'

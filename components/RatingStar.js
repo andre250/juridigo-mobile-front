@@ -20,19 +20,19 @@ export class RatingStar extends React.Component {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems:'center',
+    alignItems: 'center',
     flex: 1
   },
   ratingLabel: {
     color: "#3D3D3D",
     position: "absolute",
-    alignItems:'center',
-    alignSelf:'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     fontWeight: 'bold'
   },
   ratingStar: {
-    alignItems:'center',
-    alignSelf:'center'
+    alignItems: 'center',
+    alignSelf: 'center'
   }
 });
 

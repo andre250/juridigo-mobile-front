@@ -121,7 +121,7 @@ export class ListaDisponiveis extends Component {
   );
 
   notFound = () => {
-    return (<View style={styles.container}>
+    return (<View style={styles.listView}>
       <Text style={styles.Text}>Desculpe, não encontramos nenhum trabalho...</Text>
     </View>)
   }
@@ -132,7 +132,7 @@ export class ListaDisponiveis extends Component {
         <NavigationEvents onWillFocus={() => {
           this._setUserLocation();
           this._makeRemoteRequestAsync();
-          }}/>
+        }} />
         {this.state.refreshing == false
           ? <FlatList
             data={this.state.data}
@@ -188,11 +188,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  NotFound:{
-    flex:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center' 
+  NotFound: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   infoLabel: {
     color: "#9F9F9F",
@@ -206,6 +206,9 @@ const styles = StyleSheet.create({
     padding: hp('1%'),
     alignItems: 'center',
     textAlign: 'center'
+  },
+  listView: {
+    paddingVertical: hp('38%')
   }
 });
 

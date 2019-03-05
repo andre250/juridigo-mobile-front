@@ -20,46 +20,46 @@ export default class WaitingConfirmation extends React.Component {
 
   render() {
     return (
-    <ImageBackground source={require('../assets/images/bg3x.png')} style={styles.imageContainer}>
-      <View style={styles.container}>
-        <View  style={{
-                  borderWidth: 1,
-                  borderColor: 'rgba(0,0,0,0.2)',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 100,
-                  height: 100,
-                  backgroundColor: '#ecf0f1',
-                  borderRadius: 100,
-                }}>
+      <ImageBackground source={require('../assets/images/bg3x.png')} style={styles.imageContainer}>
+        <View style={styles.container}>
+          <View style={{
+            borderWidth: 1,
+            borderColor: 'rgba(0,0,0,0.2)',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 100,
+            height: 100,
+            backgroundColor: '#ecf0f1',
+            borderRadius: 100,
+          }}>
             <Icon name={Platform.OS === "ios" ? "ios-search" : "md-search"} color="#9F9F9F" size={50} />
-        </View>
-        <Text style={styles.descriptionText}>
-        O seu cadastro está sendo analisado pelos nossos especialistas.
-        Você receberá um e-mail quando sua solicitação for aprovada.
+          </View>
+          <Text style={styles.descriptionText}>
+            O seu cadastro está sendo analisado pelos nossos especialistas.
+            Você receberá um e-mail quando sua solicitação for aprovada.
         {"\n"}
+            {"\n"}
+            {"\n"}
+            Ficamos felizes em tê-lo conosco.
         {"\n"}
-        {"\n"}
-        Ficamos felizes em tê-lo conosco.
-        {"\n"}
-        {"\n"}
-        {"\n"}
-        {"\n"}
-        {"\n"}
-        Equipe JuridiGo.
+            {"\n"}
+            {"\n"}
+            {"\n"}
+            {"\n"}
+            Equipe JuridiGo.
         </Text>
-        <TouchableOpacity style={styles.buttonSignup}
-        onPress={() => {this.props.navigation.navigate('Auth')}} >
+          <TouchableOpacity style={styles.buttonSignup}
+            onPress={() => { this.props.navigation.navigate('Auth') }} >
             <Text style={styles.buttonSignupText}>Voltar para a tela de login</Text>
-        </TouchableOpacity>
-    </View>
-    </ImageBackground>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
-   imageContainer: {
+  imageContainer: {
     padding: hp('5%'),
     flex: 1,
     justifyContent: 'center',
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     fontWeight: '700',
     fontSize: hp('2%'),
-    marginTop:hp('10%')
+    marginTop: hp('10%')
   }
 });
