@@ -73,7 +73,7 @@ export class FormDocumento extends React.Component {
               }
             })
           }}
-          //validate={this.validate}
+          validate={this.validate}
           render={({
             handleSubmit,
             isValid,
@@ -95,7 +95,7 @@ export class FormDocumento extends React.Component {
                 <Text style={styles.descriptionText}>Tire uma foto sua segurando o documento</Text>
                 <TouchableOpacity style={[styles.buttonSignin,
                 { backgroundColor: this.state.buttonSignInColor }]}
-                /*disabled={!this.state.isValid}*/ onPress={handleSubmit}>
+                disabled={!this.state.isValid} onPress={handleSubmit}>
                   <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
                 </TouchableOpacity>
               </View>

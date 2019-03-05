@@ -260,6 +260,7 @@ export default class DetailAceitosScreen extends React.Component {
 
   setStepCancel = async (proposalID) => {
     try {
+      console.log(proposalID)
       await Proposal.refuseProposal(proposalID, userToken)
     } catch (error) {
       Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");

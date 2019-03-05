@@ -2,14 +2,11 @@ import { Field, Formik } from 'formik';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Picker, Linking, ScrollView } from 'react-native';
 import PlainTextInput from './Elements/PlainTextInput';
-import MaskTextInput from './Elements/MaskTextInput';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ProgressBar } from '../ProgressBar'
-import Icon from "react-native-vector-icons";
-import { Platform, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import User from '../../http_factory/user';
-import moment from 'moment';
 
 const cryptoFact = require("../../utils/cryptoFactory")
 
@@ -30,7 +27,7 @@ export class FormPagamento extends React.Component {
   validate = ({ numero_cartao, nome_impresso, validade, ccv,
     agencia, conta }) => {
     const errors = {};
-    if (numero_cartao === undefined) {
+    /*if (numero_cartao === undefined) {
       errors.numero_cartao = 'Obrigatório';
     } else if (numero_cartao.trim() === '') {
       this.setState({ cardType: null });
@@ -62,7 +59,7 @@ export class FormPagamento extends React.Component {
       errors.ccv = 'O campo não pode estar vazio.';
     } else if (ccv.length !== 3) {
       errors.ccv = 'Quantidade de \n digitos está inválida.';
-    }
+    }*/
     if (agencia === undefined) {
       errors.agencia = 'Obrigatório';
     } else if (agencia.trim() === '') {
@@ -82,17 +79,19 @@ export class FormPagamento extends React.Component {
         <Formik
           onSubmit={({ numero_cartao, nome_impresso, validade, ccv, banco, agencia, conta }) => {
             pagamentoForm = {
-              numero_cartao: numero_cartao,
-              nome_impresso: nome_impresso,
-              validade: validade,
-              ccv: ccv,
+              //numero_cartao: numero_cartao,
+              //nome_impresso: nome_impresso,
+              //validade: validade,
+              //ccv: ccv,
               banco: this.state.banco,
               agencia: agencia,
               conta: conta,
             }
             if (this.state.usoCheck && this.state.responsabilidadeCheck) {
               // Persiste os formularios para a próxima página
+              console.log('1')
               this.state.form.pagamentoForm = pagamentoForm
+              console.log('2')
               this._requestForm()
               this.props.navigation.navigate('Waiting')
             } else {
@@ -106,7 +105,7 @@ export class FormPagamento extends React.Component {
             isValid,
           }) => (
               <View style={styles.container}>
-                <View style={styles.cardContainer}>
+                {/*<View style={styles.cardContainer}>
                   <Field name="numero_cartao"
                     maskType="credit-card"
                     component={MaskTextInput}
@@ -138,7 +137,7 @@ export class FormPagamento extends React.Component {
                     placeholder='CCV'
                     keyboardType='phone-pad'
                     customStyle={[styles.input, { width: wp('20%') }]} />
-                </View>
+                </View>*/}
                 <View style={styles.flexStartContainer}>
                   <Picker name="banco"
                     selectedValue={this.state.banco}
@@ -214,11 +213,12 @@ export class FormPagamento extends React.Component {
   };
 
   _requestForm = async () => {
+    console.log('aqui')
     const paymentInfo = {
-      numero: this.state.form.pagamentoForm.numero_cartao.replace(/\s/g, ''),
-      cvv: this.state.form.pagamentoForm.ccv,
-      anoVencimento: '20' + this.state.form.pagamentoForm.validade.substring(3, 5),
-      mesVencimento: this.state.form.pagamentoForm.validade.substring(0, 2),
+      //numero: this.state.form.pagamentoForm.numero_cartao.replace(/\s/g, ''),
+      //cvv: this.state.form.pagamentoForm.ccv,
+      //anoVencimento: '20' + this.state.form.pagamentoForm.validade.substring(3, 5),
+      //mesVencimento: this.state.form.pagamentoForm.validade.substring(0, 2),
       agencia: this.state.form.pagamentoForm.agencia,
       conta: this.state.form.pagamentoForm.conta,
       banco: this.state.form.pagamentoForm.banco,
@@ -261,9 +261,12 @@ export class FormPagamento extends React.Component {
       pagamento: cryptoFact.encrypt(JSON.stringify(paymentInfo))
     }
     try {
+      console.log(formRequest)
       const registro = await User.register(formRequest);
+      console.log(registro)
       //const registro = {"msg": "Conta criada com sucesso!"}
       let response = registro.erro
+      console.log(respose)
       switch (response) {
         case undefined:
           //Instruções executadas quando a conta for criada com sucesso
@@ -408,7 +411,7 @@ const styles = StyleSheet.create({
   buttonSignin: {
     backgroundColor: '#2AA3D8',
     marginTop: hp('7%'),
-    marginBottom: hp('5%'),
+    marginBottom: hp('31.7%'),
     width: wp('45%'),
     height: hp('7%'),
     alignSelf: 'center',

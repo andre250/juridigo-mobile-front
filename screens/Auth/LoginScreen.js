@@ -18,8 +18,6 @@ import sha256 from 'js-sha256';
 import jwtDecode from 'jwt-decode';
 import { decode } from "punycode";
 
-
-
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -65,14 +63,14 @@ export default class LoginScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('Introduction')}>
           <Text style={styles.buttonSignupText}>Ainda não possuo cadastro</Text>
         </TouchableOpacity>
-        <Text style={styles.separatorText}>────────  ou  ────────</Text>
+        {/*<Text style={styles.separatorText}>────────  ou  ────────</Text>
         <View style={styles.fbContainer}>
-          <Image style={styles.fbImage} source={require('../../assets/images/fb_icon.png')} />
           <TouchableOpacity style={styles.buttonFacebook}
             onPress={this._facebookLogInAsync}>
+            <Image style={styles.fbImage} source={require('../../assets/images/fb_icon.png')} />
             <Text style={styles.buttonFacebookText}>ENTRAR COM FACEBOOK</Text>
           </TouchableOpacity>
-        </View>
+        </View>*/}
       </ImageBackground>
     );
   }
@@ -91,13 +89,14 @@ export default class LoginScreen extends React.Component {
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+        console.log(token)
         await AsyncStorage.setItem('userToken', token);
-        const signUp = 0
-        if (signUp === 0) {
-          this.props.navigation.navigate('Waiting');
-        } else {
-          this.props.navigation.navigate('App');
-        }
+        // const signUp = 0
+        // if (signUp === 0) {
+        //   this.props.navigation.navigate('Waiting');
+        // } else {
+        //   this.props.navigation.navigate('App');
+        // }
       } else {
         // type === 'cancel'
       }
@@ -223,17 +222,16 @@ const styles = StyleSheet.create({
     width: wp('100%'),
   },
   fbImage: {
-    paddingVertical: hp('2%'),
-    height: hp('10%'),
-    width: wp('20%'),
+    height: hp('5%'),
+    width: wp('10%'),
   },
   fbContainer: {
     flexDirection: 'row'
   },
   buttonFacebook: {
+    flexDirection: 'row',
     backgroundColor: '#3C579E',
     paddingVertical: hp('3,5%'),
-    marginBottom: 10,
     height: hp('10%'),
     width: wp('60%'),
   },
@@ -241,6 +239,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     color: 'white',
     textAlign: 'center',
-    fontWeight: '700'
+    fontWeight: '700',
+    paddingTop:hp('1%'),
+    paddingLeft:hp('1%'),
   }
 });
