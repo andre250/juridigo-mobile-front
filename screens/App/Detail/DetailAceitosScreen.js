@@ -85,36 +85,36 @@ export default class DetailAceitosScreen extends React.Component {
             <View style={innerContainerTransparentStyle}>
               <TouchableOpacity
                 style={{
-                  borderWidth: 1,
-                  borderColor: 'rgba(0,0,0,0.2)',
+                  borderWidth: 10,
+                  borderColor: 'green',
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: 100,
                   height: 100,
-                  backgroundColor: 'green',
+                  backgroundColor: 'white',
                   borderRadius: 100,
                 }}
                 onPress={this.setStepDone.bind(this, this.props.navigation.state.params.proposalID)}>
-                <Icon name={"ios-checkmark-circle"} size={30} color="#fff" />
-                <Text style={{ color: '#fff', textAlign: 'center', justifyContent: 'center' }}>Concluir essa etapa</Text>
+                <Icon name={"ios-checkmark-circle"} size={100} color="green" />
               </TouchableOpacity>
+              <Text style={{ color: '#e8e8e8', fontWeight: 'bold', textAlign: 'left', justifyContent: 'center', marginTop: 10 }}>Concluir etapa</Text>
             </View>
             <View style={innerContainerTransparentStyle}>
               <TouchableOpacity
                 style={{
-                  borderWidth: 1,
-                  borderColor: 'rgba(0,0,0,0.2)',
+                  borderWidth: 10,
+                  borderColor: 'red',
                   alignItems: 'center',
                   justifyContent: 'center',
                   width: 100,
                   height: 100,
-                  backgroundColor: 'red',
+                  backgroundColor: 'white',
                   borderRadius: 100,
                 }}
                 onPress={this.setStepCancel.bind(this, this.props.navigation.state.params.proposalID)}>
-                <Icon name={"ios-close-circle"} size={30} color="#fff" />
-                <Text style={{ color: '#fff', textAlign: 'center', justifyContent: 'center' }}>Cancelar essa etapa</Text>
+                <Icon name={"ios-close-circle"} size={100} color="red" />
               </TouchableOpacity>
+              <Text style={{ color: '#e8e8e8', fontWeight: 'bold', textAlign: 'left', justifyContent: 'center', marginTop: 10 }}>Cancelar etapa</Text>
             </View>
           </View>
         </Modal>
@@ -155,18 +155,18 @@ export default class DetailAceitosScreen extends React.Component {
               description={`R$ ${this.state.item.valor - 50} Serviço + R$ 50,00 Transporte`} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} title={`${this.state.distance}${this.state.unit}`}
               description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa}/>
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa} />
             <View style={styles.atachedContainer}>
-                <Text style={{fontWeight:'bold', color:'#777777'}}>Anexos</Text>
-                <TouchableOpacity style={styles.atachedIcon} onPress={()=>{this._downloadDocument()}}>
-                  <Icon style={{alignSelf:'center', paddingTop:hp('1%')}} name={"ios-paper"} size={40} color="#fff" />
-                  <Text style={{fontWeight:'bold', color:'#ffffff', textAlignVertical:'center', textAlign:'center', paddingLeft:hp('1%')}}>Documento</Text>
-                </TouchableOpacity>
+              <Text style={{ fontWeight: 'bold', color: '#777777' }}>Anexos</Text>
+              <TouchableOpacity style={styles.atachedIcon} onPress={() => { this._downloadDocument() }}>
+                <Icon style={{ alignSelf: 'center', paddingTop: hp('1%') }} name={"ios-paper"} size={40} color="#fff" />
+                <Text style={{ fontWeight: 'bold', color: '#ffffff', textAlignVertical: 'center', textAlign: 'center', paddingLeft: hp('1%') }}>Documento</Text>
+              </TouchableOpacity>
             </View>
             <DetailItem name={Platform.OS === 'ios' ? 'ios-alert' : 'md-alert'} title="Resumo da Audiência"
               description={this.state.item.descricao} />
           </View>
-          <TouchableOpacity onPress={()=>{this._refuseProposal(this.props.navigation.state.params.proposalID)}}>
+          <TouchableOpacity onPress={() => { this._refuseProposal(this.props.navigation.state.params.proposalID) }}>
             <Text style={styles.recuseButtonText}>Cancelar trabalho</Text>
           </TouchableOpacity>
           <View style={styles.containerJobSteps}>
@@ -194,7 +194,7 @@ export default class DetailAceitosScreen extends React.Component {
     this.setState({ date: time })
   }
 
-  _refuseProposal = async(proposalID) => {
+  _refuseProposal = async (proposalID) => {
     const userToken = await AsyncStorage.getItem('userToken');
     try {
       await Proposal.refuseProposal(proposalID, userToken)
@@ -202,7 +202,7 @@ export default class DetailAceitosScreen extends React.Component {
     } catch (error) {
       Alert.alert("Ops!", "Algo de errado do nosso lado. Por favor, repita a ação.");
     }
-  } 
+  }
 
   _calculateDistance = async () => {
     const userLatitude = await AsyncStorage.getItem('userLatitude');
@@ -389,6 +389,6 @@ const styles = StyleSheet.create({
     marginBottom: hp('2%'),
     borderRadius: 7,
     flexDirection: 'row',
-    padding:hp('1%')
+    padding: hp('1%')
   },
 });

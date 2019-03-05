@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList, Text, StyleSheet } from "react-native";
+import { View, FlatList, Text, StyleSheet, AsyncStorage } from "react-native";
 import { ListItem } from "react-native-elements";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from "react-native-vector-icons/Ionicons"
@@ -7,6 +7,10 @@ import { Platform } from 'react-native';
 import StepIndicator from 'react-native-step-indicator';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import RatingStar from "./RatingStar";
+import Proposal from "../http_factory/proposal";
+import DataFormat from "./DataFormat";
+import Distance from "./Distance";
+import Job from "../http_factory/job";
 import { NavigationEvents } from "react-navigation";
 
 export class ListaConcluidos extends Component {
@@ -21,7 +25,7 @@ export class ListaConcluidos extends Component {
       seed: 1,
       error: null,
       refreshing: false,
-      currentPosition: 0,
+      currentPosition: 4,
       labels: ["Contestação", "Saída", "Chegada", "Audiência", "Pagamento"],
       customStyles: {
         stepIndicatorSize: 40,
@@ -51,47 +55,51 @@ export class ListaConcluidos extends Component {
     this.nav = this.props.nav
   }
 
-  makeRemoteRequest = () => {
-    const { page, seed, id_usuario } = this.state;
-    const url = `https://private-599c2-juridigo.apiary-mock.com/trabalhos/:id/propostas?usuario=${id_usuario}`;
-    this.setState({ loading: true });
-
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          data: res,
-          loading: false,
-          refreshing: false
-        });
+  async _getUserInfo(job) {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      const jobDetail = await Job.getJobByID(job.idTrabalho, userToken);
+      this.nav.navigate('DetailConcluidos', {
+        proposalID: job["_id"]["$oid"],
+        item: jobDetail
       })
-      .catch(error => {
-        this.setState({ loading: false });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  makeRemoteRequest = async () => {
+    this.setState({ loading: true });
+    this.state.userID = await AsyncStorage.getItem("userID");
+    const userToken = await AsyncStorage.getItem("userToken");
+    const userLatitude = await AsyncStorage.getItem('userLatitude');
+    const userLongitude = await AsyncStorage.getItem('userLongitude');
+
+    this.setState({
+      latitude: userLatitude,
+      longitude: userLongitude
+    });
+
+    try {
+      const data = await Proposal.getUserEndProposal(this.state.userID, userToken)
+      
+      this.setState({ 
+        loading: false,
+        data: data 
       });
+    } catch (error) {
+      this.setState({ 
+        loading: false
+      });
+    }
   };
 
   handleRefresh = () => {
-    this.setState(
-      {
-        page: 1,
-        seed: this.state.seed + 1,
-        refreshing: true
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
+    this.makeRemoteRequest();
   };
 
   handleLoadMore = () => {
-    this.setState(
-      {
-        page: this.state.page + 1
-      },
-      () => {
-        this.makeRemoteRequest();
-      }
-    );
+    this.makeRemoteRequest();
   };
 
   getStepIndicatorIconConfig = ({ position, stepStatus }) => {
@@ -147,24 +155,25 @@ export class ListaConcluidos extends Component {
               customStyles={this.state.customStyles}
               renderStepIndicator={this.renderStepIndicator}
               currentPosition={this.state.currentPosition}
-              labels={this.state.labels}
-              /*onPress={() => {
-                this._getUserInfo(item)
-              }}*/
+              labels={this.state.labels} 
             />
           </View>
           <View style={styles.listItemLowerContainer}>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>14h - 11/02</Text>
+              <DataFormat timestamp={item.prazo} />
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>R$ 500,00</Text>
+              <Text style={styles.infoLabel}>R$ {item.valor}</Text>
             </View>
             <View style={styles.infoContainer}>
               <Icon name={Platform.OS === "ios" ? "ios-pin" : "md-pin"} color="#9F9F9F" size={25} />
-              <Text style={styles.infoLabel}>4,3 KM</Text>
+              <Distance 
+                uLat={this.state.latitude}
+                uLong={this.state.longitude}
+                tLat={item.latitude}
+                tLong={item.longitude}/>
             </View>
           </View>
         </View>}
