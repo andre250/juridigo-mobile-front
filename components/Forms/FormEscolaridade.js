@@ -81,7 +81,7 @@ export class FormEscolaridade extends React.Component {
           }
           
         }}
-        //validate={this.validate}
+        validate={this.validate}
         render={({
           handleSubmit,
           isValid,
@@ -120,7 +120,7 @@ export class FormEscolaridade extends React.Component {
               {this.state.postCurriculum ? null :
                 <Text style={[styles.descriptionText, {color:'red'}]}>Por favor anexe o seu curriculum aqui.</Text>}
               <TouchableOpacity style={[styles.buttonSignin, 
-                {backgroundColor:this.state.buttonSignInColor}]} /*disabled={!isValid}*/ onPress={handleSubmit}>
+                {backgroundColor:this.state.buttonSignInColor}]} disabled={!isValid} onPress={handleSubmit}>
                 <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
               </TouchableOpacity>
             </View>

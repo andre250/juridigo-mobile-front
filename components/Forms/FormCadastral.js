@@ -182,7 +182,7 @@ export class FormCadastral extends React.Component {
               }
             });
           }}
-          //validate={this.validate}
+          validate={this.validate}
           render={({
             handleSubmit,
             isValid,
@@ -302,7 +302,7 @@ export class FormCadastral extends React.Component {
                 </View>
                 <TouchableOpacity style={[styles.buttonSignin,
                 { backgroundColor: this.state.buttonSignInColor }]}
-                 /*disabled={!isValid}*/ onPress={handleSubmit}>
+                 disabled={!isValid} onPress={handleSubmit}>
                   <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
                 </TouchableOpacity>
               </ScrollView>

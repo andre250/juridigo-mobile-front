@@ -239,7 +239,7 @@ export default class DetailAceitosScreen extends React.Component {
     const userID = await AsyncStorage.getItem('userID');
     const userToken = await AsyncStorage.getItem('userToken');
     try {
-      if (this.state.currentPosition === '3') {
+      if (this.state.currentPosition === 3) {
         const paymentObject = {
           propostaId: proposalID,
           usuarioId: userID,
@@ -260,7 +260,9 @@ export default class DetailAceitosScreen extends React.Component {
 
   setStepCancel = async (proposalID) => {
     try {
+      const userToken = await AsyncStorage.getItem('userToken');
       await Proposal.refuseProposal(proposalID, userToken)
+      this.props.navigation.pop();
     } catch (error) {
       Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");
     }

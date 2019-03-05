@@ -31,6 +31,7 @@ export default class WaitingConfirmation extends React.Component {
             height: 100,
             backgroundColor: '#ecf0f1',
             borderRadius: 100,
+            marginTop:hp('5%')
           }}>
             <Icon name={Platform.OS === "ios" ? "ios-search" : "md-search"} color="#9F9F9F" size={50} />
           </View>
