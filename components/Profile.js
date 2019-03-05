@@ -38,14 +38,14 @@ export class Profile extends React.Component {
     this.makeRemoteRequest()
   }
 
-  _createTagName = function(fullName) {
+  _createTagName = function (fullName) {
     const splitName = fullName.split(" ")
     const first = splitName[0];
     const second = splitName[1];
- 
+
     if (second) {
       return `${first.substr(0, 1).toUpperCase()}${second.substr(0, 1).toUpperCase()}`
-    }else {
+    } else {
       return `${first.substr(0, 1).toUpperCase()}${first.substr(1, 1).toUpperCase()}`
     }
   }

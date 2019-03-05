@@ -79,142 +79,142 @@ export class FormPagamento extends React.Component {
   render() {
     return (
       <ScrollView>
-      <Formik
-        onSubmit={({ numero_cartao, nome_impresso, validade, ccv, banco, agencia, conta }) => {
-          pagamentoForm = {
-            numero_cartao: numero_cartao,
-            nome_impresso: nome_impresso,
-            validade: validade,
-            ccv: ccv,
-            banco: this.state.banco,
-            agencia: agencia,
-            conta: conta,
-          }
-          if (this.state.usoCheck && this.state.responsabilidadeCheck) {
-            // Persiste os formularios para a próxima página
-            this.state.form.pagamentoForm = pagamentoForm
-            this._requestForm()
-            this.props.navigation.navigate('Waiting')
-          } else {
-            Alert.alert('Você precisa aceitar os termos para continuar.');
-          }
+        <Formik
+          onSubmit={({ numero_cartao, nome_impresso, validade, ccv, banco, agencia, conta }) => {
+            pagamentoForm = {
+              numero_cartao: numero_cartao,
+              nome_impresso: nome_impresso,
+              validade: validade,
+              ccv: ccv,
+              banco: this.state.banco,
+              agencia: agencia,
+              conta: conta,
+            }
+            if (this.state.usoCheck && this.state.responsabilidadeCheck) {
+              // Persiste os formularios para a próxima página
+              this.state.form.pagamentoForm = pagamentoForm
+              this._requestForm()
+              this.props.navigation.navigate('Waiting')
+            } else {
+              Alert.alert('Você precisa aceitar os termos para continuar.');
+            }
 
-        }}
-        validate={this.validate}
-        render={({
-          handleSubmit,
-          isValid,
-        }) => (
-            <View style={styles.container}>
-              <View style={styles.cardContainer}>
-                <Field name="numero_cartao"
-                  maskType="credit-card"
-                  component={MaskTextInput}
-                  placeholder='N. do cartão'
-                  keyboardType='phone-pad'
-                  customStyle={[styles.input, { width: wp('70%') }]} />
-                {this.state.cardType ? <Icon.FontAwesome style={[styles.cardIcon]} name={this.state.cardType} color="#9E9C9D" size={hp('5%')} /> : null}
-              </View>
-              <View style={styles.spaceAroundContainer}>
-                <Field name="nome_impresso"
-                  component={PlainTextInput}
-                  placeholder='Nome Impresso'
-                  customStyle={styles.input} />
-              </View>
-              <View style={styles.dataPickerContainer}>
-                <Field name="validade"
-                  maskType="datetime"
-                  maskOptions={{ format: 'MM/YY' }}
-                  component={MaskTextInput}
-                  placeholder='Data Validade'
-                  placeholderTextColor={'#787974'}
-                  keyboardType='phone-pad'
-                  customStyle={[styles.input, { width: wp('35%') }, styles.protectedInput]} />
-                <Icon.Ionicons style={[styles.protectedInput, styles.birthdayIcon]} name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9E9C9D" size={hp('5%')} />
-                <Field name="ccv"
-                  maskType="custom"
-                  maskOptions={{ mask: '999' }}
-                  component={MaskTextInput}
-                  placeholder='CCV'
-                  keyboardType='phone-pad'
-                  customStyle={[styles.input, { width: wp('20%') }]} />
-              </View>
-              <View style={styles.flexStartContainer}>
-                <Picker name="banco"
-                  selectedValue={this.state.banco}
-                  onValueChange={(bank) => this.setState({ banco: bank })}
-                  style={[styles.input, { width: wp('60%'), color: '#787974' }]} >
-                  <Picker.Item label="Selecione um banco" value="null" />
-                  <Picker.Item label="Banco do Brasil S.A." value="001" />
-                  <Picker.Item label="Banco Santander (Brasil) S.A." value="033" />
-                  <Picker.Item label="Itaú Unibanco Holding S.A." value="652" />
-                  <Picker.Item label="Banco Bradesco S.A." value="237" />
-                  <Picker.Item label="Banco Citibank S.A." value="745" />
-                  <Picker.Item label="HSBC Bank Brasil S.A. – Banco Múltiplo" value="399" />
-                  <Picker.Item label="Caixa Econômica Federal" value="104" />
-                  <Picker.Item label="Banco Mercantil do Brasil S.A." value="389" />
-                  <Picker.Item label="Banco Rural S.A." value="453" />
-                  <Picker.Item label="Banco Safra S.A." value="422" />
-                  <Picker.Item label="Banco Itaú S.A." value="341" />
-                  <Picker.Item label="Banco Rendimento S.A." value="633" />
-                </Picker>
-              </View>
-              <View style={styles.flexStartContainer}>
-                <Field name="agencia"
-                  component={PlainTextInput}
-                  placeholderTextColor={'#787974'}
-                  placeholder='Agência'
-                  customStyle={[styles.input, { width: wp('20%'), marginRight: wp('2%') }, styles.protectedInput]} />
-                <Field name="conta"
-                  component={PlainTextInput}
-                  placeholderTextColor={'#787974'}
-                  placeholder='Conta (Com o digito)'
-                  customStyle={[styles.input, { width: wp('70%') }, styles.protectedInput]} />
-              </View>
-              <View style={styles.optInContainer}>
-                <View style={styles.checkBoxContainer}>
-                  <CheckBox
-                    style={styles.checkBox}
-                    onClick={() => {
-                      this.setState({
-                        usoCheck: !this.state.usoCheck
-                      })
-                    }}
-                    isChecked={this.state.usoCheck}
-                  />
-                  <TouchableOpacity style={styles.checkLabel} onPress={() => { Linking.openURL('https://juridigo.com.br/politica-de-privacidade-juridigo/') }}>
-                    <Text style={{ fontSize: hp('1.7%') }}>Declaro que li e aceito os <Text style={{ fontWeight: "bold", textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
-                  </TouchableOpacity>
+          }}
+          validate={this.validate}
+          render={({
+            handleSubmit,
+            isValid,
+          }) => (
+              <View style={styles.container}>
+                <View style={styles.cardContainer}>
+                  <Field name="numero_cartao"
+                    maskType="credit-card"
+                    component={MaskTextInput}
+                    placeholder='N. do cartão'
+                    keyboardType='phone-pad'
+                    customStyle={[styles.input, { width: wp('70%') }]} />
+                  {this.state.cardType ? <Icon.FontAwesome style={[styles.cardIcon]} name={this.state.cardType} color="#9E9C9D" size={hp('5%')} /> : null}
                 </View>
-                <View style={styles.checkBoxContainer}>
-                  <CheckBox
-                    style={styles.checkBox}
-                    onClick={() => {
-                      this.setState({
-                        responsabilidadeCheck: !this.state.responsabilidadeCheck
-                      })
-                    }}
-                    isChecked={this.state.responsabilidadeCheck}
-                  />
-                  <TouchableOpacity style={styles.checkLabel} onPress={() => { Linking.openURL('https://juridigo.com.br/termos-e-condicoes-gerais-de-uso-juridigo-ltda/') }}>
-                    <Text style={{ fontSize: hp('1.7%') }} >Declaro que li e aceito os <Text style={{ fontWeight: "bold", textDecorationLine: 'underline' }}>Termos de Responsabilidade</Text></Text>
-                  </TouchableOpacity>
+                <View style={styles.spaceAroundContainer}>
+                  <Field name="nome_impresso"
+                    component={PlainTextInput}
+                    placeholder='Nome Impresso'
+                    customStyle={styles.input} />
                 </View>
+                <View style={styles.dataPickerContainer}>
+                  <Field name="validade"
+                    maskType="datetime"
+                    maskOptions={{ format: 'MM/YY' }}
+                    component={MaskTextInput}
+                    placeholder='Data Validade'
+                    placeholderTextColor={'#787974'}
+                    keyboardType='phone-pad'
+                    customStyle={[styles.input, { width: wp('35%') }, styles.protectedInput]} />
+                  <Icon.Ionicons style={[styles.protectedInput, styles.birthdayIcon]} name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9E9C9D" size={hp('5%')} />
+                  <Field name="ccv"
+                    maskType="custom"
+                    maskOptions={{ mask: '999' }}
+                    component={MaskTextInput}
+                    placeholder='CCV'
+                    keyboardType='phone-pad'
+                    customStyle={[styles.input, { width: wp('20%') }]} />
+                </View>
+                <View style={styles.flexStartContainer}>
+                  <Picker name="banco"
+                    selectedValue={this.state.banco}
+                    onValueChange={(bank) => this.setState({ banco: bank })}
+                    style={[styles.input, { width: wp('60%'), color: '#787974' }]} >
+                    <Picker.Item label="Selecione um banco" value="null" />
+                    <Picker.Item label="Banco do Brasil S.A." value="001" />
+                    <Picker.Item label="Banco Santander (Brasil) S.A." value="033" />
+                    <Picker.Item label="Itaú Unibanco Holding S.A." value="652" />
+                    <Picker.Item label="Banco Bradesco S.A." value="237" />
+                    <Picker.Item label="Banco Citibank S.A." value="745" />
+                    <Picker.Item label="HSBC Bank Brasil S.A. – Banco Múltiplo" value="399" />
+                    <Picker.Item label="Caixa Econômica Federal" value="104" />
+                    <Picker.Item label="Banco Mercantil do Brasil S.A." value="389" />
+                    <Picker.Item label="Banco Rural S.A." value="453" />
+                    <Picker.Item label="Banco Safra S.A." value="422" />
+                    <Picker.Item label="Banco Itaú S.A." value="341" />
+                    <Picker.Item label="Banco Rendimento S.A." value="633" />
+                  </Picker>
+                </View>
+                <View style={styles.flexStartContainer}>
+                  <Field name="agencia"
+                    component={PlainTextInput}
+                    placeholderTextColor={'#787974'}
+                    placeholder='Agência'
+                    customStyle={[styles.input, { width: wp('20%'), marginRight: wp('2%') }, styles.protectedInput]} />
+                  <Field name="conta"
+                    component={PlainTextInput}
+                    placeholderTextColor={'#787974'}
+                    placeholder='Conta (Com o digito)'
+                    customStyle={[styles.input, { width: wp('70%') }, styles.protectedInput]} />
+                </View>
+                <View style={styles.optInContainer}>
+                  <View style={styles.checkBoxContainer}>
+                    <CheckBox
+                      style={styles.checkBox}
+                      onClick={() => {
+                        this.setState({
+                          usoCheck: !this.state.usoCheck
+                        })
+                      }}
+                      isChecked={this.state.usoCheck}
+                    />
+                    <TouchableOpacity style={styles.checkLabel} onPress={() => { Linking.openURL('https://juridigo.com.br/politica-de-privacidade-juridigo/') }}>
+                      <Text style={{ fontSize: hp('1.7%') }}>Declaro que li e aceito os <Text style={{ fontWeight: "bold", textDecorationLine: 'underline' }}>Termos de Uso</Text></Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.checkBoxContainer}>
+                    <CheckBox
+                      style={styles.checkBox}
+                      onClick={() => {
+                        this.setState({
+                          responsabilidadeCheck: !this.state.responsabilidadeCheck
+                        })
+                      }}
+                      isChecked={this.state.responsabilidadeCheck}
+                    />
+                    <TouchableOpacity style={styles.checkLabel} onPress={() => { Linking.openURL('https://juridigo.com.br/termos-e-condicoes-gerais-de-uso-juridigo-ltda/') }}>
+                      <Text style={{ fontSize: hp('1.7%') }} >Declaro que li e aceito os <Text style={{ fontWeight: "bold", textDecorationLine: 'underline' }}>Termos de Responsabilidade</Text></Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
+                  <Text style={styles.buttonSigninText}>CONCLUIR</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.buttonSignin} disabled={!isValid} onPress={handleSubmit}>
-                <Text style={styles.buttonSigninText}>CONCLUIR</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-      />
-      <View style={styles.footer}>
-        <ProgressBar Progress_Value={this.state.Progress_Value} />
-      </View>
+            )}
+        />
+        <View style={styles.footer}>
+          <ProgressBar Progress_Value={this.state.Progress_Value} />
+        </View>
       </ScrollView>)
   };
 
   _requestForm = async () => {
-   const paymentInfo = {
+    const paymentInfo = {
       numero: this.state.form.pagamentoForm.numero_cartao.replace(/\s/g, ''),
       cvv: this.state.form.pagamentoForm.ccv,
       anoVencimento: '20' + this.state.form.pagamentoForm.validade.substring(3, 5),
@@ -263,33 +263,33 @@ export class FormPagamento extends React.Component {
     try {
       const registro = await User.register(formRequest);
       //const registro = {"msg": "Conta criada com sucesso!"}
-      let response = registro.erro 
+      let response = registro.erro
       switch (response) {
         case undefined:
           //Instruções executadas quando a conta for criada com sucesso
-          return Alert.alert(registro.msg, 
+          return Alert.alert(registro.msg,
             'Seu cadastro está em validação, você receberá um email quando for confirmado.');
         case "cpf":
           //Instruções executadas quando houve erro no CPF 
-          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         case "email":
           //Instruções executadas quando houve erro no Email
-          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         case "rg":
           //Instruções executadas quando houve erro no RG
-          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         case "pagamento":
           //Instruções executadas quando houve erro nas informações de pagamento
-          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         case "cartao":
           //Instruções executadas quando houve erro no número do cartão
-          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         case "curriculum":
           //Instruções executadas quando houve erro no curriculum
-          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         case "Insert":
           //Instruções executadas quando houve erro na criação da conta
-          return Alert.alert('Ops, algo deu errado: \n'+registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         default:
           //Instruções executadas quando a resposta do servidor não for mapeada
           return Alert.alert('Houve um problema com o servidor, tente novamente mais tarde.');

@@ -15,7 +15,7 @@ class cep {
             });
             let data = await response.json();
             return data;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }

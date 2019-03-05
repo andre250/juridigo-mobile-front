@@ -10,5 +10,5 @@ module.exports = {
     openCage: mainOpenCage,
     user: userRoute,
     payment: paymentRoute,
-    cep:mainCepRoute
+    cep: mainCepRoute
 }

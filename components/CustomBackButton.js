@@ -27,7 +27,7 @@ export class CustomBackButton extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    icon:{ marginLeft: '3%' }
+    icon: { marginLeft: '3%' }
 });
 
 export default CustomBackButton;

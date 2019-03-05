@@ -31,7 +31,6 @@ class User {
             let data = await response.json();
             return data.token;
         } catch (error) {
-            console.log(error)
             throw error;
         }
     }
@@ -45,7 +44,6 @@ class User {
             let data = await response.json();
             return data;
         } catch (error) {
-            console.log(error)
             throw error;
         }
     }

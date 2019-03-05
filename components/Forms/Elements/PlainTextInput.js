@@ -29,7 +29,7 @@ const PlainTextInput = ({
                 onBlur={onBlur(name)}
                 editable={!disabled}
                 placeholder={placeholder}
-                secureTextEntry={secure==='true'}
+                secureTextEntry={secure === 'true'}
                 keyboardType={keyboardType}
                 selectTextOnFocus={!disabled}
                 placeholderTextColor={placeholderTextColor}

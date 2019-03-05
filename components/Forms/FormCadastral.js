@@ -32,23 +32,23 @@ export class FormCadastral extends React.Component {
   }
 
   _makeRemoteRequestAsync = async (cep) => {
-      try {
-        const data = await Cep.getAddress(cep) // Inicia requisição para buscar endereço por CEP
-        const completeAddress = data.logradouro + ' ' + data.localidade // Buildou o endereço com endereço + bairro
-        const latlong = await OpenCage.getLatLong(completeAddress) // Inicia requisição para buscar latitude e longitude
-        // Atualiza state da página com novas informações
-        this.setState({
-          endereco: data.logradouro,
-          bairro: data.bairro,
-          cidade: data.localidade,
-          uf: data.uf,
-          complemento: data.complemento,
-          latitude: latlong.results[0].geometry.lat, // Pega sempre o 1 elemento do array de retorno
-          longitude: latlong.results[0].geometry.lng // Pega sempre o 1 elemento do array de retorno
-        })
-      } catch (error) {
-        Alert.alert('Ops', 'Parece que algo deu errado na busca pelo seu endereço, verifique sua conexão e tente novamente mais tarde.', [{ text: 'Ok' }]);
-      }
+    try {
+      const data = await Cep.getAddress(cep) // Inicia requisição para buscar endereço por CEP
+      const completeAddress = data.logradouro + ' ' + data.localidade // Buildou o endereço com endereço + bairro
+      const latlong = await OpenCage.getLatLong(completeAddress) // Inicia requisição para buscar latitude e longitude
+      // Atualiza state da página com novas informações
+      this.setState({
+        endereco: data.logradouro,
+        bairro: data.bairro,
+        cidade: data.localidade,
+        uf: data.uf,
+        complemento: data.complemento,
+        latitude: latlong.results[0].geometry.lat, // Pega sempre o 1 elemento do array de retorno
+        longitude: latlong.results[0].geometry.lng // Pega sempre o 1 elemento do array de retorno
+      })
+    } catch (error) {
+      Alert.alert('Ops', 'Parece que algo deu errado na busca pelo seu endereço, verifique sua conexão e tente novamente mais tarde.', [{ text: 'Ok' }]);
+    }
   };
 
   _setNextButton = async (status) => {
@@ -63,7 +63,7 @@ export class FormCadastral extends React.Component {
     confirmPass, user, telphone, rg, cpf,
     numero, complemento, cep }) => {
     const errors = {};
-    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (name === undefined) {
       errors.name = 'Obrigatório';
     } else if (name.trim() === '') {
@@ -154,163 +154,163 @@ export class FormCadastral extends React.Component {
   render() {
     return (
       <ScrollView>
-      <Formik
-        onSubmit={({ name, email, pass, user, telphone,
-          birthday, rg, cpf, cep, numero }) => {
-              cadastralForm = {
-                name: name,
-                email: email,
-                telphone: telphone,
-                birthday: birthday,
-                rg: rg,
-                cpf: cpf,
-                cep: cep,
-                numero: numero,
-                user: user,
-                endereco: this.state.endereco,
-                complemento: this.state.complemento,
-                bairro: this.state.bairro,
-                cidade: this.state.cidade,
-                uf: this.state.uf,
-                latitude: this.state.latitude,
-                longitude: this.state.longitude,
-                credencial: sha256.create().update(user + "@" + pass).hex()
+        <Formik
+          onSubmit={({ name, email, pass, user, telphone,
+            birthday, rg, cpf, cep, numero }) => {
+            cadastralForm = {
+              name: name,
+              email: email,
+              telphone: telphone,
+              birthday: birthday,
+              rg: rg,
+              cpf: cpf,
+              cep: cep,
+              numero: numero,
+              user: user,
+              endereco: this.state.endereco,
+              complemento: this.state.complemento,
+              bairro: this.state.bairro,
+              cidade: this.state.cidade,
+              uf: this.state.uf,
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
+              credencial: sha256.create().update(user + "@" + pass).hex()
+            }
+            this.props.navigation.navigate('Documento', {
+              form: {
+                cadastralForm: cadastralForm
               }
-              this.props.navigation.navigate('Documento', {
-                form: {
-                  cadastralForm: cadastralForm
-                }
-              });
-        }}
-        //validate={this.validate}
-        render={({
-          handleSubmit,
-          isValid,
-        }) => (
-            <ScrollView style={styles.container}>
-              <View style={styles.spaceAroundContainer}>
-                <Field name="name"
-                  component={PlainTextInput}
-                  placeholder="Nome Completo"
-                  customStyle={styles.input} />
-                <Field name="email"
-                  component={PlainTextInput}
-                  placeholder="Email"
-                  keyboardType="email-address"
-                  customStyle={styles.input} />
-              </View>
-              <View style={styles.spaceBetweenContainer}>
-                <Field name="pass"
-                  component={PlainTextInput}
-                  placeholder="Senha"
-                  secure={'true'}
-                  customStyle={[styles.input, { width: wp('42%') },]} />
-                <Field name="confirmPass"
-                  component={PlainTextInput}
-                  placeholder='Confirmar Senha'
-                  secure={'true'}
-                  customStyle={[styles.input, { width: wp('42%') },]} />
-              </View>
-              <View style={styles.spaceBetweenContainer}>
-                <Field name="user"
-                  component={PlainTextInput}
-                  placeholder='Usuário'
-                  customStyle={[styles.input, { width: wp('42%') },]} />
-                <Field name="telphone"
-                  maskType="custom"
-                  maskOptions={{ mask:'(99) 9999-99999'}}
-                  component={MaskTextInput}
-                  placeholder='Telefone'
-                  keyboardType='phone-pad'
-                  customStyle={[styles.input, { width: wp('42%') },]} />
-              </View>
-              <View style={styles.dataPickerContainer}>
-                <Field name="birthday"
-                  maskType="datetime"
-                  maskOptions={{ format: 'DD-MM-YYYY' }}
-                  component={MaskTextInput}
-                  placeholder='Data Nascimento'
-                  placeholderTextColor={'#787974'}
-                  keyboardType='phone-pad'
-                  customStyle={[styles.input, { width: wp('35%') }, styles.protectedInput]} />
-                <Icon style={[styles.protectedInput, styles.birthdayIcon]} name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9E9C9D" size={hp('5%')} />
-              </View>
-              <View style={styles.spaceBetweenContainer}>
-                <Field name="rg"
-                  component={PlainTextInput}
-                  placeholder='RG'
-                  customStyle={[styles.input, { width: wp('42%') },]} />
-                <Field name="cpf"
-                  maskType="cpf"
-                  component={MaskTextInput}
-                  placeholder='CPF'
-                  keyboardType='phone-pad'
-                  customStyle={[styles.input, { width: wp('42%') },]} />
-              </View>
-              <View style={styles.spaceBetweenContainer}>
-                <Field name="cep"
-                  maskType="zip-code"
-                  component={MaskTextInput}
-                  placeholder='CEP'
-                  keyboardType='phone-pad'
-                  customStyle={[styles.input, { width: wp('55%') }]}
-                />
-              </View>
-              <View style={styles.spaceAroundContainer}>
-                <Field name="endereco"
-                  component={DynamicTextInput}
-                  placeholder="Endereço"
-                  disabled
-                  placeholderTextColor={'#787974'}
-                  value={this.state.endereco}
-                  customStyle={[styles.input, styles.protectedInput]} />
-              </View>
-              <View style={styles.flexStartContainer}>
-                <Field name="numero"
-                  component={PlainTextInput}
-                  placeholder="N."
-                  customStyle={[styles.input, { width: wp('25%') },]} />
-                <Field name="complemento"
-                  component={PlainTextInput}
-                  placeholder="Complemento"
-                  customStyle={[styles.input, { width: wp('42%') }, styles.complementMargin]} />
-              </View>
-              <View style={styles.flexStartContainer}>
-                <Field name="bairro"
-                  component={DynamicTextInput}
-                  placeholder="Bairro"
-                  disabled
-                  placeholderTextColor={'#787974'}
-                  value={this.state.bairro}
-                  customStyle={[styles.input, { width: wp('60%') }, styles.protectedInput]} />
-              </View>
-              <View style={styles.spaceBetweenContainer}>
-                <Field name="cidade"
-                  component={DynamicTextInput}
-                  placeholder="Cidade"
-                  disabled
-                  placeholderTextColor={'#787974'}
-                  value={this.state.cidade}
-                  customStyle={[styles.input, { width: wp('70%') }, styles.protectedInput]} />
-                <Field name="uf"
-                  component={DynamicTextInput}
-                  placeholder="UF"
-                  disabled
-                  placeholderTextColor={'#787974'}
-                  value={this.state.uf}
-                  customStyle={[styles.input, { width: wp('20%') }, styles.protectedInput]} />
-              </View>
-              <TouchableOpacity style={[styles.buttonSignin, 
-                {backgroundColor:this.state.buttonSignInColor}]} 
+            });
+          }}
+          //validate={this.validate}
+          render={({
+            handleSubmit,
+            isValid,
+          }) => (
+              <ScrollView style={styles.container}>
+                <View style={styles.spaceAroundContainer}>
+                  <Field name="name"
+                    component={PlainTextInput}
+                    placeholder="Nome Completo"
+                    customStyle={styles.input} />
+                  <Field name="email"
+                    component={PlainTextInput}
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    customStyle={styles.input} />
+                </View>
+                <View style={styles.spaceBetweenContainer}>
+                  <Field name="pass"
+                    component={PlainTextInput}
+                    placeholder="Senha"
+                    secure={'true'}
+                    customStyle={[styles.input, { width: wp('42%') },]} />
+                  <Field name="confirmPass"
+                    component={PlainTextInput}
+                    placeholder='Confirmar Senha'
+                    secure={'true'}
+                    customStyle={[styles.input, { width: wp('42%') },]} />
+                </View>
+                <View style={styles.spaceBetweenContainer}>
+                  <Field name="user"
+                    component={PlainTextInput}
+                    placeholder='Usuário'
+                    customStyle={[styles.input, { width: wp('42%') },]} />
+                  <Field name="telphone"
+                    maskType="custom"
+                    maskOptions={{ mask: '(99) 9999-99999' }}
+                    component={MaskTextInput}
+                    placeholder='Telefone'
+                    keyboardType='phone-pad'
+                    customStyle={[styles.input, { width: wp('42%') },]} />
+                </View>
+                <View style={styles.dataPickerContainer}>
+                  <Field name="birthday"
+                    maskType="datetime"
+                    maskOptions={{ format: 'DD-MM-YYYY' }}
+                    component={MaskTextInput}
+                    placeholder='Data Nascimento'
+                    placeholderTextColor={'#787974'}
+                    keyboardType='phone-pad'
+                    customStyle={[styles.input, { width: wp('35%') }, styles.protectedInput]} />
+                  <Icon style={[styles.protectedInput, styles.birthdayIcon]} name={Platform.OS === "ios" ? "ios-calendar" : "md-calendar"} color="#9E9C9D" size={hp('5%')} />
+                </View>
+                <View style={styles.spaceBetweenContainer}>
+                  <Field name="rg"
+                    component={PlainTextInput}
+                    placeholder='RG'
+                    customStyle={[styles.input, { width: wp('42%') },]} />
+                  <Field name="cpf"
+                    maskType="cpf"
+                    component={MaskTextInput}
+                    placeholder='CPF'
+                    keyboardType='phone-pad'
+                    customStyle={[styles.input, { width: wp('42%') },]} />
+                </View>
+                <View style={styles.spaceBetweenContainer}>
+                  <Field name="cep"
+                    maskType="zip-code"
+                    component={MaskTextInput}
+                    placeholder='CEP'
+                    keyboardType='phone-pad'
+                    customStyle={[styles.input, { width: wp('55%') }]}
+                  />
+                </View>
+                <View style={styles.spaceAroundContainer}>
+                  <Field name="endereco"
+                    component={DynamicTextInput}
+                    placeholder="Endereço"
+                    disabled
+                    placeholderTextColor={'#787974'}
+                    value={this.state.endereco}
+                    customStyle={[styles.input, styles.protectedInput]} />
+                </View>
+                <View style={styles.flexStartContainer}>
+                  <Field name="numero"
+                    component={PlainTextInput}
+                    placeholder="N."
+                    customStyle={[styles.input, { width: wp('25%') },]} />
+                  <Field name="complemento"
+                    component={PlainTextInput}
+                    placeholder="Complemento"
+                    customStyle={[styles.input, { width: wp('42%') }, styles.complementMargin]} />
+                </View>
+                <View style={styles.flexStartContainer}>
+                  <Field name="bairro"
+                    component={DynamicTextInput}
+                    placeholder="Bairro"
+                    disabled
+                    placeholderTextColor={'#787974'}
+                    value={this.state.bairro}
+                    customStyle={[styles.input, { width: wp('60%') }, styles.protectedInput]} />
+                </View>
+                <View style={styles.spaceBetweenContainer}>
+                  <Field name="cidade"
+                    component={DynamicTextInput}
+                    placeholder="Cidade"
+                    disabled
+                    placeholderTextColor={'#787974'}
+                    value={this.state.cidade}
+                    customStyle={[styles.input, { width: wp('70%') }, styles.protectedInput]} />
+                  <Field name="uf"
+                    component={DynamicTextInput}
+                    placeholder="UF"
+                    disabled
+                    placeholderTextColor={'#787974'}
+                    value={this.state.uf}
+                    customStyle={[styles.input, { width: wp('20%') }, styles.protectedInput]} />
+                </View>
+                <TouchableOpacity style={[styles.buttonSignin,
+                { backgroundColor: this.state.buttonSignInColor }]}
                  /*disabled={!isValid}*/ onPress={handleSubmit}>
-                <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
-              </TouchableOpacity>
-            </ScrollView>
-          )}
-      />
-      <View style={styles.footer}>
-        <ProgressBar Progress_Value={this.state.Progress_Value} />
-      </View>
+                  <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
+                </TouchableOpacity>
+              </ScrollView>
+            )}
+        />
+        <View style={styles.footer}>
+          <ProgressBar Progress_Value={this.state.Progress_Value} />
+        </View>
       </ScrollView>)
   };
 }

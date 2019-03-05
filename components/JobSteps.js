@@ -76,15 +76,16 @@ export class JobSteps extends Component {
     <MaterialIcon {...this.getStepIndicatorIconConfig(params)} />
   )
   stepPressed = (position) => {
-    if (this.props.callBackFunction){
+    if (this.props.callBackFunction) {
       this.props.callBackFunction()
-      if (this.state.customStyles.labelSize === 0){
+      if (this.state.customStyles.labelSize === 0) {
         this.setState({
-        customStyles: {
-          ...this.state.customStyles,
-          labelSize: hp('1.7%')
-        }
-      })} 
+          customStyles: {
+            ...this.state.customStyles,
+            labelSize: hp('1.7%')
+          }
+        })
+      }
       else {
         this.setState({
           customStyles: {
@@ -93,7 +94,7 @@ export class JobSteps extends Component {
           }
         })
       }
-    }    
+    }
   }
 
   render() {

@@ -45,35 +45,35 @@ export default class IntroductionScreen extends React.Component {
 
   render() {
     return (
-    <ImageBackground source={require('../assets/images/bg3x.png')} style={styles.imageContainer}>
-      <View style={styles.container}>
-        <View  style={{
-                  borderWidth: 2,
-                  borderColor: '#2980b6',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 75,
-                  height: 75,
-                  backgroundColor: '#ecf0f1',
-                  borderRadius: 100,
-                }}>
+      <ImageBackground source={require('../assets/images/bg3x.png')} style={styles.imageContainer}>
+        <View style={styles.container}>
+          <View style={{
+            borderWidth: 2,
+            borderColor: '#2980b6',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 75,
+            height: 75,
+            backgroundColor: '#ecf0f1',
+            borderRadius: 100,
+          }}>
             <Icon name={Platform.OS === "ios" ? "ios-clipboard" : "md-clipboard"} color="#2980b6" size={30} />
-        </View>
-        <Text style={{textAlign:'center', padding:hp('1%'), fontWeight:"bold", color:'#333333'}}>Você passará pelas seguintes etapas até se registrar para ser um JuridiGo.</Text>
-        <StepIndicator
-              customStyles={this.state.customStyles}
-              direction={'vertical'}
-              renderStepIndicator={this.renderStepIndicator}
-              currentPosition={5}
-              labels={this.state.labels}
-              onPress={this.stepPressed} />
-        <Text style={{textAlign:'center', padding:hp('1%'), fontWeight:"bold", color:'#333333', textDecorationLine:'underline', fontSize:hp('2.5%')}}>Separe um documento com sua foto antes de começar.</Text>
-        <TouchableOpacity style={styles.buttonSignup}
-        onPress={() => {this.props.navigation.navigate('RegisterForm')}} >
+          </View>
+          <Text style={{ textAlign: 'center', padding: hp('1%'), fontWeight: "bold", color: '#333333' }}>Você passará pelas seguintes etapas até se registrar para ser um JuridiGo.</Text>
+          <StepIndicator
+            customStyles={this.state.customStyles}
+            direction={'vertical'}
+            renderStepIndicator={this.renderStepIndicator}
+            currentPosition={5}
+            labels={this.state.labels}
+            onPress={this.stepPressed} />
+          <Text style={{ textAlign: 'center', padding: hp('1%'), fontWeight: "bold", color: '#333333', textDecorationLine: 'underline', fontSize: hp('2.5%') }}>Separe um documento com sua foto antes de começar.</Text>
+          <TouchableOpacity style={styles.buttonSignup}
+            onPress={() => { this.props.navigation.navigate('RegisterForm') }} >
             <Text style={styles.buttonSignupText}>Iniciar o Cadastro</Text>
-        </TouchableOpacity>
-    </View>
-    </ImageBackground>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -117,7 +117,7 @@ renderStepIndicator = params => (
 )
 
 const styles = StyleSheet.create({
-   imageContainer: {
+  imageContainer: {
     padding: hp('2%'),
     flex: 1,
     justifyContent: 'center',
@@ -150,6 +150,6 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     fontWeight: '700',
     fontSize: hp('2%'),
-    marginTop:hp('10%')
+    marginTop: hp('10%')
   }
 });

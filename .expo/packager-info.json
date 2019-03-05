@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 14119,
-  "expoServerNgrokUrl": "https://qv-5kj.andre250.juridigo-mobile-front.exp.direct",
-  "packagerNgrokUrl": "https://packager.qv-5kj.andre250.juridigo-mobile-front.exp.direct",
-  "ngrokPid": 14188
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

@@ -50,7 +50,7 @@ export default class GalleryScreen extends React.Component {
     }
   };
 
-  renderPhoto = fileName => 
+  renderPhoto = fileName =>
     <Photo
       key={fileName}
       uri={`${PHOTOS_DIR}/${fileName}`}

@@ -13,7 +13,6 @@ import Proposal from '../../../http_factory/proposal';
 export default class DetailAceitosScreen extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
     this.state = {
       modalVisible: false,
       job: {},
@@ -95,7 +94,7 @@ export default class DetailAceitosScreen extends React.Component {
                   backgroundColor: 'white',
                   borderRadius: 100,
                 }}
-                onPress={this.setStepDone.bind(this, this.props.navigation.state.params.proposalID)}>
+                onPress={this.setStepDone.bind(this, this.props.navigation.state.params)}>
                 <Icon name={"ios-checkmark-circle"} size={100} color="green" />
               </TouchableOpacity>
               <Text style={{ color: '#e8e8e8', fontWeight: 'bold', textAlign: 'left', justifyContent: 'center', marginTop: 10 }}>Concluir etapa</Text>
@@ -234,11 +233,19 @@ export default class DetailAceitosScreen extends React.Component {
     this._timeConverter();
   }
 
-  setStepDone = async (proposalID) => {
+  setStepDone = async (proposal) => {
+    const proposalID = proposal.proposalID;
+    const proposalValue = proposal.item.valor;
+    const userID = await AsyncStorage.getItem('userID');
     const userToken = await AsyncStorage.getItem('userToken');
     try {
-      if (this.state.currentPosition === '3'){
-        //await Proposal.generateProposalPayments(proposalID, userToken)
+      if (this.state.currentPosition === '3') {
+        const paymentObject = {
+          propostaId: proposalID,
+          usuarioId: userID,
+          valor: proposalValue
+        }
+        await Proposal.generateProposalPayments(paymentObject, userToken)
         this.setState({ currentPosition: parseInt(this.state.currentPosition) + 1 });
         this.props.navigation.navigate('Concluidos')
       } else {

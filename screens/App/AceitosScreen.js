@@ -3,7 +3,7 @@ import { ListaAceitos } from '../../components/ListaAceitos';
 import { LogoTitle } from '../../components/LogoTitle';
 
 export default class AceitosScreen extends React.Component {
-  
+
   static navigationOptions = {
     header: (
       <LogoTitle />
@@ -12,8 +12,8 @@ export default class AceitosScreen extends React.Component {
 
   render() {
     return (
-      <ListaAceitos 
-      nav={this.props.navigation}/>
+      <ListaAceitos
+        nav={this.props.navigation} />
     );
   }
 }

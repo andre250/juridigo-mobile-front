@@ -12,8 +12,8 @@ export class FormDocumento extends React.Component {
       photo_face: null,
       photoFace: null,
       photo_document: null,
-      colorDocument:'#2AA3D8',
-      colorFace:'#2AA3D8',
+      colorDocument: '#2AA3D8',
+      colorFace: '#2AA3D8',
       buttonSignInColor: 'grey',
       isValid: false,
       form: this.props.navigation.state.params.form
@@ -48,62 +48,62 @@ export class FormDocumento extends React.Component {
   };
 
   _openCameraForDocumentAsync = async () => {
-    this.props.navigation.navigate('Camera',{callback:this.callbackDocumentFunction.bind(this)});
+    this.props.navigation.navigate('Camera', { callback: this.callbackDocumentFunction.bind(this) });
   };
 
   _openCameraForFaceAsync = async () => {
-    this.props.navigation.navigate('Camera',{callback:this.callbackFaceFunction.bind(this)});
+    this.props.navigation.navigate('Camera', { callback: this.callbackFaceFunction.bind(this) });
   };
 
 
   render() {
     return (
       <ScrollView>
-      <Formik
-        onSubmit={() => {
-          documentForm = {
-            foto_pessoa: this.state.photo_face,
-            foto_document: this.state.photo_document
-          }
-          // Persiste os formularios para a próxima página
-          this.props.navigation.navigate('Escolaridade', {
-            form: {
-              cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
-              documentForm:  documentForm // Pega o formulario da pagina atual
+        <Formik
+          onSubmit={() => {
+            documentForm = {
+              foto_pessoa: this.state.photo_face,
+              foto_document: this.state.photo_document
             }
-          })
-        }}
-        //validate={this.validate}
-        render={({
-          handleSubmit,
-          isValid,
-        }) => (
-            <View style={styles.container}>
-              <View style={[styles.spaceCenterContainer, {backgroundColor:this.state.colorDocument}]}>
-                <TouchableOpacity style={styles.imagePhoto} onPress={this._openCameraForDocumentAsync}>
-                  <Image style={styles.imagePhotoImage}
-                              source={this.state.photoDocumentLocation ? {uri:this.state.photoDocumentLocation} : require('../../assets/images/rg-exemplo.png')} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.descriptionText}>Tire a foto de um documento (RG ou CNH)</Text>
-              <View style={[styles.spaceCenterContainerOther, {backgroundColor:this.state.colorFace}]}>
-                <TouchableOpacity style={styles.imagePhoto} onPress={this._openCameraForFaceAsync}>
-                  <Image style={styles.imagePhotoImagePerson}
-                              source={this.state.photoFaceLocation ? {uri:this.state.photoFaceLocation} : require('../../assets/images/foto-exemplo.png')} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.descriptionText}>Tire uma foto sua segurando o documento</Text>
-              <TouchableOpacity style={[styles.buttonSignin, 
-                {backgroundColor:this.state.buttonSignInColor}]} 
+            // Persiste os formularios para a próxima página
+            this.props.navigation.navigate('Escolaridade', {
+              form: {
+                cadastralForm: this.state.form.cadastralForm, // Pega o formulario da pagina anterior
+                documentForm: documentForm // Pega o formulario da pagina atual
+              }
+            })
+          }}
+          //validate={this.validate}
+          render={({
+            handleSubmit,
+            isValid,
+          }) => (
+              <View style={styles.container}>
+                <View style={[styles.spaceCenterContainer, { backgroundColor: this.state.colorDocument }]}>
+                  <TouchableOpacity style={styles.imagePhoto} onPress={this._openCameraForDocumentAsync}>
+                    <Image style={styles.imagePhotoImage}
+                      source={this.state.photoDocumentLocation ? { uri: this.state.photoDocumentLocation } : require('../../assets/images/rg-exemplo.png')} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.descriptionText}>Tire a foto de um documento (RG ou CNH)</Text>
+                <View style={[styles.spaceCenterContainerOther, { backgroundColor: this.state.colorFace }]}>
+                  <TouchableOpacity style={styles.imagePhoto} onPress={this._openCameraForFaceAsync}>
+                    <Image style={styles.imagePhotoImagePerson}
+                      source={this.state.photoFaceLocation ? { uri: this.state.photoFaceLocation } : require('../../assets/images/foto-exemplo.png')} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.descriptionText}>Tire uma foto sua segurando o documento</Text>
+                <TouchableOpacity style={[styles.buttonSignin,
+                { backgroundColor: this.state.buttonSignInColor }]}
                 /*disabled={!this.state.isValid}*/ onPress={handleSubmit}>
-                <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-      />
-      <View style={styles.footer}>
-        <ProgressBar Progress_Value={this.state.Progress_Value} />
-      </View>
+                  <Text style={styles.buttonSigninText}>PRÓXIMO</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+        />
+        <View style={styles.footer}>
+          <ProgressBar Progress_Value={this.state.Progress_Value} />
+        </View>
       </ScrollView>)
   };
 }

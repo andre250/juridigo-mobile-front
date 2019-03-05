@@ -13,7 +13,7 @@ import isIPhoneX from 'react-native-is-iphonex';
 import base64 from 'base-64';
 import utf8 from 'utf8';
 
-import { 
+import {
   Ionicons,
   MaterialIcons,
   Foundation,
@@ -54,26 +54,26 @@ const wbIcons = {
 };
 
 export default class CameraScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            flash: 'off',
-            zoom: 0,
-            autoFocus: 'on',
-            type: 'back',
-            whiteBalance: 'auto',
-            ratio: '16:9',
-            ratios: [],
-            newPhotos: false,
-            permissionsGranted: false,
-            pictureSize: undefined,
-            pictureSizes: [],
-            pictureSizeId: 0,
-            photoUri: null
-          };
-    }
-    
-    
+  constructor(props) {
+    super(props);
+    this.state = {
+      flash: 'off',
+      zoom: 0,
+      autoFocus: 'on',
+      type: 'back',
+      whiteBalance: 'auto',
+      ratio: '16:9',
+      ratios: [],
+      newPhotos: false,
+      permissionsGranted: false,
+      pictureSize: undefined,
+      pictureSizes: [],
+      pictureSizeId: 0,
+      photoUri: null
+    };
+  }
+
+
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -140,7 +140,7 @@ export default class CameraScreen extends React.Component {
         pictureSizeId = pictureSizes.indexOf('High');
       } else {
         // returned array is sorted in ascending order - default size is the largest one
-        pictureSizeId = pictureSizes.length-1;
+        pictureSizeId = pictureSizes.length - 1;
       }
       this.setState({ pictureSizes, pictureSizeId, pictureSize: pictureSizes[pictureSizeId] });
     }
@@ -155,19 +155,19 @@ export default class CameraScreen extends React.Component {
     if (newId >= length) {
       newId = 0;
     } else if (newId < 0) {
-      newId = length -1;
+      newId = length - 1;
     }
     this.setState({ pictureSize: this.state.pictureSizes[newId], pictureSizeId: newId });
   }
 
-  renderNoPermissions = () => 
+  renderNoPermissions = () =>
     <View style={styles.noPermissions}>
       <Text style={{ color: 'white' }}>
         Camera permissions not granted - cannot open camera preview.
       </Text>
     </View>
 
-  renderTopBar = () => 
+  renderTopBar = () =>
     <View
       style={styles.topBar}>
       <TouchableOpacity style={styles.toggleButton} onPress={this.toggleFacing}>
@@ -181,7 +181,7 @@ export default class CameraScreen extends React.Component {
       </TouchableOpacity>
       <TouchableOpacity style={styles.toggleButton} onPress={this.toggleFocus}>
         <Text style={[styles.autoFocusLabel, { color: this.state.autoFocus === 'on' ? "white" : "#6b6b6b" }]}>AF</Text>
-      </TouchableOpacity>   
+      </TouchableOpacity>
     </View>
 
   renderBottomBar = () =>
@@ -194,7 +194,7 @@ export default class CameraScreen extends React.Component {
         >
           <Ionicons name="ios-radio-button-on" size={70} color="white" />
         </TouchableOpacity>
-      </View> 
+      </View>
     </View>
 
   renderCamera = () =>
@@ -214,7 +214,7 @@ export default class CameraScreen extends React.Component {
           ratio={this.state.ratio}
           pictureSize={this.state.pictureSize}
           onMountError={this.handleMountError}
-          >
+        >
           {this.renderTopBar()}
           {this.renderBottomBar()}
         </Camera>
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   noPermissions: {
     flex: 1,
-    alignItems:'center',
+    alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
   },
@@ -280,8 +280,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   bottomButton: {
-    flex: 0.3, 
-    height: 58, 
+    flex: 0.3,
+    height: 58,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   },
   pictureQualityLabel: {
     fontSize: 10,
-    marginVertical: 3, 
+    marginVertical: 3,
     color: 'white'
   },
   pictureSizeContainer: {
