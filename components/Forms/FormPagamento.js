@@ -268,7 +268,7 @@ export class FormPagamento extends React.Component {
       switch (response) {
         case undefined:
           //Instruções executadas quando a conta for criada com sucesso
-          return Alert.alert(registro.msg,
+          return Alert.alert(registro.msg, 
             'Seu cadastro está em validação, você receberá um email quando for confirmado.');
         case "cpf":
           //Instruções executadas quando houve erro no CPF 
