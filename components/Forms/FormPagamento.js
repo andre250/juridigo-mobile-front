@@ -260,13 +260,11 @@ export class FormPagamento extends React.Component {
       },
       pagamento: cryptoFact.encrypt(JSON.stringify(paymentInfo))
     }
+    let response;
     try {
-      console.log(formRequest)
-      const registro = await User.register(formRequest);
-      console.log(registro)
-      //const registro = {"msg": "Conta criada com sucesso!"}
-      let response = registro.erro
-      console.log(respose)
+      response = await User.register(formRequest);
+    } catch (error) {
+
       switch (response) {
         case undefined:
           //Instruções executadas quando a conta for criada com sucesso
@@ -294,17 +292,11 @@ export class FormPagamento extends React.Component {
           //Instruções executadas quando houve erro na criação da conta
           return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
         default:
-          //Instruções executadas quando a resposta do servidor não for mapeada
-          return Alert.alert('Houve um problema com o servidor, tente novamente mais tarde.');
+          return Alert.alert(
+            'Houve um erro no processo de cadastro',
+            'Por favor verifique e tente novamente mais tarde.'
+          );
       }
-      //this.setState({ loading: false });
-
-    } catch (error) {
-      //this.setState({ loading: false });
-      return Alert.alert(
-        'Houve um erro no processo de cadastro',
-        'Por favor verifique e tente novamente mais tarde.'
-      );
     };
   };
 }
