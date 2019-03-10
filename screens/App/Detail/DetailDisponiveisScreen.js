@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapView, Marker } from 'expo';
-import { Text, Alert, View, ScrollView, TouchableOpacity, StyleSheet, AsyncStorage, Modal } from 'react-native';
+import { Text, Alert, View, ScrollView, TouchableOpacity, StyleSheet, AsyncStorage, Modal, Linking } from 'react-native';
 import { LogoTitle } from '../../../components/LogoTitle';
 import { DetailItem } from '../../../components/DetailItem';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -140,12 +140,14 @@ export default class DetailDisponiveisScreen extends React.Component {
           <View style={[styles.modalContainer, modalBackgroundStyle, style = { paddingLeft: wp('5%'), paddingRight: wp('5%') }]}>
             <View style={[innerContainerTransparentStyle,
               style = { marginTop: hp('50%'), backgroundColor: 'white' }]}>
-              <Text style={{ fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start' }}>
-                Lembre-se que ao aceitar um trabalho você se compromete com o cumprimento de todas as
+              <TouchableOpacity onPress={() => { Linking.openURL('https://juridigo.com.br/termos-e-condicoes-gerais-de-uso-juridigo-ltda/') }}>
+                <Text style={{ fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start' }}>
+                  Lembre-se que ao aceitar um trabalho você se compromete com o cumprimento de todas as
                       <Text style={{ textDecorationLine: 'underline' }}> etapas propostas pela contratante.{"\n"}</Text>
-              </Text>
-              <Text style={{ fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start' }}>
-                O não cumprimento de qualquer etapa do trabalho aceito acarretará em penas previstas nos termos da lei.
+                </Text>
+                </TouchableOpacity>
+                  <Text style={{ fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start' }}>
+                    O não cumprimento de qualquer etapa do trabalho aceito acarretará em penas previstas nos termos da lei.
                   </Text>
               <TouchableOpacity style={styles.modalConfirmButtonContainer} onPress={this.setJobConfirmed.bind(this, false)}>
                 <Text style={styles.confirmButtonText}>ACEITAR</Text>
@@ -185,10 +187,10 @@ export default class DetailDisponiveisScreen extends React.Component {
             </MapView>
           </View>
           <View>
-            <DetailItem name={Platform.OS === 'ios' ? 'ios-business' : 'md-business'} title={this.state.item.rotulo} />
+            <DetailItem name={Platform.OS === 'ios' ? 'ios-business' : 'md-business'} title={this.state.item.usuarioResponsavel.empresa+' - '+this.state.item.rotulo} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-calendar' : 'md-calendar'} title={this.state.date} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-cash' : 'md-cash'} title={`R$ ${this.state.item.valor}`}
-              description={`R$ ${this.state.item.valor - 50} Serviço + R$ 50,00 Transporte`} />
+              description={`R$ ${this.state.item.valor} Serviço`} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'} style={styles.Text} title={`${this.state.distance}${this.state.unit}`}
               description={`${this.state.item.localizacao.rua}, ${this.state.item.localizacao.numero} ${this.state.item.localizacao.regiao}, ${this.state.item.localizacao.cidade}`} />
             <DetailItem name={Platform.OS === 'ios' ? 'ios-briefcase' : 'md-briefcase'} title={this.state.item.usuarioResponsavel.empresa} />
