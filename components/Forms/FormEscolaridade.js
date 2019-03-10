@@ -28,7 +28,7 @@ export class FormEscolaridade extends React.Component {
   }
 
   validate = ({instituicao, ano, oab }) => {
-    
+    const regex = /\d/
     const errors = {};
     if (instituicao === undefined) {
       errors.instituicao = 'Obrigatório';
@@ -46,6 +46,8 @@ export class FormEscolaridade extends React.Component {
       errors.oab = 'Obrigatório';
     } else if (oab.trim() === '') {
       errors.oab = 'O campo não pode estar vazio.';
+    } else if (!regex.test(oab)) {
+      errors.oab = 'O campo deve conter números.';
     } 
     if (Object.keys(errors).length === 0) {
       this._setNextButton(true);
