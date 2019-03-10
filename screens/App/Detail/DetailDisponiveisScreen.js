@@ -128,7 +128,7 @@ export default class DetailDisponiveisScreen extends React.Component {
       backgroundColor: 'rgba(0, 0, 0, 0.5)'
     };
     var innerContainerTransparentStyle =
-      { padding: 20 };
+      { padding: hp('3%') };
     return (
       <View>
         <Modal
@@ -147,8 +147,11 @@ export default class DetailDisponiveisScreen extends React.Component {
               <Text style={{ fontWeight: "bold", textAlign: 'justify', textAlignVertical: 'center', justifyContent: 'flex-start' }}>
                 O não cumprimento de qualquer etapa do trabalho aceito acarretará em penas previstas nos termos da lei.
                   </Text>
-              <TouchableOpacity style={styles.confirmButtonContainer} onPress={this.setJobConfirmed.bind(this, false)}>
+              <TouchableOpacity style={styles.modalConfirmButtonContainer} onPress={this.setJobConfirmed.bind(this, false)}>
                 <Text style={styles.confirmButtonText}>ACEITAR</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.setModalVisible.bind(this, false)}>
+                <Text style={styles.modalBackButtonText}>Voltar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -203,7 +206,6 @@ export default class DetailDisponiveisScreen extends React.Component {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -226,6 +228,15 @@ const styles = StyleSheet.create({
     marginBottom: hp('5%'),
     borderRadius: 7,
   },
+  modalConfirmButtonContainer: {
+    backgroundColor: '#2AA3D8',
+    padding: hp('2%'),
+    width: wp('40%'),
+    height: hp('7%'),
+    alignSelf: "center",
+    marginTop: hp('7%'),
+    borderRadius: 7,
+  },
   confirmButtonText: {
     color: "white",
     textAlignVertical: "center",
@@ -235,6 +246,12 @@ const styles = StyleSheet.create({
     color: "#838383",
     alignSelf: "center",
     marginTop: hp('5%'),
+    textDecorationLine: "underline"
+  },
+  modalBackButtonText: {
+    color: "#838383",
+    alignSelf: "center",
+    marginTop: hp('1%'),
     textDecorationLine: "underline"
   },
   Text: {
