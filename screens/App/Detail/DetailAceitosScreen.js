@@ -61,10 +61,10 @@ export default class DetailAceitosScreen extends React.Component {
   }
 
 
-  static navigationOptions = {
-    header: (
-      <LogoTitle />
-    )
+  static navigationOptions = ({navigation}) => {
+    return {
+      header: <LogoTitle navigation={navigation} />
+    }
   };
 
   render() {
