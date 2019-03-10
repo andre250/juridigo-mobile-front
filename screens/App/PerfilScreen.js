@@ -5,10 +5,13 @@ import { Profile } from '../../components/Profile';
 import { Payments } from '../../components/Payments';
 
 export default class PerfilScreen extends React.Component {
-  static navigationOptions = {
-    header: (
-      <LogoTitle />
-    )
+  constructor(props) {
+    super(props);
+  }
+  static navigationOptions = ({navigation}) => {
+    return {
+      header: <LogoTitle navigation={navigation} />
+    }
   };
 
   render() {
