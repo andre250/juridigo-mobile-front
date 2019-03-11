@@ -41,7 +41,6 @@ class User {
                 method: "POST",
                 body: JSON.stringify(registerInformation)
             });
-            console.log(response)
             let data = await response.json();
             return data;
         } catch (error) {

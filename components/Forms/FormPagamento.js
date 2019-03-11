@@ -216,7 +216,6 @@ export class FormPagamento extends React.Component {
   };
 
   _requestForm = async () => {
-    console.log('aqui')
     const paymentInfo = {
       //numero: this.state.form.pagamentoForm.numero_cartao.replace(/\s/g, ''),
       //cvv: this.state.form.pagamentoForm.ccv,

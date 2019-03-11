@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "0.0.2",
+    "version": "0.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/profile.png",
     "splash": {
@@ -26,7 +26,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 4,
       "package": "com.juridigo.juridigo"
     },
     "androidStatusBar": {

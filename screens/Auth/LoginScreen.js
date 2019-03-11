@@ -89,7 +89,6 @@ export default class LoginScreen extends React.Component {
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
         const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-        console.log(token)
         await AsyncStorage.setItem('userToken', token);
         // const signUp = 0
         // if (signUp === 0) {
