@@ -38,11 +38,10 @@ export class FormCadastral extends React.Component {
       const latlong = await OpenCage.getLatLong(completeAddress) // Inicia requisição para buscar latitude e longitude
       // Atualiza state da página com novas informações
       this.setState({
-        endereco: data.logradouro,
-        bairro: data.bairro,
-        cidade: data.localidade,
-        uf: data.uf,
-        complemento: data.complemento,
+        endereco: data.logradouro, // Alimenta com retorno da requisição
+        bairro: data.bairro, // Alimenta com retorno da requisição
+        cidade: data.localidade, // Alimenta com retorno da requisição
+        uf: data.uf, // Alimenta com retorno da requisição
         latitude: latlong.results[0].geometry.lat, // Pega sempre o 1 elemento do array de retorno
         longitude: latlong.results[0].geometry.lng // Pega sempre o 1 elemento do array de retorno
       })
@@ -61,7 +60,7 @@ export class FormCadastral extends React.Component {
 
   validate = ({ name, email, pass,
     confirmPass, user, telphone, rg, cpf,
-    numero, complemento, cep }) => {
+    numero, cep }) => {
     const errors = {};
     let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (name === undefined) {
@@ -138,11 +137,6 @@ export class FormCadastral extends React.Component {
     } else if (numero.trim() === '') {
       errors.numero = 'O campo não pode estar vazio.';
     }
-    if (complemento === undefined) {
-      errors.complemento = 'Obrigatório';
-    } else if (complemento.trim() === '') {
-      errors.complemento = 'O campo não pode estar vazio.';
-    }
     if (Object.keys(errors).length === 0) {
       this._setNextButton(true);
     } else {
@@ -160,7 +154,7 @@ export class FormCadastral extends React.Component {
             cadastralForm = {
               name: name,
               email: email,
-              telphone: telphone,
+              telphone: telphone.replace(/[^\d]+/g,''),
               birthday: birthday,
               rg: rg,
               cpf: cpf,

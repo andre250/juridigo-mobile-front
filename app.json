@@ -26,7 +26,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "package": "com.juridigo.juridigo"
     },
     "androidStatusBar": {
