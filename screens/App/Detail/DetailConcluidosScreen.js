@@ -3,15 +3,12 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 export default class DetailConcluidosScreen extends React.Component {
-
-  static navigationOptions = {
-    title: 'JuridiGo',
-    headerStyle: {
-      backgroundColor: '#f4511e',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
+  constructor(props) {
+    super(props);
+  }
+  static navigationOptions = ({navigation}) => {
+    return {
+      header: <LogoTitle navigation={navigation} />
     }
   };
 

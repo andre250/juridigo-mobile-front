@@ -262,35 +262,36 @@ export class FormPagamento extends React.Component {
     }
     let response;
     try {
+      //Executa o registro no webservice
       response = await User.register(formRequest);
     } catch (error) {
-
-      switch (response) {
+      errorMsg = response.msg
+      switch (errorMsg) {
         case undefined:
           //Instruções executadas quando a conta for criada com sucesso
-          return Alert.alert(registro.msg, 
+          return Alert.alert(errorMsg, 
             'Seu cadastro está em validação, você receberá um email quando for confirmado.');
         case "cpf":
           //Instruções executadas quando houve erro no CPF 
-          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + errorMsg);
         case "email":
           //Instruções executadas quando houve erro no Email
-          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + errorMsg);
         case "rg":
           //Instruções executadas quando houve erro no RG
-          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + errorMsg);
         case "pagamento":
           //Instruções executadas quando houve erro nas informações de pagamento
-          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + errorMsg);
         case "cartao":
           //Instruções executadas quando houve erro no número do cartão
-          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + errorMsg);
         case "curriculum":
           //Instruções executadas quando houve erro no curriculum
-          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + errorMsg);
         case "Insert":
           //Instruções executadas quando houve erro na criação da conta
-          return Alert.alert('Ops, algo deu errado: \n' + registro.msg);
+          return Alert.alert('Ops, algo deu errado: \n' + errorMsg);
         default:
           return Alert.alert(
             'Houve um erro no processo de cadastro',

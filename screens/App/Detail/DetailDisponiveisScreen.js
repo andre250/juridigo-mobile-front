@@ -117,10 +117,10 @@ export default class DetailDisponiveisScreen extends React.Component {
     this.setModalVisible(true)
   }
 
-  static navigationOptions = {
-    header: (
-      <LogoTitle />
-    )
+  static navigationOptions = ({navigation}) => {
+    return {
+      header: <LogoTitle navigation={navigation} />
+    }
   };
 
   render() {

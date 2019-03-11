@@ -47,19 +47,17 @@ export class Payments extends Component {
 
   render() {
     return (
-      <ScrollView style={{ height: "100%" }}>
+      <View style={styles.listContainer}>
         <NavigationEvents onWillFocus={() => {
           this._loadUserPayment();
         }} />
-        <List style={styles.listContainer} containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
-          <FlatList style={styles.listContainer}
+          <FlatList 
             data={this.state.data}
             renderItem={this.renderItem}
             ListEmptyComponent={this.notFound}
             keyExtractor={item => item.propostaId}
           />
-        </List>
-      </ScrollView>
+        </View>
     );
   }
 }
@@ -67,7 +65,8 @@ export class Payments extends Component {
 const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: "#E8E9ED",
-    height: hp("100%")
+    height: "100%",
+    justifyContent: 'center',
   },
   container: {
     backgroundColor: "#E8E9ED",
