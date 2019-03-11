@@ -9,6 +9,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import StepIndicator from 'react-native-step-indicator';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Proposal from '../../../http_factory/proposal';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class DetailAceitosScreen extends React.Component {
   constructor(props) {
@@ -81,7 +82,8 @@ export default class DetailAceitosScreen extends React.Component {
           visible={this.state.modalVisible}
           onRequestClose={() => this.setModalVisible(false)}
         >
-          <View style={[styles.modalContainer, modalBackgroundStyle]}>
+          <TouchableOpacity style={[styles.modalContainer, modalBackgroundStyle]} 
+          onPress={this.setModalVisible.bind(this, false)}>
             <View style={innerContainerTransparentStyle}>
               <TouchableOpacity
                 style={{
@@ -116,7 +118,7 @@ export default class DetailAceitosScreen extends React.Component {
               </TouchableOpacity>
               <Text style={{ color: '#e8e8e8', fontWeight: 'bold', textAlign: 'left', justifyContent: 'center', marginTop: 10 }}>Cancelar etapa</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </Modal>
         <ScrollView
           ref="scrollView"
@@ -247,35 +249,72 @@ export default class DetailAceitosScreen extends React.Component {
         }
         await Proposal.generateProposalPayments(paymentObject, userToken)
         this.setState({ currentPosition: parseInt(this.state.currentPosition) + 1 });
-        this.props.navigation.navigate('Concluidos')
+        this.setModalVisible(false);
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({
+              index: 0,
+              routeName: 'Aceitos',
+            })
+          ]
+        });
+        this.props.navigation.dispatch(resetAction)
+        this.props.navigation.navigate('Concluidos');
+      } else if (this.state.currentPosition === 4) {
+        this.setModalVisible(false);
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({
+              index: 0,
+              routeName: 'Aceitos',
+            })
+          ]
+        });
+        this.props.navigation.dispatch(resetAction)
+        this.props.navigation.navigate('Concluidos');
       } else {
         await Proposal.updateProposal(proposalID, userToken)
         this.setState({ currentPosition: parseInt(this.state.currentPosition) + 1 });
-      }
-      this.setModalVisible(false);
+        this.setModalVisible(false);
+      } 
     } catch (error) {
       Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");
     }
   }
 
   setStepCancel = async (proposalID) => {
-    try {
-      const userToken = await AsyncStorage.getItem('userToken');
-      await Proposal.refuseProposal(proposalID, userToken)
-      this.props.navigation.pop();
-    } catch (error) {
-      Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");
-    }
-    this.setState({
-      jobCanceled: true,
-      customStyles: {
-        ...this.state.customStyles,
-        stepStrokeCurrentColor: 'red',
-        stepIndicatorCurrentColor: 'red',
-        currentStepLabelColor: 'red'
-      }
-    });
-    this.setModalVisible(false)
+    Alert.alert(
+      'Cancelar etapa.',
+      'Ao cancelar essa etapa você irá cancelar o trabalho, deseja realmente executar esta ação?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {text: 'Sim', onPress: async () => {
+          try {
+            const userToken = await AsyncStorage.getItem('userToken');
+            await Proposal.refuseProposal(proposalID, userToken)
+            this.props.navigation.pop();
+          } catch (error) {
+            Alert.alert("Ops!", "Algo de errado. Por favor, repita a ação.");
+          }
+          this.setState({
+            jobCanceled: true,
+            customStyles: {
+              ...this.state.customStyles,
+              stepStrokeCurrentColor: 'red',
+              stepIndicatorCurrentColor: 'red',
+              currentStepLabelColor: 'red'
+            }
+          });
+          this.setModalVisible(false)
+        }},
+      ],
+      {cancelable: true},
+    );
   }
 
   getStepIndicatorIconConfig = ({ position, stepStatus }) => {
@@ -320,9 +359,6 @@ export default class DetailAceitosScreen extends React.Component {
       setTimeout(() => {
         this.refs.scrollView.scrollToEnd();
       }, 50);
-
-      this.setModalVisible(true);
-
       if (this.state.customStyles.labelSize === 0) {
         this.setState({
           customStyles: {
@@ -331,14 +367,7 @@ export default class DetailAceitosScreen extends React.Component {
           }
         })
       }
-      else {
-        this.setState({
-          customStyles: {
-            ...this.state.customStyles,
-            labelSize: 0
-          }
-        })
-      }
+      this.setModalVisible(true);
     }
   }
 }

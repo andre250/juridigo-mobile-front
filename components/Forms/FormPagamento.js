@@ -26,6 +26,7 @@ export class FormPagamento extends React.Component {
 
   validate = ({ numero_cartao, nome_impresso, validade, ccv,
     agencia, conta }) => {
+    const regex = /\d/
     const errors = {};
     /*if (numero_cartao === undefined) {
       errors.numero_cartao = 'Obrigatório';
@@ -64,11 +65,15 @@ export class FormPagamento extends React.Component {
       errors.agencia = 'Obrigatório';
     } else if (agencia.trim() === '') {
       errors.agencia = 'O campo não pode estar vazio.';
+    } else if (!regex.test(agencia)) {
+      errors.agencia = 'O campo deve conter números.';
     }
     if (conta === undefined) {
       errors.conta = 'Obrigatório';
     } else if (conta.trim() === '') {
       errors.conta = 'O campo não pode estar vazio.';
+    } else if (!regex.test(conta)) {
+      errors.conta = 'O campo deve conter números.';
     }
     return errors;
   };
@@ -89,9 +94,7 @@ export class FormPagamento extends React.Component {
             }
             if (this.state.usoCheck && this.state.responsabilidadeCheck) {
               // Persiste os formularios para a próxima página
-              console.log('1')
               this.state.form.pagamentoForm = pagamentoForm
-              console.log('2')
               this._requestForm()
               this.props.navigation.navigate('Waiting')
             } else {
